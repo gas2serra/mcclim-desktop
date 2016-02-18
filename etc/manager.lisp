@@ -17,7 +17,9 @@
   (add-application "chess" 'mcclim-application :system-name "clim-chess"))
 
 (when (asdf:find-system 'climacs nil)
-  (add-application "climacs-rv" 'mcclim-application :system-name "climacs"))
+  (add-application "climacs-rv" 'mcclim-application :system-name "climacs")
+  (add-application "climacs" 'mcclim-application :system-name "climacs"))
+  
 
 (when (asdf:find-system 'mcclim nil)
   (add-application "listener" 'mcclim-application :system-name "mcclim"))

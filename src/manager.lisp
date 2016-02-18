@@ -27,3 +27,8 @@
 (defmethod add-application-1 ((manager manager) application)
   (with-slots (name) application
     (setf (gethash name *applications*) application)))
+
+(defun edit-file (filename)
+  (let ((climacs-app (gethash "climacs" *applications*)))
+    (configure-application climacs-app)
+    (eval (read-from-string (format nil "(climacs:edit-file ~S)" filename)))))

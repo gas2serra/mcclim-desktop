@@ -1,4 +1,13 @@
 * Todo
 
+** Application
+   - Adding parameters to application
+
+** Manager
+   - Define edit application and other standard applications
+
+** Launcher
+   - Edit config file (system and user)
+   
 
 
