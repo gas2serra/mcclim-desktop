@@ -43,3 +43,6 @@
   (add-application "beirc" 'mcclim-application :system-name "beirc"))
 
 
+(add-application "emacs" 'shell-application :command "emacs ~{~A ~}")
+
+

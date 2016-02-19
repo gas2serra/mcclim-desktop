@@ -24,13 +24,12 @@
     ((application 'application))
   (run-application application))
 
-(define-launcher-frame-command com-edit-system-config
+(define-launcher-frame-command com-edit-config-file
     ((application 'application))
-  (with-slots (name) application
-    (let ((system-config-file (uiop:merge-pathnames*
-			       (format nil "etc/~A.lisp" name)
-			       *mcclim-desktop-directory*)))
-    (edit-file system-config-file))))
+  (with-slots (name config-file) application
+    (edit-file (or (and config-file (probe-file config-file))
+		   (probe-file (default-user-config-file name))
+		   (probe-file (default-system-config-file name))))))
 
 (clim:define-presentation-to-command-translator launch-app
     (application com-launch-app launcher-frame
@@ -38,15 +37,15 @@
 		 :documentation "Launch application")
     (object) (list object))
 
-(clim:define-presentation-to-command-translator edit-system-config
-    (application com-edit-system-config launcher-frame
+(clim:define-presentation-to-command-translator edit-config-file
+    (application com-edit-config-file launcher-frame
 		 :gesture :help
-		 :documentation "Edit system config")
+		 :documentation "Edit Config File")
     (object) (list object))
 
 (defmethod clim:frame-standard-output ((frame launcher-frame))
   (clim:get-frame-pane frame 'app))
 
-(defun run-launcher-gui ()
+(defun run-launcher-gui (&rest args)
   (clim:run-frame-top-level
    (clim:make-application-frame 'launcher-frame :pretty-name "Launcher")))

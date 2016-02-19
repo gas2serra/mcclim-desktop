@@ -1,4 +1,7 @@
 (in-package :mcclim-desktop)
+
+
+(setf *applications* (manager-applications *manager*))
 #|
 (setf *debugger-fn* #'clim-debugger:debugger)
 

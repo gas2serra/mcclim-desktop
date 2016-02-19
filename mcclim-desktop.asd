@@ -20,7 +20,8 @@
   :components ((:module "src" :serial t
                 :components
                 ((:file "packages")
-		 (:file "configuration")
+		 (:file "global")
+		 (:file "config")
 		 (:file "application")
 		 (:file "manager")
 		 (:file "launcher-gui")
