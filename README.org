@@ -1,4 +1,4 @@
-* McClim Desktop 
+* Cl-Desktop 
 
 ** Usage
 
@@ -11,3 +11,7 @@
 ** Copyright
 
 Copyright (c) 2016 Alessandro Serra (gas2serra@gmail.com)
+
+** License
+
+Licensed under the GPLv3 License.

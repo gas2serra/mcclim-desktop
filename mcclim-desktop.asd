@@ -16,15 +16,15 @@
   :version "0.1"
   :author "Alessandro Serra"
   :license "GPLv3"
-  :depends-on (:mcclim :mcclim-truetype :clouseau :clim-listener)
-  :components ((:module "src" :serial t
+  :depends-on (:mcclim :mcclim-truetype :clouseau :clim-listener :cl-desktop)
+  :components ((:module "src/mcclim" :serial t
                 :components
                 ((:file "packages")
 		 (:file "global")
-		 (:file "config")
-		 (:file "application")
-		 (:file "manager")
-		 (:file "launcher-gui")
 		 (:file "mcclim-debugger")
-		 (:file "main"))))
+		 (:file "mcclim-manager")))
+	       (:module "src/gui" :serial t
+		:components
+		((:file "launcher-gui")	
+		 (:file "main"))))	
   :description "")
