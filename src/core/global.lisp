@@ -1,7 +1,14 @@
 (in-package :cl-desktop)
 
-(defvar *application* nil "The current application")
+;;;;
+;;;; Global Variables
+;;;;
 
-(defvar *manager* nil "The manager")
+(defvar *application* nil
+  "The current application")
 
-(defparameter *debugger-fn* nil)
+(defvar *manager* nil
+  "The manager")
+
+(defparameter *debugger-fn* nil
+  "The debugger hook")

@@ -17,10 +17,12 @@
   :author "Alessandro Serra"
   :license "GPLv3"
   :depends-on (:mcclim :mcclim-truetype :clouseau :clim-listener :cl-desktop)
-  :components ((:module "src/mcclim" :serial t
+  :components ((:module "src" :serial t
+			:components
+			((:file "mcclim-desktop")))
+	       (:module "src/mcclim" :serial t
                 :components
-                ((:file "packages")
-		 (:file "global")
+                ((:file "global")
 		 (:file "mcclim-debugger")
 		 (:file "mcclim-manager")))
 	       (:module "src/gui" :serial t

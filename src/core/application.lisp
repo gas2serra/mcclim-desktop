@@ -22,29 +22,7 @@
 		       :type (member :boot :require :run))))
 
 ;;;
-;;; protocol: configure  
-;;;
-
-(defgeneric configure-application (application &optional force-p))
-(defgeneric note-application-configured (application))
-
-(defmethod configure-application :after ((application application) &optional (force-p nil))
-  (declare (ignore force-p))
-  (with-slots (configured-p) application
-    (setf configured-p t))
-  (note-application-configured application))
-
-(defmethod configure-application :around ((application application) &optional (force-p nil))
-  (with-slots (configured-p) application
-    (when (or force-p (not configured-p))
-      (let ((*application* application))
-	(call-next-method)))))
-
-(defmethod note-application-configured ((application application))
-  )
-
-;;;
-;;; protocol: launch/running
+;;; Application protocols
 ;;;
 
 (defgeneric run-application (application &rest args))
@@ -52,18 +30,10 @@
 (defgeneric note-application-start-running (application &rest args))
 (defgeneric note-application-end-running (application &rest args))
 
-(defmethod run-application :before ((application application) &rest args)
-  (declare (ignore args))
-  (with-slots (configuration-time) application
-    (case configuration-time
-      (:require
-       (configure-application application))
-      (:run
-       (configure-application application t))))
-  (note-application-start-running application args))
+(defgeneric configure-application (application &optional force-p))
+(defgeneric note-application-configured (application))
 
-(defmethod run-application :after ((application application) &rest args)
-  (note-application-end-running application args))
+;;; protocol: launch/running
 
 (defmethod launch-application ((application application) &key end-cb args)
   (with-slots (name) application
@@ -78,15 +48,43 @@
   (let ((*application* application))
     (call-next-method)))
 
+(defmethod run-application :before ((application application) &rest args)
+  (declare (ignore args))
+  (with-slots (configuration-time) application
+    (case configuration-time
+      (:require
+       (configure-application application))
+      (:run
+       (configure-application application t))))
+  (note-application-start-running application args))
+
+(defmethod run-application :after ((application application) &rest args)
+  (note-application-end-running application args))
+
 (defmethod note-application-start-running ((application application) &rest args)
   (declare (ignore args)))
 
 (defmethod note-application-end-running ((application application) &rest args)
    (declare (ignore args)))
 
-;;;
+;;; protocol: configure  
+
+(defmethod configure-application :around ((application application) &optional (force-p nil))
+  (with-slots (configured-p) application
+    (when (or force-p (not configured-p))
+      (let ((*application* application))
+	(call-next-method)))))
+
+(defmethod configure-application :after ((application application) &optional (force-p nil))
+  (declare (ignore force-p))
+  (with-slots (configured-p) application
+    (setf configured-p t))
+  (note-application-configured application))
+
+(defmethod note-application-configured ((application application))
+  )
+
 ;;; protocol: initialization
-;;;
 
 (defmethod initialize-instance :after ((application application) &rest initargs)
   (declare (ignore initargs))
@@ -118,6 +116,15 @@
 		 :initform :configuration
 		 :type (member :boot :configuration))))
 
+;;;
+;;; protocols
+;;;
+
+(defgeneric load-application (application &optional force-p))
+(defgeneric note-application-loaded (application))
+
+;;; protocol: running
+
 (defmethod run-application :around ((application cl-application) &rest args)
   (with-slots (debug-p) application
     (if debug-p
@@ -125,18 +132,21 @@
 	  (call-next-method))
 	(call-next-method))))
 
-;;;
-;;; protocol: Loading
-;;;
+;;; protocol: configure
 
-(defgeneric load-application (application &optional force-p))
-(defgeneric note-application-loaded (application))
-
-(defmethod load-application :after ((application cl-application) &optional (force-p nil))
+(defmethod configure-application :before ((application cl-application) &optional (force-p nil))
   (declare (ignore force-p))
+  (with-slots (loaded-p loading-time) application
+    (when (or (eql loading-time :configuration) (not loaded-p))
+      (load-application application))))
+
+;;; protocol: Loading
+
+(defmethod load-application :around ((application cl-application) &optional (force-p nil))
   (with-slots (loaded-p) application
-    (setf loaded-p t))
-  (note-application-loaded application))
+    (when (or force-p (not loaded-p))
+      (let ((*application* application))
+	(call-next-method)))))
 
 (defmethod load-application :before ((application cl-application) &optional (force-p nil))
   (declare (ignore force-p))
@@ -147,25 +157,16 @@
 	    (asdf:load-system system-name))
 	(log4cl:log-warn "System name for ~A undefined" name))))
 
-(defmethod load-application :around ((application cl-application) &optional (force-p nil))
-  (with-slots (loaded-p) application
-    (when (or force-p (not loaded-p))
-      (let ((*application* application))
-	(call-next-method)))))
-
-(defmethod configure-application :before ((application cl-application) &optional (force-p nil))
+(defmethod load-application :after ((application cl-application) &optional (force-p nil))
   (declare (ignore force-p))
-  (with-slots (loaded-p loading-time) application
-    (when (or (eql loading-time :configuration) (not loaded-p))
-      (load-application application))))
+  (with-slots (loaded-p) application
+    (setf loaded-p t))
+  (note-application-loaded application))
 
 (defmethod note-application-loaded ((application cl-application))
   )
 
-;;;
-;;; protocol: initialization
-;;;
-
+;; protocol: initialization
 (defmethod initialize-instance :after ((application cl-application) &rest initargs)
   (declare (ignore initargs))
   (with-slots (loading-time) application
@@ -209,22 +210,20 @@
 (defclass proxy-application (link-application)
   ())
 
-
-;;;
-;;; NoCL Applications
-;;;
-
-(defclass nocl-application (application)
-  ())
-
 ;;;
 ;;; Shell Application
 ;;;
 
-(defclass shell-application (nocl-application)
+(defclass shell-application (application)
   ())
 
 (defmethod configure-application ((application shell-application) &optional force-p)
   (declare (ignore force-p)))
 
 
+;;;
+;;; Utility Function
+;;;
+
+(defun make-application (name type &rest args)
+  (apply #'make-instance type :name name args))

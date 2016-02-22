@@ -1,57 +1,63 @@
 (in-package :cl-desktop)
 
-
+;;;;
+;;;; Abstract Manager Class
+;;;;
 
 (defclass manager ()
-  ((applications :initform (make-hash-table :test #'equal)
-		 :reader manager-applications)
-   (processes :initform nil
-	      :reader manager-processes)))
+  ((name->application :initform (make-hash-table :test #'equal)
+		      :reader manager-name->application)
+   (thread->process-info :initform (make-hash-table :test #'eql)
+			 :reader manager-thread->process-info)))
+
+;;;
+;;; protocols 
+;;;
 
 (defgeneric get-application-1 (manager name))
 (defgeneric find-application-1 (manager name))
 (defgeneric add-application-1 (manager application))
+(defgeneric note-manager-add-application (manager application))
+
+;;; protolog: get
 
 (defmethod get-application-1 ((manager manager) name)
-  (with-slots (applications) manager
-    (gethash name applications)))
+  (with-slots (name->application) manager
+    (gethash name name->application)))
+
+;;; protocol add
 
 (defmethod add-application-1 ((manager manager) application)
   (with-slots (name) application
-    (with-slots (applications) manager
-      (setf (gethash name applications) application))))
+    (with-slots (name->application) manager
+      (setf (gethash name name->application) application))))
 
-;;;
-;;; non va bene...
-;;;
+(defmethod note-manager-add-application ((manager manager) application)
+  )
+
+;;; protocol: application runnig
 
 (defmethod note-application-start-running ((application application) &rest args)
-  (with-slots (processes) *manager*
-    (push (list application args (bt:current-thread)) processes)))
+  (with-slots (thread->process-info) *manager*
+    (setf (gethash (bt:current-thread) thread->process-info) 
+	  (list application args))))
 
 (defmethod note-application-end-running ((application application) &rest args)
-  (with-slots (processes) *manager*
-    (setf processes (delete-if #'(lambda (x) (equal (bt:current-thread) x))
-			       processes
-			       :key #'third))))
-
+  (declare (ignore args))
+  (with-slots (thread->process-info) *manager*
+    (remhash (bt:current-thread) thread->process-info)))
 
 ;;;
-;;;
+;;; Utility functions
 ;;;
 
-
-		       
 (defun get-application (name &optional (manager *manager*))
   (get-application-1 manager name))
 
 (defun find-application (name &optional (manager *manager*))
   (find-application-1 manager name))
 
-(defun make-application (name type &rest args)
-  (apply #'make-instance type :name name args))
-
 (defun register-application (name type &rest args)
   (add-application-1 *manager*
    (apply #'make-application name type args)))
-  
+

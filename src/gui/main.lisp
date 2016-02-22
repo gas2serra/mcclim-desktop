@@ -1,6 +1,6 @@
 (in-package :mcclim-desktop)
 
-(defun run ()
+(defun launcher-run ()
   (init)
 ;  (let* ((manager-application (make-instance 'standard-cl-application				       
 ;					      :name "manager"

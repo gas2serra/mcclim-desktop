@@ -27,7 +27,8 @@
        (clim:vertically ()
 	 application app))))
 
-(defun display-commands (launcher-frame stream) 
+(defun display-commands (launcher-frame stream)
+  (declare (ignore launcher-frame))
   (dolist (ae *applications*)
     (clim:present ae 'application-entry :stream stream)))
 
@@ -47,6 +48,13 @@
       (setf application (find-application name)))
     (when (application-config-file application)
       (edit-file (application-config-file application)))))
+
+(define-launcher-frame-command com-edit-application-file ((app 'application-entry))
+  (with-slots (application name) app
+    (unless application
+      (setf application (find-application name)))
+    (when (application-file application)
+      (edit-file (application-file application)))))
      
 
 (clim:define-presentation-to-command-translator launch-app
@@ -62,10 +70,17 @@
 		 :documentation "Edit Config File")
     (object) (list object))
 
+(clim:define-presentation-to-command-translator edit-application-file
+    (application-entry com-edit-application-file launcher-frame
+		 :gesture :help
+		 :documentation "Edit Application File")
+    (object) (list object))
+
 
 (defmethod clim:frame-standard-output ((frame launcher-frame))
   (clim:get-frame-pane frame 'app))
 
 (defun run-launcher-gui (&rest args)
+  (declare (ignore args))
   (clim:run-frame-top-level
    (clim:make-application-frame 'launcher-frame :pretty-name "Launcher")))

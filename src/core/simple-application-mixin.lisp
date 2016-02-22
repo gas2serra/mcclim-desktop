@@ -1,7 +1,11 @@
 (in-package :cl-desktop)
 
+;;;;
+;;;; Application Mixin
+;;;; 
+
 ;;;
-;;; Simple Application
+;;; Simple Application Mixin
 ;;;
 
 (defclass simple-application-mixin ()
@@ -10,10 +14,7 @@
 	     :initform nil)
    (config-fn :initarg :config-fn
 	      :accessor application-config-fn
-	      :initform nil)
-   (config-file :initarg :config-file
-		:initform nil
-		:accessor application-config-file)))
+	      :initform nil)))
 
 (defmethod run-application ((application simple-application-mixin) &rest args)
   (with-slots (entry-fn name) application
@@ -23,18 +24,12 @@
 
 (defmethod configure-application ((application simple-application-mixin) &optional force-p)
   (with-slots (config-fn config-file name) application
-    (when config-file
-      (if (probe-file config-file)
-	  (load config-file)
-	  (log4cl:log-warn "Config file (~A) for ~A not found" file name)))
     (if config-fn
 	(funcall config-fn application)
 	(log4cl:log-warn "Config function for ~A undefined" name))))
 
-
-
 ;;;
-;;; Simple CL Appplication
+;;; Simple CL Appplication Mixin
 ;;;
 
 (defclass simple-cl-application-mixin (simple-application-mixin)
@@ -50,7 +45,7 @@
 	(log4cl:log-warn "Loading function for ~A undefined" name))))
 
 ;;;
-;;; Simple Shell
+;;; Simple Shell Mixin
 ;;;
 
 (defclass simple-shell-application-mixin ()

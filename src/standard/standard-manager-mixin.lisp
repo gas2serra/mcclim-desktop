@@ -1,22 +1,21 @@
 (in-package :cl-desktop)
 
+;;;;
+;;;; Standard Manager Mixin
+;;;;
+
 (defclass standard-manager-mixin ()
   ())
-
 
 (defmethod find-application-1 ((manager standard-manager-mixin) name)
   (let ((application (get-application name manager)))
     (unless application
-      (load-default-application-file name)
+      (let ((application-file (find-application-file name)))
+	(when application-file
+	  (load application-file)))
       (setf application (get-application  name manager)))
     application))
 
-(defmethod add-application-1 :before ((manager standard-manager-mixin) (application standard-application-mixin))
-  (unless (application-config-file application)
-    (setf (application-config-file application)
-	  (default-config-file (application-name application)))))
-
-
-
-
+(defun setup ()
+  (uiop:ensure-all-directories-exist (list *user-directory*)))
 

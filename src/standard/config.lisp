@@ -1,67 +1,49 @@
 (in-package :cl-desktop)
 
-
-
-;;;
-;;;
-;;;
-
-(defparameter *mcclim-directory*
-  (asdf:component-pathname (asdf:find-system "mcclim")))
+;;;;
+;;;; Application and Config Files
+;;;;
 
 (defparameter *cl-desktop-directory*
   (asdf:component-pathname (asdf:find-system :cl-desktop)))
 
+(defparameter *system-directory* (uiop:merge-pathnames* "etc/" *cl-desktop-directory*))
 (defparameter *user-directory* (uiop:merge-pathnames* "~/.cl-desktop/"))
 
-(defun default-system-config-file (name)
-  (uiop:merge-pathnames*
-   (format nil "etc/config/~A-config.lisp" name)
-   *cl-desktop-directory*))
+(defparameter *application-file-name* "apps/~A.lisp")
+(defparameter *application-config-file-name* "config/~A-config.lisp")
 
-(defun default-user-config-file (name)
-  (uiop:merge-pathnames*
-   (format nil "etc/config/~A-config.lisp" name)
-   *user-directory*))
+(defparameter *cl-desktop-search-pathnames* 
+  (list *user-directory* *system-directory*))
 
-(defun default-config-file (name)
-  (or
-   (probe-file (default-user-config-file name))
-   (probe-file (default-system-config-file name))))
+;;; application files
 
-(defun load-default-application-file (name)
-  (let ((application-file (default-application-file name)))
-    (when (probe-file application-file)
-      (load application-file))))
+(defun find-application-file (name)
+   (find-if #'probe-file
+	    (mapcar #'(lambda (d) (uiop:merge-pathnames* (format nil *application-file-name* name) d)) *cl-desktop-search-pathnames*)))
 
+;;; config file
 
+(defun find-application-config-file (name)
+  (find-if #'probe-file
+	   (mapcar #'(lambda (d) (uiop:merge-pathnames* (format nil *application-config-file-name* name) d)) *cl-desktop-search-pathnames*)))
 
-;; application files
-
-(defun default-system-application-file (name)
-  (uiop:merge-pathnames*
-   (format nil "etc/apps/~A.lisp" name)
-   *cl-desktop-directory*))
-
-(defun default-user-application-file (name)
-  (uiop:merge-pathnames*
-   (format nil "etc/apps/~A.lisp" name)
-   *user-directory*))
-
-(defun default-application-file (name)
-  (or
-   (probe-file (default-user-application-file name))
-   (probe-file (default-system-application-file name))))
-
-
-
-;;;
-;;;
-;;;
-
-(defgeneric application-file (application))
-(defmethod application-file ((application application))
-  nil)
-
-;;(defgeneric find-application (application name)
-
+(defun create-user-config-file (name)
+  (let ((dest (uiop:merge-pathnames*
+		   (format nil *application-config-file-name* name)
+		   *user-directory*)))
+    (uiop:ensure-all-directories-exist (list dest))
+    (uiop:copy-file (uiop:merge-pathnames*
+		     (format nil *application-config-file-name* "_%sample_")
+		     *system-directory*)
+		    dest)))
+  
+(defun create-user-application-file (name)
+  (let ((dest (uiop:merge-pathnames*
+		   (format nil *application-file-name* name)
+		   *user-directory*)))
+    (uiop:ensure-all-directories-exist (list dest))
+    (uiop:copy-file (uiop:merge-pathnames*
+		     (format nil *application-file-name* "_%sample_")
+		     *system-directory*)
+		    dest)))

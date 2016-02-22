@@ -1,11 +1,8 @@
 (in-package :mcclim-desktop)
 
+;;;;
+;;;; Global variables
+;;;;
+
 (defparameter *mcclim-directory*
   (asdf:component-pathname (asdf:find-system "mcclim")))
-
-(defparameter *mcclim-desktop-directory*
-  (asdf:component-pathname (asdf:find-system :mcclim-desktop)))
-
-(defparameter *user-directory* (uiop:merge-pathnames* "~/.mcclim/desktop"))
-
-
