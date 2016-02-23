@@ -24,7 +24,8 @@
                 :components
                 ((:file "global")
 		 (:file "mcclim-debugger")
-		 (:file "mcclim-manager")))
+		 (:file "mcclim-manager")
+		 (:file "init")))
 	       (:module "src/gui" :serial t
 		:components
 		((:file "launcher-gui")	

@@ -11,6 +11,7 @@
 (defparameter *user-directory* (uiop:merge-pathnames* "~/.cl-desktop/"))
 
 (defparameter *application-file-name* "apps/~A.lisp")
+(defparameter *init-file-name* "init.lisp")
 (defparameter *application-config-file-name* "config/~A-config.lisp")
 
 (defparameter *cl-desktop-search-pathnames* 
@@ -27,6 +28,13 @@
 (defun find-application-config-file (name)
   (find-if #'probe-file
 	   (mapcar #'(lambda (d) (uiop:merge-pathnames* (format nil *application-config-file-name* name) d)) *cl-desktop-search-pathnames*)))
+
+;;; init file
+
+(defun find-init-file ()
+  (find-if #'probe-file
+	   (mapcar #'(lambda (d) (uiop:merge-pathnames* *init-file-name* d))
+		   *cl-desktop-search-pathnames*)))
 
 (defun create-user-config-file (name)
   (let ((dest (uiop:merge-pathnames*

@@ -5,8 +5,14 @@
 			  manager)
   ())
 
-(defmethod inizialize-instance :after ((manager mcclim-manager) &rest initargs)
-  (setf *debugger-fn* #'clim-debugger:debugger))
+(defmethod initialize-instance :after ((manager mcclim-manager) &rest initargs)
+  (declare (ignore initargs))
+  ;;(setf *debugger-hook* nil)
+  ;;(setf *debugger-hook* #'clim-debugger:debugger)
+  )
 
-(defun init ()
-  (setf *manager* (make-instance 'mcclim-desktop::mcclim-manager)))
+(defmethod manager-debugger-hook ((manager mcclim-manager) debug-p)
+  (if debug-p 
+      #'clim-debugger:debugger
+      nil))
+

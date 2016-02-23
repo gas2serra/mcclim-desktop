@@ -10,5 +10,3 @@
 (defvar *manager* nil
   "The manager")
 
-(defparameter *debugger-fn* nil
-  "The debugger hook")

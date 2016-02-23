@@ -19,7 +19,7 @@
 
 (defmethod application-file ((application standard-application-mixin))
   (with-slots (name) application
-    (default-application-file name)))
+    (find-application-file name)))
 
 ;;; protocol: application file
 

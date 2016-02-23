@@ -16,6 +16,5 @@
       (setf application (get-application  name manager)))
     application))
 
-(defun setup ()
+(defmethod manager-setup ((manager standard-manager-mixin))
   (uiop:ensure-all-directories-exist (list *user-directory*)))
-

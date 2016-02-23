@@ -39,14 +39,18 @@
   (with-slots (name) application
     (bt:make-thread
      #'(lambda ()
-	 (apply #'run-application application args)
-	 (when end-cb
-	   (funcall end-cb application :args args)))
+	 (unwind-protect
+	      (apply #'run-application application args)
+	   (when end-cb
+	     (funcall end-cb application :args args))))
      :name name)))
 
 (defmethod run-application :around ((application application) &rest args)
   (let ((*application* application))
-    (call-next-method)))
+    (note-application-start-running application args)
+    (unwind-protect
+	 (call-next-method)
+      (note-application-end-running application args))))
 
 (defmethod run-application :before ((application application) &rest args)
   (declare (ignore args))
@@ -55,11 +59,7 @@
       (:require
        (configure-application application))
       (:run
-       (configure-application application t))))
-  (note-application-start-running application args))
-
-(defmethod run-application :after ((application application) &rest args)
-  (note-application-end-running application args))
+       (configure-application application t)))))
 
 (defmethod note-application-start-running ((application application) &rest args)
   (declare (ignore args)))
@@ -127,8 +127,7 @@
 
 (defmethod run-application :around ((application cl-application) &rest args)
   (with-slots (debug-p) application
-    (if debug-p
-	(let ((*debugger-hook* *debugger-fn*))
+    (let ((*debugger-hook* (debugger-hook debug-p))
 	  (call-next-method))
 	(call-next-method))))
 

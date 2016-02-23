@@ -5,10 +5,11 @@
   (:import-from :cl-desktop
 		:standard-manager-mixin
 		:simple-manager-mixin
+		:manager-debugger-hook
+		:manager-setup
 		:manager
 		:*manager*
-		:*debugger-fn*
-
+		:find-init-file
 		:launch-application
 		:find-application
 		:application-config-file

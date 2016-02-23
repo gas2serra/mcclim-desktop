@@ -19,6 +19,9 @@
 (defgeneric add-application-1 (manager application))
 (defgeneric note-manager-add-application (manager application))
 
+(defgeneric manager-debugger-hook (manager debug-p))
+(defgeneric manager-setup (manager))
+
 ;;; protolog: get
 
 (defmethod get-application-1 ((manager manager) name)
@@ -47,6 +50,8 @@
   (with-slots (thread->process-info) *manager*
     (remhash (bt:current-thread) thread->process-info)))
 
+
+
 ;;;
 ;;; Utility functions
 ;;;
@@ -61,3 +66,5 @@
   (add-application-1 *manager*
    (apply #'make-application name type args)))
 
+(defun debugger-hook (debug-p &optional (manager *manager*))
+  (manager-debugger-hook manager debug-p))
