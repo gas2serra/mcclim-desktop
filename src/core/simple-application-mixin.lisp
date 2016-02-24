@@ -37,7 +37,7 @@
 	       :accessor application-loading-fn
 	       :initform nil)))
 
-(defmethod load-application ((application simple-cl-application-mixin) &optional force-p)
+(defmethod load-application-system ((application simple-cl-application-mixin) &optional force-p)
   (declare (ignore force-p))
   (with-slots (loading-fn name) application
     (if loading-fn

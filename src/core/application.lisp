@@ -108,20 +108,16 @@
    (debug-system-p :initarg :debug-system-p
 		   :accessor application-debug-system-p
 		   :initform nil)
-   (loaded-p :initarg :loaded-p
-	     :reader application-loaded-p
-	     :initform nil)
-   (loading-time :initarg :loading-time
-		 :accessor application-loading-time
-		 :initform :configuration
-		 :type (member :boot :configuration))))
+   (system-loaded-p :initarg :system-loaded-p
+	     :reader application-system-loaded-p
+	     :initform nil)))
 
 ;;;
 ;;; protocols
 ;;;
 
-(defgeneric load-application (application &optional force-p))
-(defgeneric note-application-loaded (application))
+(defgeneric load-application-system (application &optional force-p))
+(defgeneric note-application-system-loaded (application))
 
 ;;; protocol: running
 
@@ -135,19 +131,19 @@
 
 (defmethod configure-application :before ((application cl-application) &optional (force-p nil))
   (declare (ignore force-p))
-  (with-slots (loaded-p loading-time) application
-    (when (or (eql loading-time :configuration) (not loaded-p))
-      (load-application application))))
+  (with-slots (system-loaded-p) application
+    (unless system-loaded-p
+      (load-application-system application))))
 
 ;;; protocol: Loading
 
-(defmethod load-application :around ((application cl-application) &optional (force-p nil))
-  (with-slots (loaded-p) application
-    (when (or force-p (not loaded-p))
+(defmethod load-application-system :around ((application cl-application) &optional (force-p nil))
+  (with-slots (system-loaded-p) application
+    (when (or force-p (not system-loaded-p))
       (let ((*application* application))
 	(call-next-method)))))
 
-(defmethod load-application :before ((application cl-application) &optional (force-p nil))
+(defmethod load-application-system :before ((application cl-application) &optional (force-p nil))
   (declare (ignore force-p))
   (with-slots (system-name debug-system-p name) application
     (if system-name
@@ -156,21 +152,18 @@
 	    (asdf:load-system system-name))
 	(log4cl:log-warn "System name for ~A undefined" name))))
 
-(defmethod load-application :after ((application cl-application) &optional (force-p nil))
+(defmethod load-application-system :after ((application cl-application) &optional (force-p nil))
   (declare (ignore force-p))
-  (with-slots (loaded-p) application
-    (setf loaded-p t))
-  (note-application-loaded application))
+  (with-slots (system-loaded-p) application
+    (setf system-loaded-p t))
+  (note-application-system-loaded application))
 
-(defmethod note-application-loaded ((application cl-application))
+(defmethod note-application-system-loaded ((application cl-application))
   )
 
 ;; protocol: initialization
 (defmethod initialize-instance :after ((application cl-application) &rest initargs)
-  (declare (ignore initargs))
-  (with-slots (loading-time) application
-    (when (eql loading-time :boot)
-      (load-application application))))
+  (declare (ignore initargs)))
 
 ;;;
 ;;; McClim Application

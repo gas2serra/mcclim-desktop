@@ -10,31 +10,27 @@
 (defparameter *system-directory* (uiop:merge-pathnames* "etc/" *cl-desktop-directory*))
 (defparameter *user-directory* (uiop:merge-pathnames* "~/.cl-desktop/"))
 
-(defparameter *application-file-name* "apps/~A.lisp")
 (defparameter *init-file-name* "init.lisp")
+(defparameter *application-file-name* "apps/~A.lisp")
 (defparameter *application-config-file-name* "config/~A-config.lisp")
 
 (defparameter *cl-desktop-search-pathnames* 
   (list *user-directory* *system-directory*))
 
-;;; application files
+;;;
+;;; Utility
+;;;
 
-(defun find-application-file (name)
+(defun find-file (relative-pathname)
    (find-if #'probe-file
-	    (mapcar #'(lambda (d) (uiop:merge-pathnames* (format nil *application-file-name* name) d)) *cl-desktop-search-pathnames*)))
+	    (mapcar #'(lambda (d) (uiop:merge-pathnames*
+				   relative-pathname d))
+		    *cl-desktop-search-pathnames*)))
 
-;;; config file
 
-(defun find-application-config-file (name)
-  (find-if #'probe-file
-	   (mapcar #'(lambda (d) (uiop:merge-pathnames* (format nil *application-config-file-name* name) d)) *cl-desktop-search-pathnames*)))
-
-;;; init file
-
-(defun find-init-file ()
-  (find-if #'probe-file
-	   (mapcar #'(lambda (d) (uiop:merge-pathnames* *init-file-name* d))
-		   *cl-desktop-search-pathnames*)))
+;;;
+;;; Create a new application or config file
+;;;
 
 (defun create-user-config-file (name)
   (let ((dest (uiop:merge-pathnames*

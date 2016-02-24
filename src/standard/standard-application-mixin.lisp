@@ -19,16 +19,16 @@
 
 (defmethod application-file ((application standard-application-mixin))
   (with-slots (name) application
-    (find-application-file name)))
+    (find-file (format nil *application-file-name* name))))
 
-;;; protocol: application file
+;;; protocol: application config file
 
 (defmethod application-config-file ((application application))
   nil)
 
 (defmethod application-config-file ((application standard-application-mixin))
   (with-slots (name) application
-    (find-application-config-file name)))
+    (find-file (format nil *application-config-file-name* name))))
 
 ;;; protocol: application config file
 

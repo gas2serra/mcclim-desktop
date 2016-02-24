@@ -9,7 +9,6 @@
 		:manager-setup
 		:manager
 		:*manager*
-		:find-init-file
 		:launch-application
 		:find-application
 		:application-config-file
