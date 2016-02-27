@@ -22,6 +22,7 @@
 (defgeneric manager-debugger-hook (manager debug-p))
 (defgeneric manager-setup (manager))
 
+(defgeneric refresh-applications (manager))
 ;;; protolog: get
 
 (defmethod get-application-1 ((manager manager) name)
@@ -50,7 +51,13 @@
   (with-slots (thread->process-info) *manager*
     (remhash (bt:current-thread) thread->process-info)))
 
+;;; refresh
 
+(defmethod refresh-applications ((manager manager))
+  (with-slots (name->application) manager
+    (maphash #'(lambda (k v)
+		 (configure-application v t))
+	     name->application)))
 
 ;;;
 ;;; Utility functions

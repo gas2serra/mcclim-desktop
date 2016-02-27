@@ -24,8 +24,7 @@
   (register-launcher-application "gsharp" "Gsharp")
   (register-launcher-application "emacs" "Emacs")
   (register-launcher-application "class-browser" "Class Browser")
-  
-  )
+  (register-launcher-application "clim-demo" "Clim Demo"))
   
 
 (register-application "launcher" 'standard-mcclim-application

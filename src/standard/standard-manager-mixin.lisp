@@ -20,6 +20,16 @@
 (defmethod manager-setup ((manager standard-manager-mixin))
   (uiop:ensure-all-directories-exist (list *user-directory*)))
 
+(defmethod refresh-applications :before ((manager standard-manager-mixin))
+  (with-slots (name->application) manager
+    (maphash #'(lambda (k v)
+		 (let ((application-file (find-file
+					  (format nil *application-file-name* k))))
+		   (when application-file
+		     (load application-file))))
+		 name->application)))
+
+
 (defmethod initialize-instance :after ((manager standard-manager-mixin) &rest initargs)
   (declare (ignore initargs))
   (let ((init-file (find-file *init-file-name*)))
