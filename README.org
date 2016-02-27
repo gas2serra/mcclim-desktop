@@ -12,7 +12,7 @@
 
 ** Installation
 
-** Application
+** Applications
 
 | Name          | What              | Source                                    | Quicklisp |
 |---------------+-------------------+-------------------------------------------+-----------|
@@ -28,6 +28,11 @@
 | gsharp        | score editor      | https://github.com/informatimago/gsharp   | No        |
 | listener      | REPL              | https://github.com/robert-strandh/McCLIM  | Yes       |
 
+To Add
+
+| Name                          | What         | Source                                                    |
+|-------------------------------+--------------+-----------------------------------------------------------|
+| FTD - The Flexi-Trivial Dired | file manager | https://github.com/gabriel-laddel/flexi-trivial-dired.git |
 
 ** Author
 
