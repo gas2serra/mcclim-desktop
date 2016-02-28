@@ -14,19 +14,20 @@
 
 ** Applications
 
-| Name          | What              | Source                                    | Quicklisp |
-|---------------+-------------------+-------------------------------------------+-----------|
-| beirc         | irc               | https://github.com/MrNeutron/beirc        | Yes       |
-| clim-chess    | chess             | https://github.com/stassats/clim-chess    | No        |
-| clim-pkg-doc  | package browser   | https://github.com/jschatzer/clim-pkg-doc | No        |
-| spectacle     | image editor      | https://github.com/slyrus/spectacle       | No        |
-| climc         | instant messaging | https://github.com/nlamirault/climc       | Yes       |
-| climon        | simon game        | https://github.com/nlamirault/climon      | Yes       |
-| ernestine     | music browser     | https://github.com/nlamirault/ernestine   | No        |
-| sudoku-mcclim | sudoku            | https://github.com/tortkis/sudoku-mcclim  | No        |
-| climacs       | editor            | https://github.com/robert-strandh/Climacs | Yes       |
-| gsharp        | score editor      | https://github.com/informatimago/gsharp   | No        |
-| listener      | REPL              | https://github.com/robert-strandh/McCLIM  | Yes       |
+| Name          | What              | Source                                               | Quicklisp |
+|---------------+-------------------+------------------------------------------------------+-----------|
+| beirc         | irc               | https://github.com/MrNeutron/beirc                   | Yes       |
+| clim-chess    | chess             | https://github.com/stassats/clim-chess               | No        |
+| clim-pkg-doc  | package browser   | https://github.com/jschatzer/clim-pkg-doc            | Yes       |
+| spectacle     | image editor      | https://github.com/slyrus/spectacle                  | No        |
+| climc         | instant messaging | https://github.com/nlamirault/climc                  | Yes       |
+| climon        | simon game        | https://github.com/nlamirault/climon                 | Yes       |
+| ernestine     | music browser     | https://github.com/nlamirault/ernestine              | Yes       |
+| sudoku-mcclim | sudoku            | https://github.com/tortkis/sudoku-mcclim             | No        |
+| climacs       | editor            | https://github.com/robert-strandh/Climacs            | Yes       |
+| gsharp        | score editor      | https://github.com/informatimago/gsharp              | Yes       |
+| listener      | REPL              | https://github.com/robert-strandh/McCLIM             | Yes       |
+| class-browser | class browser     | https://github.com/pocket7878/clim-class-browser.git | No        |
 
 To Add
 
