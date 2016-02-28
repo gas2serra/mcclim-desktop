@@ -21,6 +21,7 @@
   (register-launcher-application "spectacle" "Spectacle")
   (register-launcher-application "listener" "Listener")
   (register-launcher-application "pkg-doc" "PkgDoc")
+  (register-launcher-application "scigraph" "Scigraph")
   (register-launcher-application "gsharp" "Gsharp")
   (register-launcher-application "emacs" "Emacs")
   (register-launcher-application "class-browser" "Class Browser")

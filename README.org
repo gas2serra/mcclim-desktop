@@ -28,6 +28,8 @@
 | gsharp        | score editor      | https://github.com/informatimago/gsharp              | Yes       |
 | listener      | REPL              | https://github.com/robert-strandh/McCLIM             | Yes       |
 | class-browser | class browser     | https://github.com/pocket7878/clim-class-browser.git | No        |
+| scigraph      | plotting          | https://github.com/robert-strandh/McCLIM             | Yes       |
+
 
 To Add
 
