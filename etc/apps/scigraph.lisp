@@ -3,7 +3,7 @@
 (asdf:require-system "scigraph")
 
 (register-application "scigraph" 'standard-mcclim-application
-		      :system-name "graph"
+		      :system-name "scigraph"
 		      :debug-p t
 		      :entry-fn #'(lambda (&rest args)
 				    (graph:make-demo-frame)))
