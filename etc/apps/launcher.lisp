@@ -24,6 +24,7 @@
   (register-launcher-application "scigraph" "Scigraph")
   (register-launcher-application "gsharp" "Gsharp")
   (register-launcher-application "emacs" "Emacs")
+  (register-launcher-application "mcclide" "McCLIM IDE")
   (register-launcher-application "class-browser" "Class Browser")
   (register-launcher-application "clim-demo" "Clim Demo"))
   
