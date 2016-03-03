@@ -20,9 +20,12 @@
 (defgeneric note-manager-add-application (manager application))
 
 (defgeneric manager-debugger-hook (manager debug-p))
+(defgeneric manager-log-warn (manager msg))
+
 (defgeneric manager-setup (manager))
 
 (defgeneric refresh-applications (manager))
+
 ;;; protolog: get
 
 (defmethod get-application-1 ((manager manager) name)
@@ -75,3 +78,6 @@
 
 (defun debugger-hook (debug-p &optional (manager *manager*))
   (manager-debugger-hook manager debug-p))
+
+(defun log-warn (msg &optional (manager *manager*))
+  (manager-log-warn manager msg))

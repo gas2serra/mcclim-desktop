@@ -21,7 +21,8 @@
    (application :application
 		:display-function #'display-commands
 		:display-after-commands nil)
-   (app :application :height 100))
+   (app :application :height 100
+	:display-time nil))
   (:layouts
    (defaults
        (clim:vertically ()
@@ -49,13 +50,38 @@
     (when (application-config-file application)
       (edit-file (application-config-file application)))))
 
+(define-launcher-frame-command com-load-application ((app 'application-entry))
+  (with-slots (application name) app
+    (unless application
+      (setf application (find-application name)))
+    (load-application-system application t)))
+
+(define-launcher-frame-command com-configure-application ((app 'application-entry))
+  (with-slots (application name) app
+    (unless application
+      (setf application (find-application name)))
+    (configure-application application t)))
+
+
+(define-launcher-frame-command com-edit-config-file ((app 'application-entry))
+  (with-slots (application name) app
+    (unless application
+      (setf application (find-application name)))
+    (when (application-config-file application)
+      (edit-file (application-config-file application)))))
+
+
+
 (define-launcher-frame-command com-edit-application-file ((app 'application-entry))
   (with-slots (application name) app
     (unless application
       (setf application (find-application name)))
     (when (application-file application)
       (edit-file (application-file application)))))
-     
+
+;;
+;; command traslators
+;;
 
 (clim:define-presentation-to-command-translator launch-app
     (application-entry com-launch-app launcher-frame
@@ -75,6 +101,20 @@
 		 :gesture :help
 		 :documentation "Edit Application File")
     (object) (list object))
+
+(clim:define-presentation-to-command-translator load-application
+    (application-entry com-load-application launcher-frame
+		 :gesture :help
+		 :documentation "Load Application")
+    (object) (list object))
+
+(clim:define-presentation-to-command-translator configure-application
+    (application-entry com-configure-application launcher-frame
+		 :gesture :help
+		 :documentation "Configure Application")
+  (object) (list object))
+
+
 
 
 (defmethod clim:frame-standard-output ((frame launcher-frame))

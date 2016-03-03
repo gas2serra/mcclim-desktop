@@ -20,13 +20,13 @@
   (with-slots (entry-fn name) application
     (if entry-fn
 	(apply entry-fn application args)
-	(log4cl:log-warn "Entry function for ~A undefined" name))))
+	(log-warn (format nil "Entry function for ~A undefined" name)))))
 
 (defmethod configure-application ((application simple-application-mixin) &optional force-p)
   (with-slots (config-fn config-file name) application
     (if config-fn
 	(funcall config-fn application)
-	(log4cl:log-warn "Config function for ~A undefined" name))))
+	(log-warn (format nil "Config function for ~A undefined" name)))))
 
 ;;;
 ;;; Simple CL Appplication Mixin
@@ -42,7 +42,7 @@
   (with-slots (loading-fn name) application
     (if loading-fn
 	(apply loading-fn application)
-	(log4cl:log-warn "Loading function for ~A undefined" name))))
+	(log-warn (format nil "Loading function for ~A undefined" name)))))
 
 ;;;
 ;;; Simple Shell Mixin
@@ -57,4 +57,4 @@
   (with-slots (make-command-fn name) application
     (if make-command-fn
 	(uiop:run-program (apply make-command-fn args))
-	(log4cl:log-warn "Make command function for ~A undefined" name))))
+	(log-warn (format nil "Make command function for ~A undefined" name)))))
