@@ -37,7 +37,7 @@
 
 (defmethod launch-application ((application application) &key end-cb args)
   (with-slots (name) application
-    (bt:make-thread
+    (clim-sys:make-process 
      #'(lambda ()
 	 (unwind-protect
 	      (apply #'run-application application args)
@@ -109,8 +109,8 @@
 		   :accessor application-debug-system-p
 		   :initform nil)
    (system-loaded-p :initarg :system-loaded-p
-	     :reader application-system-loaded-p
-	     :initform nil)))
+		    :reader application-system-loaded-p
+		    :initform nil)))
 
 ;;;
 ;;; protocols
@@ -123,9 +123,8 @@
 
 (defmethod run-application :around ((application cl-application) &rest args)
   (with-slots (debug-p) application
-    (let ((*debugger-hook* (debugger-hook debug-p))
-	  (call-next-method))
-	(call-next-method))))
+    (let ((*debugger-hook* (debugger-hook debug-p)))
+      (call-next-method))))
 
 ;;; protocol: configure
 
@@ -148,9 +147,9 @@
   (with-slots (system-name debug-system-p name) application
     (if system-name
 	(if debug-system-p
-	    (asdf:operate 'asdf:load-source-op system-name)
+	    (asdf:operate 'asdf:load-source-op system-name :force-not t)
 	    (asdf:load-system system-name))
-	(log4cl:log-warn "System name for ~A undefined" name))))
+	(log-warn (format nil "System name for ~A undefined" name)))))
 
 (defmethod load-application-system :after ((application cl-application) &optional (force-p nil))
   (declare (ignore force-p))

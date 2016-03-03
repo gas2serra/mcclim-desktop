@@ -20,6 +20,9 @@
 (defmethod manager-setup ((manager standard-manager-mixin))
   (uiop:ensure-all-directories-exist (list *user-directory*)))
 
+(defmethod manager-log-warn ((manager standard-manager-mixin) msg)
+  (format t "Warning: ~A~%" msg))
+
 (defmethod refresh-applications :before ((manager standard-manager-mixin))
   (with-slots (name->application) manager
     (maphash #'(lambda (k v)
