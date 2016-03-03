@@ -104,17 +104,15 @@
 
 (clim:define-presentation-to-command-translator load-application
     (application-entry com-load-application launcher-frame
-		 :gesture :help
-		 :documentation "Load Application")
-    (object) (list object))
+		       :gesture :help
+		       :documentation "Load Application")
+  (object) (list object))
 
 (clim:define-presentation-to-command-translator configure-application
     (application-entry com-configure-application launcher-frame
 		 :gesture :help
 		 :documentation "Configure Application")
   (object) (list object))
-
-
 
 
 (defmethod clim:frame-standard-output ((frame launcher-frame))
