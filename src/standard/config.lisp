@@ -12,7 +12,8 @@
 
 (defparameter *init-file-name* "init.lisp")
 (defparameter *application-file-name* "apps/~A.lisp")
-(defparameter *application-config-file-name* "config/~A-config.lisp")
+(defparameter *application-loading-file-name* "apps/~A-loading.lisp")
+(defparameter *application-config-file-name* "apps/~A-config.lisp")
 
 (defparameter *cl-desktop-search-pathnames* 
   (list *user-directory* *system-directory*))

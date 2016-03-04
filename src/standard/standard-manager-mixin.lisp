@@ -25,7 +25,7 @@
 
 (defmethod refresh-applications :before ((manager standard-manager-mixin))
   (with-slots (name->application) manager
-    (maphash #'(lambda (k v)
+    (maphash #'(lambda (k application)
 		 (let ((application-file (find-file
 					  (format nil *application-file-name* k))))
 		   (when application-file
