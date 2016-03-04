@@ -11,7 +11,7 @@
 
 (defgeneric application-file (application))
 (defgeneric application-config-file (application))
-(defgeneric application-loading-file (application))
+;;(defgeneric application-loading-file (application))
 
 ;;; protocol: application file
 
@@ -31,9 +31,11 @@
   (with-slots (name) application
     (find-file (format nil *application-config-file-name* name))))
 
+#|
 (defmethod application-loading-file ((application standard-application-mixin))
   (with-slots (name) application
     (find-file (format nil *application-loading-file-name* name))))
+|#
 
 ;;; protocol: application config file
 
@@ -48,12 +50,15 @@
 
 (defmethod load-application :before ((application standard-application-mixin) &optional force-p)
   (declare (ignore force-p))
+  #|
   (let ((loading-file (application-loading-file application)))
     (when loading-file
       (if (probe-file loading-file)
 	  (let ((*application* application))
 	    (load loading-file))
 	  (log4cl:log-warn "Loading file (~A) for ~A not found" file name)))))
+  |#
+  )
 
 
 ;;;
