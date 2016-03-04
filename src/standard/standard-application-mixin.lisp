@@ -39,14 +39,15 @@
 
 ;;; protocol: application config file
 
-(defmethod configure-application :before ((application standard-application-mixin) &optional force-p)
+(defmethod configure-application ((application standard-application-mixin) &optional force-p)
   (declare (ignore force-p))
   (let ((config-file (application-config-file application)))
     (when config-file
       (if (probe-file config-file)
 	  (let ((*application* application))
 	    (load config-file))
-	  (log4cl:log-warn "Config file (~A) for ~A not found" file name)))))
+	  (log4cl:log-warn "Config file (~A) for ~A not found" file name))))
+  (call-next-method))
 
 (defmethod load-application :before ((application standard-application-mixin) &optional force-p)
   (declare (ignore force-p))

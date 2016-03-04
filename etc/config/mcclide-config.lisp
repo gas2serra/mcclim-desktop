@@ -1,6 +1,6 @@
 (in-package :cl-desktop)
 
-(asdf:require-system "mcclide")
+;;(asdf:require-system "mcclide")
 
 (defun mcclide-entry-fn (application &rest args)
   (declare (ignore args))

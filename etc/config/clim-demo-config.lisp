@@ -1,6 +1,6 @@
 (in-package :cl-desktop)
 
-(asdf:require-system "clim-examples")
+;;(asdf:require-system "clim-examples")
 
 (defun clim-demo-entry-fn (application &rest args)
   (declare (ignore args))

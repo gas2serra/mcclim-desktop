@@ -54,6 +54,15 @@
 	     (funcall end-cb application :args args))))
      :name name)))
 
+(defmethod launch-application :before ((application application) &key end-cb args)
+  (declare (ignore args))
+  (with-slots (configuration-time) application
+    (case configuration-time
+      (:require
+       (configure-application application))
+      (:run
+       (configure-application application t)))))
+
 (defmethod run-application :around ((application application) &rest args)
   (let ((*application* application))
     (note-application-start-running application args)

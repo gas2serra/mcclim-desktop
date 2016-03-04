@@ -2,5 +2,3 @@
 
 (register-application "beirc" 'standard-mcclim-application
 		      :system-name "beirc")
-
-

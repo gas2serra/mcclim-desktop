@@ -1,6 +1,6 @@
 (in-package :cl-desktop)
 
-(asdf:require-system "climacs")
+;;(asdf:require-system "climacs")
 
 (defun climacs-entry-fn (application &rest args)
   (declare (ignore args))
