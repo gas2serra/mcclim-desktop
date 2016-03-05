@@ -19,6 +19,9 @@
 (defclass standard-manager-mixin ()
   ())
 
+(defgeneric manager-setup (manager))
+(defgeneric reload-application-files (manager))
+
 (defmethod find-application-1 ((manager standard-manager-mixin) name)
   (let ((application (get-application name manager)))
     (unless application
@@ -38,7 +41,7 @@
 (defmethod manager-log-warn ((manager standard-manager-mixin) msg)
   (format t "Warn: ~A~%" msg))
 
-(defmethod refresh-applications :before ((manager standard-manager-mixin))
+(defmethod reload-application-files ((manager standard-manager-mixin))
   (with-slots (name->application) manager
     (maphash #'(lambda (name application)
 		 (declare (ignore application))
@@ -47,7 +50,6 @@
 		   (when application-file
 		     (load application-file))))
 		 name->application)))
-
 
 (defmethod initialize-instance :after ((manager standard-manager-mixin) &rest initargs)
   (declare (ignore initargs))

@@ -9,7 +9,7 @@
 		:simple-manager-mixin
 		:manager-debugger-hook
 		:manager-setup
-		:refresh-applications
+		:reload-application-files
 		:manager
 		:*manager*
 		:launch-application

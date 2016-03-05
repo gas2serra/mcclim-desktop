@@ -16,7 +16,7 @@
   :version "0.1"
   :author "Alessandro Serra"
   :license "GPLv3"
-  :depends-on (:log4cl)
+  :depends-on (:alexandria)
   :components ((:module "src" :serial t
 			:components
 			((:file "cl-desktop")

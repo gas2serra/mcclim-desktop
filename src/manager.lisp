@@ -5,10 +5,7 @@
 ;;;;
 
 (defclass manager ()
-  ((name->application :initform (make-hash-table :test #'equal)
-		      :reader manager-name->application)
-   (thread->process-info :initform (make-hash-table :test #'eql)
-			 :reader manager-thread->process-info)))
+  ((name->application :initform (make-hash-table :test #'equal))))
 
 ;;;
 ;;; protocols 
@@ -23,17 +20,14 @@
 (defgeneric manager-log-info (manager msg))
 (defgeneric manager-log-warn (manager msg))
 
-(defgeneric manager-setup (manager))
+(defgeneric get-applications (manager))
+(defgeneric map-applications (manager fn))
 
-(defgeneric refresh-applications (manager))
-
-;;; protolog: get
+;;; protocol: get/add
 
 (defmethod get-application-1 ((manager manager) name)
   (with-slots (name->application) manager
     (gethash name name->application)))
-
-;;; protocol add
 
 (defmethod add-application-1 ((manager manager) application)
   (with-slots (name) application
@@ -44,26 +38,15 @@
 (defmethod note-manager-added-application ((manager manager) application)
   )
 
-;;; protocol: application runnig
+;;; protocol: access applications
 
-(defmethod note-application-start-running ((application application) &rest args)
-  (with-slots (thread->process-info) *manager*
-    (setf (gethash (bt:current-thread) thread->process-info) 
-	  (list application args))))
-
-(defmethod note-application-end-running ((application application) &rest args)
-  (declare (ignore args))
-  (with-slots (thread->process-info) *manager*
-    (remhash (bt:current-thread) thread->process-info)))
-
-;;; refresh
-
-(defmethod refresh-applications ((manager manager))
+(defmethod get-applications ((manager manager))
   (with-slots (name->application) manager
-    (maphash #'(lambda (k application)
-		 (declare (ignore k))
-		 (need-reconfigure-application application))
-	     name->application)))
+    (alexandria:hash-table-values name->application)))
+
+(defmethod map-applications ((manager manager) fn)
+  (with-slots (name->application) manager
+    (alexandria:maphash-values fn name->application)))
 
 ;;;
 ;;; Utility functions
