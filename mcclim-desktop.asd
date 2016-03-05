@@ -19,13 +19,11 @@
   :depends-on (:mcclim :mcclim-truetype :clouseau :clim-listener :cl-desktop)
   :components ((:module "mcclim" :serial t
 			:components
-			((:file "mcclim-desktop")))
-	       (:module "mcclim/mcclim" :serial t
-                :components
-                ((:file "global")
-		 (:file "mcclim-debugger")
-		 (:file "mcclim-manager")
-		 (:file "init")))
+			((:file "mcclim-desktop")
+			 (:file "global")
+			 (:file "mcclim-debugger")
+			 (:file "mcclim-manager")
+			 (:file "init")))
 	       (:module "mcclim/gui" :serial t
 		:components
 		((:file "launcher-gui")	
