@@ -4,8 +4,9 @@
   (:use :cl :cl-desktop)
   (:import-from :cl-desktop
 		:application
+		:initialize-manager
 		:application-pretty-name
-		:standard-manager-mixin
+		:standard-manager
 		:simple-manager-mixin
 		:manager-debugger-hook
 		:manager-debugger-fn

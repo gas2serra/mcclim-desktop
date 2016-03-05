@@ -22,7 +22,6 @@
 			((:file "mcclim-desktop")
 			 (:file "global")
 			 (:file "mcclim-debugger")
-			 (:file "mcclim-manager")
 			 (:file "init")))
 	       (:module "mcclim/gui" :serial t
 		:components

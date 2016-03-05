@@ -8,7 +8,9 @@
   ((name->application :initform (make-hash-table :test #'equal))
    (force-debug-p :initarg :force-debug-p
 		  :accessor manager-force-debug-p
-		  :initform nil)))
+		  :initform nil)
+   (configured-p :reader manager-configured-p
+		 :initform nil)))
 
 ;;;
 ;;; protocols 
@@ -18,6 +20,9 @@
 (defgeneric find-application-1 (manager name))
 (defgeneric add-application-1 (manager application))
 (defgeneric note-manager-added-application (manager application))
+
+(defgeneric configure-manager (manager &optional force-p))
+(defgeneric note-manager-configured (manager))
 
 (defgeneric manager-debugger-hook (manager debug-p))
 (defgeneric manager-log-info (manager msg))
@@ -51,6 +56,18 @@
 (defmethod map-applications ((manager manager) fn)
   (with-slots (name->application) manager
     (alexandria:maphash-values fn name->application)))
+
+;;; protocol: configure
+
+(defmethod configure-manager :around ((manager manager) &optional (force-p nil))
+  (with-slots (configured-p) manager
+    (when (or force-p (not configured-p))
+      (call-next-method)
+      (setf configured-p t)
+      (note-manager-configured manager))))
+
+(defmethod note-manager-configured ((manager manager))
+  (log-info (format nil "configured manager")))
 
 ;;;
 ;;; Utility functions

@@ -10,7 +10,8 @@
 (defparameter *system-directory* (uiop:merge-pathnames* "etc/" *cl-desktop-directory*))
 (defparameter *user-directory* (uiop:merge-pathnames* "~/.cl-desktop/"))
 
-(defparameter *init-file-name* "init.lisp")
+(defparameter *init-file-name* "manager-init.lisp")
+(defparameter *manager-config-file-name* "manager-config.lisp")
 (defparameter *application-file-name* "apps/~A.lisp")
 (defparameter *application-config-file-name* "config/~A-config.lisp")
 

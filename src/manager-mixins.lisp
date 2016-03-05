@@ -14,7 +14,10 @@
 	       :initform *trace-output*)
    (debugger-fn :initarg :debugger-fn
 		:accessor manager-debugger-fn
-		:initform nil)))
+		:initform nil)
+   (config-fn :initarg :config-fn
+	      :accessor manager-config-fn
+	      :initform nil)))
 
 ;;; protocol: logs
 
@@ -33,6 +36,15 @@
     (if (or debug-p (manager-force-debug-p manager))
 	debugger-fn
 	nil)))
+
+;;; protocol: configure
+
+(defmethod configure-manager ((manager simple-manager-mixin) &optional force-p)
+  (declare (ignore force-p))
+  (with-slots (config-fn) manager
+    (when config-fn
+	(funcall config-fn manager))))
+
 
 ;;;;
 ;;;; Standard Manager Mixin
@@ -62,6 +74,16 @@
 
 ;;;
 
+(defmethod configure-manager :before ((manager standard-manager-mixin) &optional force-p)
+  (declare (ignore force-p))
+  (let ((config-file (find-file *manager-config-file-name*)))
+    (when config-file
+	(if (probe-file config-file)
+	    (let ((*manager* manager))
+	      (load config-file))
+	    (log-warn (format nil "Config file (~A) for manager not found" config-file))))))
+;;;
+
 (defmethod manager-setup ((manager standard-manager-mixin))
   (uiop:ensure-all-directories-exist (list *user-directory*)))
 
@@ -78,8 +100,4 @@
 ;;; protocol: initialize
 
 (defmethod initialize-instance :after ((manager standard-manager-mixin) &rest initargs)
-  (declare (ignore initargs))
-  (let ((init-file (find-file *init-file-name*)))
-    (when init-file
-      (let ((*manager* manager))
-	(load init-file)))))
+  (declare (ignore initargs)))

@@ -27,7 +27,8 @@
 			 (:file "application-mixins")
 			 (:file "manager-mixins")
 			 (:file "standard-application")
-			 (:file "standard-manager"))))
+			 (:file "standard-manager")
+			 (:file "init"))))
   :description ""
   :long-description ""
   :in-order-to ((test-op (test-op cl-desktop-test))))
