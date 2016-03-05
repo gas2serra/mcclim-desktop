@@ -1,6 +1,8 @@
 (in-package :cl-desktop)
 
 (register-application "scigraph" 'standard-mcclim-application
+		      :pretty-name "Sci Graph"
 		      :system-name "scigraph"
-		      :debug-p nil)
-
+		      :debug-p nil
+		      :debug-system-p nil
+		      :frame-class nil)

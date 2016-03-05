@@ -1,6 +1,8 @@
 (in-package :cl-desktop)
 
-(ql:quickload "climon")
-
 (register-application "climon" 'standard-mcclim-application
-		      :system-name "climon")
+		      :pretty-name "Climon"
+		      :system-name "climon"
+		      :debug-p nil
+		      :debug-system-p nil
+		      :frame-class nil)

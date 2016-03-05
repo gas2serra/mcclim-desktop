@@ -1,4 +1,8 @@
 (in-package :cl-desktop)
 
 (register-application "beirc" 'standard-mcclim-application
-		      :system-name "beirc")
+		      :pretty-name "Be IRC"
+		      :system-name "beirc"
+		      :debug-p nil
+		      :debug-system-p nil
+		      :frame-class nil)

@@ -1,7 +1,8 @@
 (in-package :cl-desktop)
 
 (register-application "gsharp" 'standard-mcclim-application
-		      :system-name "gsharp")
-				    
-
-
+		      :pretty-name "Gsharp"
+		      :system-name "gsharp"
+		      :debug-p nil
+		      :debug-system-p nil
+		      :frame-class nil)

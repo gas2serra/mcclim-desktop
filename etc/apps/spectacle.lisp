@@ -1,8 +1,8 @@
 (in-package :cl-desktop)
 
 (register-application "spectacle" 'standard-mcclim-application
-		      :system-name "spectacle")
-
-
-
-
+		      :pretty-name "Spectacle"
+		      :system-name "spectacle"
+		      :debug-p nil
+		      :debug-system-p nil
+		      :frame-class nil)

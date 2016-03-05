@@ -239,6 +239,10 @@
   (with-slots (reference) application
     (configure-application reference force-p)))
 
+(defmethod load-application ((application alias-application) &optional force-p)
+  (with-slots (reference) application
+    (load-application reference force-p)))
+
 (defmethod launch-application ((application alias-application) &key end-cb args)
   (with-slots (reference) application
     (launch-application reference :end-cb end-cb :args args)))

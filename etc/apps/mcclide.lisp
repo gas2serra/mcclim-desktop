@@ -1,7 +1,8 @@
 (in-package :cl-desktop)
 
 (register-application "mcclide" 'standard-mcclim-application
-		      :system-name "mcclide")
-
-
-
+		      :pretty-name "Mcclim IDE"
+		      :system-name "mcclide"
+		      :debug-p nil
+		      :debug-system-p nil
+		      :frame-class nil)
