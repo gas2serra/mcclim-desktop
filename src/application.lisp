@@ -28,11 +28,13 @@
 
 (defgeneric configure-application (application &optional force-p))
 (defgeneric ensure-application-configured (application))
+(defgeneric need-reconfigure-application (application))
 (defgeneric note-application-configured (application))
 
 ;;; protocol: launch/running
 
 (defmethod launch-application ((application application) &key end-cb args)
+  (ensure-application-configured application)
   (with-slots (name) application
     (clim-sys:make-process 
      #'(lambda ()
@@ -42,21 +44,14 @@
 	     (funcall end-cb application :args args))))
      :name name)))
 
-(defmethod launch-application :before ((application application) &key end-cb args)
-  (declare (ignore end-cb args))
-  (ensure-application-configured application))
-
 (defmethod run-application :around ((application application) &rest args)
+  (ensure-application-configured application)
   (let ((*application* application))
     (note-application-start-running application args)
     (unwind-protect
 	 (call-next-method)
       (note-application-end-running application args))))
 
-(defmethod run-application :before ((application application) &rest args)
-  (declare (ignore args))
-  (ensure-application-configured application))
-  
 (defmethod note-application-start-running ((application application) &rest args)
   (declare (ignore args)))
 
@@ -81,6 +76,10 @@
   (with-slots (configured-p) application
     (when (not configured-p)
       (configure-application application))))
+
+(defmethod need-reconfigure-application ((application application))
+  (with-slots (configured-p) application
+    (setf configured-p nil)))
 
 (defmethod note-application-configured ((application application))
   )
@@ -110,7 +109,7 @@
    (loaded-p :reader application-loaded-p
 	     :initform nil)
    (installed-p :reader application-installed-p
-		:initform nil)))
+		:initform t)))
 
 ;;;
 ;;; protocols
@@ -118,10 +117,12 @@
 
 (defgeneric load-application (application &optional force-p))
 (defgeneric ensure-application-loaded (application))
+(defgeneric need-reload-application (application))
 (defgeneric note-application-loaded (application))
 
 (defgeneric install-application (application &optional force-p))
 (defgeneric ensure-application-installed (application))
+(defgeneric need-reinstall-application (application))
 (defgeneric note-application-installed (application))
 
 ;;; protocol: running
@@ -133,13 +134,15 @@
 
 ;;; protocol: config
 
-(defmethod configure-application :before ((application cl-application) &optional (force-p nil))
+(defmethod configure-application :around ((application cl-application) &optional (force-p nil))
   (declare (ignore force-p))
-  (ensure-application-loaded application))
+  (ensure-application-loaded application)
+  (call-next-method))
 
 ;;; protocol: loading
 
 (defmethod load-application :around ((application cl-application) &optional (force-p nil))
+  (ensure-application-installed application)
   (with-slots (loaded-p) application
     (when (or force-p (not loaded-p))
       (let ((*application* application))
@@ -151,19 +154,15 @@
     (setf loaded-p t))
   (note-application-loaded application))
 
-(defmethod load-application ((application cl-application) &optional (force-p nil))
-  (declare (ignore force-p))
-  (with-slots (system-name debug-system-p name) application
-    (if system-name
-	(if debug-system-p
-	    (asdf:operate 'asdf:load-source-op system-name :force-not t)
-	    (asdf:operate 'asdf:load-op system-name))
-	(log-warn (format nil "System name for ~A undefined" name)))))
-  
 (defmethod ensure-application-loaded ((application cl-application))
   (with-slots (loaded-p) application
     (when (not loaded-p)
       (load-application application))))
+
+(defmethod need-reload-application ((application cl-application))
+  (with-slots (loaded-p) application
+    (setf loaded-p nil))
+  (need-reconfigure-application application))
 
 (defmethod note-application-loaded ((application cl-application))
   )
@@ -182,17 +181,15 @@
     (setf installed-p t))
   (note-application-installed application))
 
-(defmethod install-application ((application cl-application) &optional (force-p nil))
-  (declare (ignore force-p))
-  (with-slots (system-name) application
-    (if system-name
-	(ql:quickload system-name)
-	(log-warn (format nil "System name for ~A undefined" name)))))
-  
 (defmethod ensure-application-installed ((application cl-application))
   (with-slots (installed-p) application
     (when (not installed-p)
       (install-application application))))
+
+(defmethod need-reinstall-application ((application cl-application))
+  (with-slots (installed-p) application
+    (setf installed-p nil))
+  (need-reload-application application))
 
 (defmethod note-application-installed ((application cl-application))
   )

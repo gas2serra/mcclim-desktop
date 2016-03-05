@@ -12,7 +12,6 @@
 				  "beirc"
 				  "chess"
 				  "climc"
-				  "climon"			  
 				  "climon"
 				  "ernestine"
 				  "spectacle"

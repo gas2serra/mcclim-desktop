@@ -19,20 +19,14 @@
   :depends-on (:log4cl)
   :components ((:module "src" :serial t
 			:components
-			((:file "cl-desktop")))
-	       (:module "src/core" :serial t
-			:components
-			((:file "global")
+			((:file "cl-desktop")
+			 (:file "global")
 			 (:file "application")
-			 (:file "simple-application-mixin")
 			 (:file "manager")
-			 (:file "simple-manager-mixin")))
-	       (:module "src/standard" :serial t
-			:components
-			((:file "config")
-			 (:file "standard-application-mixin")
-			 (:file "standard-application")
-			 (:file "standard-manager-mixin"))))
+			 (:file "standard-pathnames")
+			 (:file "application-mixins")
+			 (:file "manager-mixins")
+			 (:file "standard-application"))))
   :description ""
   :long-description ""
   :in-order-to ((test-op (test-op cl-desktop-test))))
