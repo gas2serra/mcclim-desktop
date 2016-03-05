@@ -9,8 +9,19 @@
 ;;;
 
 (defclass simple-manager-mixin ()
-  ())
+  ((log-stream :initarg :log-stream
+	       :accessor manager-log-stream
+	       :initform *trace-output*)))
 
+;;; protocol: logs
+
+(defmethod manager-log-info ((manager simple-manager-mixin) msg)
+  (with-slots (log-stream) manager
+    (format log-stream "Info: ~A~%" msg)))
+
+(defmethod manager-log-warn ((manager simple-manager-mixin) msg)
+  (with-slots (log-stream) manager
+    (format log-stream "Warn: ~A~%" msg)))
 
 ;;;;
 ;;;; Standard Manager Mixin
@@ -19,8 +30,14 @@
 (defclass standard-manager-mixin ()
   ())
 
+;;;
+;;; protocols 
+;;;
+
 (defgeneric manager-setup (manager))
 (defgeneric reload-application-files (manager))
+
+;;; protocol: find
 
 (defmethod find-application-1 ((manager standard-manager-mixin) name)
   (let ((application (get-application name manager)))
@@ -32,14 +49,12 @@
       (setf application (get-application  name manager)))
     application))
 
+
+
+;;;
+
 (defmethod manager-setup ((manager standard-manager-mixin))
   (uiop:ensure-all-directories-exist (list *user-directory*)))
-
-(defmethod manager-log-info ((manager standard-manager-mixin) msg)
-  (format t "Info: ~A~%" msg))
-
-(defmethod manager-log-warn ((manager standard-manager-mixin) msg)
-  (format t "Warn: ~A~%" msg))
 
 (defmethod reload-application-files ((manager standard-manager-mixin))
   (with-slots (name->application) manager
@@ -50,6 +65,8 @@
 		   (when application-file
 		     (load application-file))))
 		 name->application)))
+
+;;; protocol" initialize
 
 (defmethod initialize-instance :after ((manager standard-manager-mixin) &rest initargs)
   (declare (ignore initargs))

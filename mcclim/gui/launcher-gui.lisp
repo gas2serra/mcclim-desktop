@@ -24,6 +24,11 @@
        (clim:vertically ()
 	 application app))))
 
+(defmethod clim:adopt-frame  :after (fm (frame launcher-frame))
+  (declare (ignore fm))
+  (setf (manager-log-stream *manager*)
+	(clim:get-frame-pane frame 'app)))
+
 (defun display-commands (launcher-frame stream)
   (declare (ignore launcher-frame))
   (dolist (ae *applications*)
@@ -98,5 +103,6 @@
 
 (defun run-launcher-gui (&rest args)
   (declare (ignore args))
+  
   (clim:run-frame-top-level
    (clim:make-application-frame 'launcher-frame :pretty-name "Launcher")))

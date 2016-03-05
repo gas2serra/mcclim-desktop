@@ -37,7 +37,6 @@
 ;;; protocol: launch/running
 
 (defmethod launch-application ((application application) &key end-cb args)
-  (ensure-application-configured application)
   (with-slots (name) application
     (clim-sys:make-process 
      #'(lambda ()
