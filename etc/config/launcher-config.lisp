@@ -6,23 +6,24 @@
 
 (defun launcher-config-fn (application)
   (setf *applications* nil)
-  (register-launcher-application "sudoku" "Sudoku")
-  (register-launcher-application "climacs" "Climacs")
-  (register-launcher-application "editor" "Editor")
-  (register-launcher-application "beirc" "Beirc")
-  (register-launcher-application "chess" "Chess")
-  (register-launcher-application "climc" "Climc")
-  (register-launcher-application "climon" "Climon")
-  (register-launcher-application "ernestine" "Ernestine")
-  (register-launcher-application "spectacle" "Spectacle")
-  (register-launcher-application "listener" "Listener")
-  (register-launcher-application "pkg-doc" "PkgDoc")
-  (register-launcher-application "scigraph" "Scigraph")
-  (register-launcher-application "gsharp" "Gsharp")
-  (register-launcher-application "emacs" "Emacs")
-  (register-launcher-application "mcclide" "McCLIM IDE")
-  (register-launcher-application "class-browser" "Class Browser")
-  (register-launcher-application "clim-demo" "Clim Demo"))
+  (register-launcher-applications "sudoku"
+				  "climacs"
+				  "editor"
+				  "beirc"
+				  "chess"
+				  "climc"
+				  "climon"			  
+				  "climon"
+				  "ernestine"
+				  "spectacle"
+				  "listener"
+				  "pkg-doc" 
+				  "scigraph"
+				  "gsharp" 
+				  "emacs" 
+				  "mcclide"
+				  "class-browser"
+				  "clim-demo"))
 
 (setf (application-entry-fn *application*) #'launcher-entry-fn)
 (setf (application-config-fn *application*) #'launcher-config-fn)

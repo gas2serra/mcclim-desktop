@@ -1,19 +1,15 @@
 (in-package :mcclim-desktop)
 
-
 (defvar *applications* nil)
+
 (defun edit-file (filename)
   (let ((editor (find-application "editor")))
     (launch-application editor :args (list filename))))
 
 
-(defclass application-entry ()
-  ((name :initarg :name)
-   (label :initarg :label)
-   (application :initform nil)))
-
-(defun register-launcher-application (name label)
-  (push (make-instance 'application-entry :name name :label label) *applications*))
+(defun register-launcher-applications (&rest names)
+  (dolist (name names)
+    (push (find-application name) *applications*)))
 
 (clim:define-application-frame launcher-frame ()
   () 
@@ -31,85 +27,67 @@
 (defun display-commands (launcher-frame stream)
   (declare (ignore launcher-frame))
   (dolist (ae *applications*)
-    (clim:present ae 'application-entry :stream stream)))
+    (clim:present ae 'application :stream stream)))
 
-(clim:define-presentation-method clim:present (app (type application-entry) stream (view clim:textual-view) &key)
-  (with-slots (label) app
+(clim:define-presentation-method clim:present (app (type application) stream (view clim:textual-view) &key)
+  (with-accessors ((label cl-desktop:application-pretty-name)) app
     (format stream "~A~%" label)))
 
-(define-launcher-frame-command com-launch-app ((app 'application-entry))
-  (with-slots (application name) app
-    (unless application
-      (setf application (find-application name)))
-    (launch-application application)))
+(define-launcher-frame-command com-launch-app ((app 'application))
+  (launch-application app))
 
-(define-launcher-frame-command com-edit-config-file ((app 'application-entry))
-  (with-slots (application name) app
-    (unless application
-      (setf application (find-application name)))
-    (when (application-config-file application)
-      (edit-file (application-config-file application)))))
+(define-launcher-frame-command com-edit-config-file ((app 'application))
+  (when (application-config-file app)
+    (edit-file (application-config-file app))))
 
-(define-launcher-frame-command com-load-application ((app 'application-entry))
-  (with-slots (application name) app
-    (unless application
-      (setf application (find-application name)))
-    (load-application-system application t)))
+(define-launcher-frame-command com-load-application ((app 'application))
+  (load-application-system app t))
 
-(define-launcher-frame-command com-configure-application ((app 'application-entry))
-  (with-slots (application name) app
-    (unless application
-      (setf application (find-application name)))
-    (configure-application application t)))
+(define-launcher-frame-command com-configure-application ((app 'application))
+  (configure-application application t))
 
 
-(define-launcher-frame-command com-edit-config-file ((app 'application-entry))
-  (with-slots (application name) app
-    (unless application
-      (setf application (find-application name)))
-    (when (application-config-file application)
-      (edit-file (application-config-file application)))))
+(define-launcher-frame-command com-edit-config-file ((app 'application))
+  (when (application-config-file app)
+    (edit-file (application-config-file app))))
 
 
 
-(define-launcher-frame-command com-edit-application-file ((app 'application-entry))
-  (with-slots (application name) app
-    (unless application
-      (setf application (find-application name)))
-    (when (application-file application)
-      (edit-file (application-file application)))))
+(define-launcher-frame-command com-edit-application-file ((app 'application))
+  (when (application-file app)
+    (edit-file (application-file app))))
 
 ;;
 ;; command traslators
 ;;
 
 (clim:define-presentation-to-command-translator launch-app
-    (application-entry com-launch-app launcher-frame
+    (application com-launch-app launcher-frame
 		 :gesture :select
 		 :documentation "Launch application")
     (object) (list object))
 
 
 (clim:define-presentation-to-command-translator edit-config-file
-    (application-entry com-edit-config-file launcher-frame
+    (application com-edit-config-file launcher-frame
 		 :gesture :help
 		 :documentation "Edit Config File")
     (object) (list object))
 
 (clim:define-presentation-to-command-translator edit-application-file
-    (application-entry com-edit-application-file launcher-frame
+    (application com-edit-application-file launcher-frame
 		 :gesture :help
 		 :documentation "Edit Application File")
     (object) (list object))
 
 (clim:define-presentation-to-command-translator load-application
-    (application-entry com-load-application launcher-frame
+    (application com-load-application launcher-frame
 		       :gesture :help
 		       :documentation "Load Application")
   (object) (list object))
 
 (clim:define-presentation-to-command-translator configure-application
-    (application-entry com-configure-application launcher-frame
+    (application com-configure-application launcher-frame
 		 :gesture :help
 		 :documentation "Configure Application")
   (object) (list object))

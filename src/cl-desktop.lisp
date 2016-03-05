@@ -8,6 +8,7 @@
    :STANDARD-MCCLIM-APPLICATION
    :STANDARD-SHELL-APPLICATION
    :STANDARD-ALIAS-APPLICATION
+   :application-pretty-name
    :application-entry-fn
    :application-config-fn
    ))

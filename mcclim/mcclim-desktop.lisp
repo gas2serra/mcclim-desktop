@@ -3,6 +3,8 @@
 (defpackage mcclim-desktop
   (:use :cl :cl-desktop)
   (:import-from :cl-desktop
+		:application
+		:application-pretty-name
 		:standard-manager-mixin
 		:simple-manager-mixin
 		:manager-debugger-hook
