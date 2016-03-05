@@ -44,7 +44,7 @@
   (load-application-system app t))
 
 (define-launcher-frame-command com-configure-application ((app 'application))
-  (configure-application application t))
+  (configure-application app t))
 
 
 (define-launcher-frame-command com-edit-config-file ((app 'application))
