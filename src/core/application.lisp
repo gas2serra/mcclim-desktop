@@ -15,17 +15,7 @@
 		:accessor application-pretty-name
 		:initform nil)
    (configured-p :reader application-configured-p
-		 :initform nil)
-   (configuration-time :initarg :configuration-time
-		       :accessor application-configuration-time
-		       :initform :require
-		       :type (member :boot :require :run))
-   (loading-time :initarg :loading-time
-		       :accessor application-loading-time
-		       :initform :require
-		       :type (member :boot :require :run))
-   (loaded-p :reader application-loaded-p
-	     :initform nil)))
+		 :initform nil)))
 
 ;;;
 ;;; Application protocols
@@ -37,10 +27,8 @@
 (defgeneric note-application-end-running (application &rest args))
 
 (defgeneric configure-application (application &optional force-p))
+(defgeneric ensure-application-configured (application))
 (defgeneric note-application-configured (application))
-
-(defgeneric load-application (application &optional force-p))
-(defgeneric note-application-loaded (application))
 
 ;;; protocol: launch/running
 
@@ -55,13 +43,8 @@
      :name name)))
 
 (defmethod launch-application :before ((application application) &key end-cb args)
-  (declare (ignore args))
-  (with-slots (configuration-time) application
-    (case configuration-time
-      (:require
-       (configure-application application))
-      (:run
-       (configure-application application t)))))
+  (declare (ignore end-cb args))
+  (ensure-application-configured application))
 
 (defmethod run-application :around ((application application) &rest args)
   (let ((*application* application))
@@ -72,13 +55,8 @@
 
 (defmethod run-application :before ((application application) &rest args)
   (declare (ignore args))
-  (with-slots (configuration-time) application
-    (case configuration-time
-      (:require
-       (configure-application application))
-      (:run
-       (configure-application application t)))))
-
+  (ensure-application-configured application))
+  
 (defmethod note-application-start-running ((application application) &rest args)
   (declare (ignore args)))
 
@@ -86,15 +64,6 @@
    (declare (ignore args)))
 
 ;;; protocol: configure
-
-(defmethod configure-application :before ((application application) &optional (force-p nil))
-  (declare (ignore args))
-  (with-slots (loading-time) application
-    (case loading-time
-      (:require
-       (load-application application))
-      (:run
-       (load-application application t)))))
 
 (defmethod configure-application :around ((application application) &optional (force-p nil))
   (with-slots (configured-p) application
@@ -108,38 +77,21 @@
     (setf configured-p t))
   (note-application-configured application))
 
+(defmethod ensure-application-configured ((application application))
+  (with-slots (configured-p) application
+    (when (not configured-p)
+      (configure-application application))))
+
 (defmethod note-application-configured ((application application))
   )
-
-;;; protocol: loading
-
-(defmethod load-application :around ((application application) &optional (force-p nil))
-  (with-slots (loaded-p) application
-    (when (or force-p (not loaded-p))
-      (let ((*application* application))
-	(call-next-method)))))
-
-(defmethod load-application :after ((application application) &optional (force-p nil))
-  (declare (ignore force-p))
-  (with-slots (loaded-p) application
-    (setf loaded-p t))
-  (note-application-loaded application))
-
-(defmethod note-application-loaded ((application application))
-  )
-
 
 ;;; protocol: initialization
 
 (defmethod initialize-instance :after ((application application) &rest initargs)
   (declare (ignore initargs))
-  (with-slots (name pretty-name loading-time configuration-time) application
+  (with-slots (name pretty-name) application
     (unless pretty-name
-      (setf pretty-name name))
-    (when (eql loading-time :boot)
-      (load-application application))
-    (when (eql configuration-time :boot)
-      (configure-application application))))
+      (setf pretty-name name))))
 
 ;;;
 ;;; CL Application
@@ -155,6 +107,8 @@
    (debug-system-p :initarg :debug-system-p
 		   :accessor application-debug-system-p
 		   :initform nil)
+   (loaded-p :reader application-loaded-p
+	     :initform nil)
    (system-loaded-p :initarg :system-loaded-p
 		    :reader application-system-loaded-p
 		    :initform nil)))
@@ -163,8 +117,18 @@
 ;;; protocols
 ;;;
 
+(defgeneric load-application (application &optional force-p))
+(defgeneric ensure-application-loaded (application))
+(defgeneric note-application-loaded (application))
+
 (defgeneric load-application-system (application &optional force-p))
+(defgeneric ensure-application-system-loaded (application))
 (defgeneric note-application-system-loaded (application))
+
+(defgeneric install-application (application &optional force-p))
+(defgeneric ensure-application-installed (application))
+(defgeneric note-application-installed (application))
+
 
 ;;; protocol: running
 
@@ -177,14 +141,34 @@
 
 (defmethod configure-application :before ((application cl-application) &optional (force-p nil))
   (declare (ignore force-p))
-  (with-slots (system-loaded-p) application
-    (unless system-loaded-p
-      (load-application-system application))))
+  (ensure-application-loaded application))
 
-;;; protocol: Loading
+;;; protocol: loaded
 
-(defmethod load-application :before ((application cl-application) &optional (force-p nil))
+(defmethod load-application :around ((application cl-application) &optional (force-p nil))
+  (with-slots (loaded-p) application
+    (when (or force-p (not loaded-p))
+      (let ((*application* application))
+	(call-next-method)))))
+
+(defmethod load-application :after ((application cl-application) &optional (force-p nil))
+  (declare (ignore force-p))
+  (with-slots (loaded-p) application
+    (setf loaded-p t))
+  (note-application-loaded application))
+
+(defmethod load-application ((application cl-application) &optional (force-p nil))
   (load-application-system application force-p))
+
+(defmethod ensure-application-loaded ((application cl-application))
+  (with-slots (loaded-p) application
+    (when (not loaded-p)
+      (load-application application))))
+
+(defmethod note-application-loaded ((application cl-application))
+  )
+
+;;; protocol: System Loading
 
 (defmethod load-application-system :around ((application cl-application) &optional (force-p nil))
   (with-slots (system-loaded-p) application
@@ -192,7 +176,7 @@
       (let ((*application* application))
 	(call-next-method)))))
 
-(defmethod load-application-system :before ((application cl-application) &optional (force-p nil))
+(defmethod load-application-system ((application cl-application) &optional (force-p nil))
   (declare (ignore force-p))
   (with-slots (system-name debug-system-p name) application
     (if system-name
@@ -238,10 +222,6 @@
 (defmethod configure-application ((application alias-application) &optional force-p)
   (with-slots (reference) application
     (configure-application reference force-p)))
-
-(defmethod load-application ((application alias-application) &optional force-p)
-  (with-slots (reference) application
-    (load-application reference force-p)))
 
 (defmethod launch-application ((application alias-application) &key end-cb args)
   (with-slots (reference) application

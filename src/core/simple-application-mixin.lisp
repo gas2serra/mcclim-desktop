@@ -39,13 +39,11 @@
 
 (defmethod load-application ((application simple-cl-application-mixin) &optional force-p)
   (declare (ignore force-p))
+  (load-application-system application)
   (with-slots (loading-fn name) application
     (if loading-fn
 	(apply loading-fn application)
 	(log-warn (format nil "Loading function for ~A undefined" name)))))
-
-(defmethod load-application-system ((application simple-cl-application-mixin) &optional force-p)
-  (declare (ignore force-p)))
 
 ;;;
 ;;; Simple Shell Mixin
@@ -62,8 +60,3 @@
 	(uiop:run-program (apply make-command-fn args))
 	(log-warn (format nil "Make command function for ~A undefined" name)))))
 
-(defmethod load-application ((application simple-shell-application-mixin) &optional force-p)
-  (declare (ignore force-p application))
-  )
-
-  

@@ -4,4 +4,7 @@
   (if (or force-p (null *manager*))
       (setf *manager* (make-instance 'mcclim-manager))
       (refresh-applications *manager*)))
+
+      
+      
   
