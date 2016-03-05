@@ -14,7 +14,7 @@
    (pretty-name :initarg :pretty-name
 		:accessor application-pretty-name
 		:initform nil)
-   (icon :initargs :icon
+   (icon :initarg :icon
 	 :accessor application-icon
 	 :initform nil)
    (configured-p :reader application-configured-p
@@ -93,9 +93,9 @@
 ;;;
 
 (defclass cl-application (application)
-  ((homepage :initarg :homepage
-	     :accessor application-homepage
-	     :initform nil)
+  ((home-page :initarg :home-page
+	      :accessor application-home-page
+	      :initform nil)
    (git-repo :initarg :git-repo
 	     :accessor application-git-repo
 	     :initform nil)
