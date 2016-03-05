@@ -54,10 +54,15 @@
     (note-application-end-running application args)))
 
 (defmethod note-application-start-running ((application application) &rest args)
-  (declare (ignore args)))
+  (declare (ignore args))
+  (with-slots (name) application
+    (log-info (format nil "start running ~A application" name))))
 
 (defmethod note-application-end-running ((application application) &rest args)
-   (declare (ignore args)))
+  (declare (ignore args))
+  (with-slots (name) application
+    (log-info (format nil "end runnig ~A application" name))))
+
 
 ;;; protocol: configure
 
@@ -78,7 +83,8 @@
     (setf configured-p nil)))
 
 (defmethod note-application-configured ((application application))
-  )
+  (with-slots (name) application
+    (log-info (format nil "configured ~A application" name))))
 
 ;;; protocol: initialization
 
@@ -164,7 +170,8 @@
   (need-reconfigure-application application))
 
 (defmethod note-application-loaded ((application cl-application))
-  )
+  (with-slots (name) application
+    (log-info (format nil "loaded ~A application" name))))
 
 ;;; protocol: installing
 
@@ -187,7 +194,9 @@
   (need-reload-application application))
 
 (defmethod note-application-installed ((application cl-application))
-  )
+  (with-slots (name) application
+    (log-info (format nil "installed ~A application" name))))
+
 
 
 ;;;

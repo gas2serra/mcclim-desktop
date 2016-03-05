@@ -29,6 +29,10 @@
   (setf (manager-log-stream *manager*)
 	(clim:get-frame-pane frame 'app)))
 
+(defmethod clim:disown-frame  :after (fm (frame launcher-frame))
+  (declare (ignore fm))
+  (setf (manager-log-stream *manager*) *trace-output*))
+
 (defun display-commands (launcher-frame stream)
   (declare (ignore launcher-frame))
   (dolist (ae *applications*)
