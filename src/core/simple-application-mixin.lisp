@@ -39,7 +39,7 @@
 
 (defmethod load-application ((application simple-cl-application-mixin) &optional force-p)
   (declare (ignore force-p))
-  (load-application-system application)
+  (call-next-method)
   (with-slots (loading-fn name) application
     (if loading-fn
 	(apply loading-fn application)

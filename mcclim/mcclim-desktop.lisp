@@ -16,7 +16,6 @@
 		:find-application
 		:application-config-file
 		:application-file
-		:load-application-system
 		:configure-application)
   (:export
    :launcher-run))

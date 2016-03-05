@@ -1,7 +1,7 @@
 (in-package :cl-desktop)
 
 ;;;;
-;;;; Abstract Application classes
+;;;; Application Classes
 ;;;;
 
 ;;;
@@ -109,9 +109,8 @@
 		   :initform nil)
    (loaded-p :reader application-loaded-p
 	     :initform nil)
-   (system-loaded-p :initarg :system-loaded-p
-		    :reader application-system-loaded-p
-		    :initform nil)))
+   (installed-p :reader application-installed-p
+		:initform nil)))
 
 ;;;
 ;;; protocols
@@ -121,14 +120,9 @@
 (defgeneric ensure-application-loaded (application))
 (defgeneric note-application-loaded (application))
 
-(defgeneric load-application-system (application &optional force-p))
-(defgeneric ensure-application-system-loaded (application))
-(defgeneric note-application-system-loaded (application))
-
 (defgeneric install-application (application &optional force-p))
 (defgeneric ensure-application-installed (application))
 (defgeneric note-application-installed (application))
-
 
 ;;; protocol: running
 
@@ -137,13 +131,13 @@
     (let ((*debugger-hook* (debugger-hook debug-p)))
       (call-next-method))))
 
-;;; protocol: configure
+;;; protocol: config
 
 (defmethod configure-application :before ((application cl-application) &optional (force-p nil))
   (declare (ignore force-p))
   (ensure-application-loaded application))
 
-;;; protocol: loaded
+;;; protocol: loading
 
 (defmethod load-application :around ((application cl-application) &optional (force-p nil))
   (with-slots (loaded-p) application
@@ -158,8 +152,14 @@
   (note-application-loaded application))
 
 (defmethod load-application ((application cl-application) &optional (force-p nil))
-  (load-application-system application force-p))
-
+  (declare (ignore force-p))
+  (with-slots (system-name debug-system-p name) application
+    (if system-name
+	(if debug-system-p
+	    (asdf:operate 'asdf:load-source-op system-name :force-not t)
+	    (asdf:operate 'asdf:load-op system-name))
+	(log-warn (format nil "System name for ~A undefined" name)))))
+  
 (defmethod ensure-application-loaded ((application cl-application))
   (with-slots (loaded-p) application
     (when (not loaded-p)
@@ -168,35 +168,35 @@
 (defmethod note-application-loaded ((application cl-application))
   )
 
-;;; protocol: System Loading
+;;; protocol: installing
 
-(defmethod load-application-system :around ((application cl-application) &optional (force-p nil))
-  (with-slots (system-loaded-p) application
-    (when (or force-p (not system-loaded-p))
+(defmethod install-application :around ((application cl-application) &optional (force-p nil))
+  (with-slots (installed-p) application
+    (when (or force-p (not installed-p))
       (let ((*application* application))
 	(call-next-method)))))
 
-(defmethod load-application-system ((application cl-application) &optional (force-p nil))
+(defmethod install-application :after ((application cl-application) &optional (force-p nil))
   (declare (ignore force-p))
-  (with-slots (system-name debug-system-p name) application
+  (with-slots (installed-p) application
+    (setf installed-p t))
+  (note-application-installed application))
+
+(defmethod install-application ((application cl-application) &optional (force-p nil))
+  (declare (ignore force-p))
+  (with-slots (system-name) application
     (if system-name
-	(if debug-system-p
-	    (asdf:operate 'asdf:load-source-op system-name :force-not t)
-	    (asdf:operate 'asdf:load-op system-name))
+	(ql:quickload system-name)
 	(log-warn (format nil "System name for ~A undefined" name)))))
+  
+(defmethod ensure-application-installed ((application cl-application))
+  (with-slots (installed-p) application
+    (when (not installed-p)
+      (install-application application))))
 
-(defmethod load-application-system :after ((application cl-application) &optional (force-p nil))
-  (declare (ignore force-p))
-  (with-slots (system-loaded-p) application
-    (setf system-loaded-p t))
-  (note-application-system-loaded application))
-
-(defmethod note-application-system-loaded ((application cl-application))
+(defmethod note-application-installed ((application cl-application))
   )
 
-;; protocol: initialization
-(defmethod initialize-instance :after ((application cl-application) &rest initargs)
-  (declare (ignore initargs)))
 
 ;;;
 ;;; McClim Application
@@ -219,10 +219,6 @@
 (defclass alias-application (link-application)
   ())
 
-(defmethod configure-application ((application alias-application) &optional force-p)
-  (with-slots (reference) application
-    (configure-application reference force-p)))
-
 (defmethod launch-application ((application alias-application) &key end-cb args)
   (with-slots (reference) application
     (launch-application reference :end-cb end-cb :args args)))
@@ -230,6 +226,10 @@
 (defmethod run-application ((application alias-application) &rest args)
   (with-slots (reference) application
     (apply #'run-application reference args)))
+
+(defmethod configure-application ((application alias-application) &optional force-p)
+  (with-slots (reference) application
+    (configure-application reference force-p)))
 
 
 (defclass proxy-application (link-application)
