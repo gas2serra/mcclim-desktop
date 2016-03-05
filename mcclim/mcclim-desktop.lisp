@@ -8,6 +8,7 @@
 		:standard-manager-mixin
 		:simple-manager-mixin
 		:manager-debugger-hook
+		:manager-debugger-fn
 		:manager-setup
 		:manager-log-stream
 		:reload-application-files

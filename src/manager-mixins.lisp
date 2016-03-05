@@ -11,7 +11,10 @@
 (defclass simple-manager-mixin ()
   ((log-stream :initarg :log-stream
 	       :accessor manager-log-stream
-	       :initform *trace-output*)))
+	       :initform *trace-output*)
+   (debugger-fn :initarg :debugger-fn
+		:accessor manager-debugger-fn
+		:initform nil)))
 
 ;;; protocol: logs
 
@@ -22,6 +25,14 @@
 (defmethod manager-log-warn ((manager simple-manager-mixin) msg)
   (with-slots (log-stream) manager
     (format log-stream "Warn: ~A~%" msg)))
+
+;;; protocol: debug
+
+(defmethod manager-debugger-hook ((manager simple-manager-mixin) debug-p)
+  (with-slots (debugger-fn) manager
+    (if (or debug-p (manager-force-debug-p manager))
+	debugger-fn
+	nil)))
 
 ;;;;
 ;;;; Standard Manager Mixin
@@ -49,8 +60,6 @@
       (setf application (get-application  name manager)))
     application))
 
-
-
 ;;;
 
 (defmethod manager-setup ((manager standard-manager-mixin))
@@ -66,10 +75,11 @@
 		     (load application-file))))
 		 name->application)))
 
-;;; protocol" initialize
+;;; protocol: initialize
 
 (defmethod initialize-instance :after ((manager standard-manager-mixin) &rest initargs)
   (declare (ignore initargs))
   (let ((init-file (find-file *init-file-name*)))
     (when init-file
-      (load init-file))))
+      (let ((*manager* manager))
+	(load init-file)))))

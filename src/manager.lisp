@@ -5,7 +5,10 @@
 ;;;;
 
 (defclass manager ()
-  ((name->application :initform (make-hash-table :test #'equal))))
+  ((name->application :initform (make-hash-table :test #'equal))
+   (force-debug-p :initarg :force-debug-p
+		  :accessor manager-force-debug-p
+		  :initform nil)))
 
 ;;;
 ;;; protocols 
@@ -36,7 +39,8 @@
   (note-manager-added-application manager application))
     
 (defmethod note-manager-added-application ((manager manager) application)
-  )
+  (with-slots (name) application
+    (log-info (format nil "added ~A application" name))))
 
 ;;; protocol: access applications
 
