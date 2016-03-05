@@ -26,7 +26,8 @@
 			 (:file "standard-pathnames")
 			 (:file "application-mixins")
 			 (:file "manager-mixins")
-			 (:file "standard-application"))))
+			 (:file "standard-application")
+			 (:file "standard-manager"))))
   :description ""
   :long-description ""
   :in-order-to ((test-op (test-op cl-desktop-test))))

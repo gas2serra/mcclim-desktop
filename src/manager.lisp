@@ -17,9 +17,10 @@
 (defgeneric get-application-1 (manager name))
 (defgeneric find-application-1 (manager name))
 (defgeneric add-application-1 (manager application))
-(defgeneric note-manager-add-application (manager application))
+(defgeneric note-manager-added-application (manager application))
 
 (defgeneric manager-debugger-hook (manager debug-p))
+(defgeneric manager-log-info (manager msg))
 (defgeneric manager-log-warn (manager msg))
 
 (defgeneric manager-setup (manager))
@@ -37,9 +38,10 @@
 (defmethod add-application-1 ((manager manager) application)
   (with-slots (name) application
     (with-slots (name->application) manager
-      (setf (gethash name name->application) application))))
-
-(defmethod note-manager-add-application ((manager manager) application)
+      (setf (gethash name name->application) application)))
+  (note-manager-added-application manager application))
+    
+(defmethod note-manager-added-application ((manager manager) application)
   )
 
 ;;; protocol: application runnig
@@ -58,8 +60,9 @@
 
 (defmethod refresh-applications ((manager manager))
   (with-slots (name->application) manager
-    (maphash #'(lambda (k v)
-		 (configure-application v t))
+    (maphash #'(lambda (k application)
+		 (declare (ignore k))
+		 (need-reconfigure-application application))
 	     name->application)))
 
 ;;;
@@ -78,6 +81,9 @@
 
 (defun debugger-hook (debug-p &optional (manager *manager*))
   (manager-debugger-hook manager debug-p))
+
+(defun log-info (msg &optional (manager *manager*))
+  (manager-log-info manager msg))
 
 (defun log-warn (msg &optional (manager *manager*))
   (manager-log-warn manager msg))

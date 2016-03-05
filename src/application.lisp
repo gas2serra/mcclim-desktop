@@ -14,6 +14,9 @@
    (pretty-name :initarg :pretty-name
 		:accessor application-pretty-name
 		:initform nil)
+   (icon :initargs :icon
+	 :accessor application-icon
+	 :initform nil)
    (configured-p :reader application-configured-p
 		 :initform nil)))
 
@@ -46,11 +49,10 @@
 
 (defmethod run-application :around ((application application) &rest args)
   (ensure-application-configured application)
-  (let ((*application* application))
-    (note-application-start-running application args)
-    (unwind-protect
-	 (call-next-method)
-      (note-application-end-running application args))))
+  (note-application-start-running application args)
+  (unwind-protect
+       (call-next-method)
+    (note-application-end-running application args)))
 
 (defmethod note-application-start-running ((application application) &rest args)
   (declare (ignore args)))
@@ -63,14 +65,9 @@
 (defmethod configure-application :around ((application application) &optional (force-p nil))
   (with-slots (configured-p) application
     (when (or force-p (not configured-p))
-      (let ((*application* application))
-	(call-next-method)))))
-
-(defmethod configure-application :after ((application application) &optional (force-p nil))
-  (declare (ignore force-p))
-  (with-slots (configured-p) application
-    (setf configured-p t))
-  (note-application-configured application))
+      (call-next-method)
+      (setf configured-p t)
+      (note-application-configured application))))
 
 (defmethod ensure-application-configured ((application application))
   (with-slots (configured-p) application
@@ -97,12 +94,18 @@
 ;;;
 
 (defclass cl-application (application)
-  ((debug-p :initarg :debug-p
-	    :accessor application-debug-p
-	    :initform t)
+  ((homepage :initarg :homepage
+	     :accessor application-homepage
+	     :initform nil)
+   (git-repo :initarg :git-repo
+	     :accessor application-git-repo
+	     :initform nil)
    (system-name :initarg :system-name
 		:accessor application-system-name
 		:initform nil)
+   (debug-p :initarg :debug-p
+	    :accessor application-debug-p
+	    :initform t)
    (debug-system-p :initarg :debug-system-p
 		   :accessor application-debug-system-p
 		   :initform nil)
@@ -128,6 +131,7 @@
 ;;; protocol: running
 
 (defmethod run-application :around ((application cl-application) &rest args)
+  (declare (ignore args))
   (with-slots (debug-p) application
     (let ((*debugger-hook* (debugger-hook debug-p)))
       (call-next-method))))
@@ -145,14 +149,10 @@
   (ensure-application-installed application)
   (with-slots (loaded-p) application
     (when (or force-p (not loaded-p))
-      (let ((*application* application))
-	(call-next-method)))))
-
-(defmethod load-application :after ((application cl-application) &optional (force-p nil))
-  (declare (ignore force-p))
-  (with-slots (loaded-p) application
-    (setf loaded-p t))
-  (note-application-loaded application))
+      (call-next-method)
+      (setf loaded-p t)
+      (need-reconfigure-application application)
+      (note-application-loaded application))))
 
 (defmethod ensure-application-loaded ((application cl-application))
   (with-slots (loaded-p) application
@@ -172,14 +172,10 @@
 (defmethod install-application :around ((application cl-application) &optional (force-p nil))
   (with-slots (installed-p) application
     (when (or force-p (not installed-p))
-      (let ((*application* application))
-	(call-next-method)))))
-
-(defmethod install-application :after ((application cl-application) &optional (force-p nil))
-  (declare (ignore force-p))
-  (with-slots (installed-p) application
-    (setf installed-p t))
-  (note-application-installed application))
+      (call-next-method)
+      (setf installed-p t)
+      (need-reload-application application)
+      (note-application-installed application))))
 
 (defmethod ensure-application-installed ((application cl-application))
   (with-slots (installed-p) application
@@ -228,7 +224,6 @@
   (with-slots (reference) application
     (configure-application reference force-p)))
 
-
 (defclass proxy-application (link-application)
   ())
 
@@ -238,10 +233,6 @@
 
 (defclass shell-application (application)
   ())
-
-(defmethod configure-application ((application shell-application) &optional force-p)
-  (declare (ignore force-p)))
-
 
 ;;;
 ;;; Utility Function

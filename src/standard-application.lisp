@@ -6,13 +6,11 @@
 
 (defclass standard-cl-application (standard-cl-application-mixin
 				   simple-cl-application-mixin
-				   simple-asdf-cl-application-mixin
 				   cl-application)
   ())
 
 (defclass standard-mcclim-application (standard-cl-application-mixin
 				       simple-cl-application-mixin
-				       simple-asdf-cl-application-mixin
 				       mcclim-application)
   ())
    

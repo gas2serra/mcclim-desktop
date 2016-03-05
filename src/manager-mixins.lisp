@@ -32,14 +32,18 @@
 (defmethod manager-setup ((manager standard-manager-mixin))
   (uiop:ensure-all-directories-exist (list *user-directory*)))
 
+(defmethod manager-log-info ((manager standard-manager-mixin) msg)
+  (format t "Info: ~A~%" msg))
+
 (defmethod manager-log-warn ((manager standard-manager-mixin) msg)
-  (format t "Warning: ~A~%" msg))
+  (format t "Warn: ~A~%" msg))
 
 (defmethod refresh-applications :before ((manager standard-manager-mixin))
   (with-slots (name->application) manager
-    (maphash #'(lambda (k application)
+    (maphash #'(lambda (name application)
+		 (declare (ignore application))
 		 (let ((application-file (find-file
-					  (format nil *application-file-name* k))))
+					  (format nil *application-file-name* name))))
 		   (when application-file
 		     (load application-file))))
 		 name->application)))
