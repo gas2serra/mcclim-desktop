@@ -1,12 +1,12 @@
 (in-package :cl-desktop)
 
-;;(asdf:require-system "sudoku-mcclim")
-
-(defun sudoku-entry-fn (application &rest args)
-  (declare (ignore args))
-  (sudoku-mcclim:run))
- 
-(setf (application-entry-fn *application*) #'sudoku-entry-fn)
-
-
+(setf (application-entry-fn *application*)
+      #'(lambda (app &rest args)
+	  (declare (ignore app args))
+	  (sudoku-mcclim:run)))
+      
+(setf (application-config-fn *application*)
+      #'(lambda (app)
+	  (declare (ignore app))
+	  nil))
 

@@ -1,11 +1,8 @@
 (in-package :mcclim-desktop)
 
-(ql:quickload "mcclim-desktop")
-
 (defun launcher-entry-fn (application &rest args)
   (declare (ignore args))
   (mcclim-desktop::run-launcher-gui))
-
 
 (defun launcher-config-fn (application)
   (setf *applications* nil)
@@ -26,8 +23,6 @@
   (register-launcher-application "mcclide" "McCLIM IDE")
   (register-launcher-application "class-browser" "Class Browser")
   (register-launcher-application "clim-demo" "Clim Demo"))
-  
+
 (setf (application-entry-fn *application*) #'launcher-entry-fn)
 (setf (application-config-fn *application*) #'launcher-config-fn)
-
-

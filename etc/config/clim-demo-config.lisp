@@ -1,11 +1,13 @@
 (in-package :cl-desktop)
 
-;;(asdf:require-system "clim-examples")
-
-(defun clim-demo-entry-fn (application &rest args)
-  (declare (ignore args))
-  (clim-demo::demodemo))
-  
-(setf (application-entry-fn *application*) #'clim-demo-entry-fn)
+(setf (application-entry-fn *application*)
+      #'(lambda (app &rest args)
+	  (declare (ignore app args))
+	  (clim-demo::demodemo)))
+      
+(setf (application-config-fn *application*)
+      #'(lambda (app)
+	  (declare (ignore app))
+	  nil))
 
 

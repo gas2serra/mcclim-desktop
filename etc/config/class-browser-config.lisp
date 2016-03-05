@@ -1,10 +1,14 @@
 (in-package :cl-desktop)
 
-;;(ql:quickload "clim-class-browser")
-
 (setf (application-entry-fn *application*)
-      #'(lambda (&rest args)
+      #'(lambda (app &rest args)
+	  (declare (ignore app args))
 	  (clim-class-browser:browse-class 'application)))
 				    
+(setf (application-config-fn *application*)
+      #'(lambda (app)
+	  (declare (ignore app))
+	  nil))
+
 
       

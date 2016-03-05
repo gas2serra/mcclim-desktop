@@ -1,8 +1,11 @@
 (in-package :cl-desktop)
 
-;;(ql:quickload "beirc")
+(setf (application-entry-fn *application*)
+      #'(lambda (app &rest args)
+	  (declare (ignore app args))
+	  (beirc:beirc)))
 
-(setf (application-entry-fn *application*) #'(lambda (&rest args)
-					       (beirc:beirc)))
-
-
+(setf (application-config-fn *application*)
+      #'(lambda (app)
+	  (declare (ignore app))
+	  nil))

@@ -1,9 +1,11 @@
 (in-package :cl-desktop)
 
-;;(ql:quickload "gsharp")
-
-(setf (application-entry-fn *application*) #'(lambda (&rest args)
-					       (gsharp:gsharp)))
-				    
-
-
+(setf (application-entry-fn *application*)
+      #'(lambda (app &rest args)
+	  (declare (ignore app args))
+	  (gsharp:gsharp)))
+      
+(setf (application-config-fn *application*)
+      #'(lambda (app)
+	  (declare (ignore app))
+	  nil))
