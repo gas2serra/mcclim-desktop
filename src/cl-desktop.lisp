@@ -13,5 +13,8 @@
    :application-config-fn
    ))
 
+(defpackage cl-desktop-user
+  (:use :cl :cl-desktop))
+
 (in-package :cl-desktop)
 

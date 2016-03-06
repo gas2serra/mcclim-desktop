@@ -1,10 +1,10 @@
-(in-package :cl-desktop)
+(in-package :cl-desktop-user)
 
 (register-application "gsharp" 'standard-mcclim-application
 		      :pretty-name "Gsharp"
 		      :icon nil
-		      :home-page nil
-		      :git-repo nil
+		      :home-page "https://github.com/informatimago/gsharp"
+		      :git-repo "https://github.com/informatimago/gsharp.git"
 		      :system-name "gsharp"
 		      :debug-p nil
 		      :debug-system-p nil

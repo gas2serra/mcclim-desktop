@@ -1,10 +1,10 @@
-(in-package :cl-desktop)
+(in-package :cl-desktop-user)
 
 (register-application "chess" 'standard-mcclim-application
 		      :pretty-name "Chess"
 		      :icon nil
-		      :home-page nil
-		      :git-repo nil
+		      :home-page "https://github.com/stassats/clim-chess"
+		      :git-repo "https://github.com/stassats/clim-chess.git"
 		      :system-name "clim-chess"
 		      :debug-p nil
 		      :debug-system-p nil

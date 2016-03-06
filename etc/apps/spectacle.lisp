@@ -1,10 +1,10 @@
-(in-package :cl-desktop)
+(in-package :cl-desktop-user)
 
 (register-application "spectacle" 'standard-mcclim-application
 		      :pretty-name "Spectacle"
 		      :icon nil
-		      :home-page nil
-		      :git-repo nil
+		      :home-page "https://github.com/slyrus/spectacle"
+		      :git-repo "https://github.com/slyrus/spectacle.git"
 		      :system-name "spectacle"
 		      :debug-p nil
 		      :debug-system-p nil

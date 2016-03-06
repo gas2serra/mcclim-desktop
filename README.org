@@ -29,7 +29,7 @@
 | listener      | REPL              | https://github.com/robert-strandh/McCLIM             | Yes       |
 | class-browser | class browser     | https://github.com/pocket7878/clim-class-browser.git | No        |
 | scigraph      | plotting          | https://github.com/robert-strandh/McCLIM             | Yes       |
-
+| mcclide       | ide               | https://github.com/gas2serra/mcclide                 | No        |
 
 To Add
 

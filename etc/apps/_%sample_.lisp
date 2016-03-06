@@ -1,4 +1,4 @@
-(in-package :cl-desktop)
+(in-package :cl-desktop-user)
 
 (register-application "" 'standard-mcclim-application
 		      :pretty-name ""
