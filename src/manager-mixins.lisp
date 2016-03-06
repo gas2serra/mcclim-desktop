@@ -97,7 +97,3 @@
 		     (load application-file))))
 		 name->application)))
 
-;;; protocol: initialize
-
-(defmethod initialize-instance :after ((manager standard-manager-mixin) &rest initargs)
-  (declare (ignore initargs)))
