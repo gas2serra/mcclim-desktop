@@ -63,7 +63,6 @@
   (with-slots (name) application
     (log-info (format nil "end runnig ~A application" name))))
 
-
 ;;; protocol: configure
 
 (defmethod configure-application :around ((application application) &optional (force-p nil))
@@ -86,13 +85,17 @@
   (with-slots (name) application
     (log-info (format nil "configured ~A application" name))))
 
-;;; protocol: initialization
-
+;;; initialize
 (defmethod initialize-instance :after ((application application) &rest initargs)
   (declare (ignore initargs))
   (with-slots (name pretty-name) application
     (unless pretty-name
       (setf pretty-name name))))
+
+;;; print-object
+(defmethod print-object ((obj application) stream)
+   (print-unreadable-object (obj stream :type t :identity t)
+     (princ (application-name obj) stream)))
 
 ;;;
 ;;; CL Application
@@ -196,8 +199,6 @@
 (defmethod note-application-installed ((application cl-application))
   (with-slots (name) application
     (log-info (format nil "installed ~A application" name))))
-
-
 
 ;;;
 ;;; McClim Application
