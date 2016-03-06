@@ -1,4 +1,6 @@
-(in-package :cl-desktop)
+(in-package :cl-desktop-user)
+
+(setf *application* (find-application "sudoku"))
 
 (setf (application-entry-fn *application*)
       #'(lambda (app &rest args)
@@ -9,4 +11,3 @@
       #'(lambda (app)
 	  (declare (ignore app))
 	  nil))
-

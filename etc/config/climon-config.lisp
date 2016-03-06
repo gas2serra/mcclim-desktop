@@ -1,4 +1,6 @@
-(in-package :cl-desktop)
+(in-package :cl-desktop-user)
+
+(setf *application* (find-application "climon"))
 
 (setf (application-entry-fn *application*)
       #'(lambda (app &rest args)

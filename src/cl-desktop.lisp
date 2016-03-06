@@ -11,6 +11,7 @@
    :application-pretty-name
    :application-entry-fn
    :application-config-fn
+   :find-application
    ))
 
 (defpackage cl-desktop-user

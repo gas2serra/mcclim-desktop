@@ -1,9 +1,9 @@
-(in-package :cl-desktop)
+(in-package :cl-desktop-user)
 
-;;(asdf:require-system "mcclide")
+(setf *application* (find-application "mcclide"))
 
 (defun mcclide-entry-fn (application &rest args)
-  (declare (ignore args))
+  (declare (ignore application args))
   (mcclide:mcclide))
 
 (setf (application-entry-fn *application*) #'mcclide-entry-fn)
