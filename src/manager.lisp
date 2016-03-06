@@ -16,8 +16,8 @@
 ;;; protocols 
 ;;;
 
-(defgeneric get-application-1 (manager name))
-(defgeneric find-application-1 (manager name))
+(defgeneric get-application-1 (manager name &optional errorp))
+(defgeneric find-application-1 (manager name &optional errorp))
 (defgeneric add-application-1 (manager application))
 (defgeneric note-manager-added-application (manager application))
 
@@ -33,9 +33,10 @@
 
 ;;; protocol: get/add
 
-(defmethod get-application-1 ((manager manager) name)
+(defmethod get-application-1 ((manager manager) name &optional (errorp t))
   (with-slots (name->application) manager
-    (gethash name name->application)))
+    (or (gethash name name->application)
+	(and errorp (error "Application ~A not found" name)))))
 
 (defmethod add-application-1 ((manager manager) application)
   (with-slots (name) application
@@ -73,11 +74,11 @@
 ;;; Utility functions
 ;;;
 
-(defun get-application (name &optional (manager *manager*))
-  (get-application-1 manager name))
+(defun get-application (name &optional (errorp t) (manager *manager*))
+  (get-application-1 manager name errorp))
 
-(defun find-application (name &optional (manager *manager*))
-  (find-application-1 manager name))
+(defun find-application (name &optional (errorp t) (manager *manager*))
+  (find-application-1 manager name errorp))
 
 (defun register-application (name type &rest args)
   (add-application-1 *manager*
