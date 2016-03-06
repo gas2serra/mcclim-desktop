@@ -97,3 +97,8 @@
 		     (load application-file))))
 		 name->application)))
 
+(defmethod refresh-application ((manager standard-manager-mixin) application)
+  (let ((application-file (find-file
+			   (format nil *application-file-name* (application-name application)))))
+    (when application-file
+      (load application-file))))

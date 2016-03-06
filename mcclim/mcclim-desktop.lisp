@@ -6,6 +6,7 @@
 		;; application classes
 		:application
 		;; manager
+		:refresh-application
 		:manager-log-stream
 		:log-warn
 		:initialize-manager

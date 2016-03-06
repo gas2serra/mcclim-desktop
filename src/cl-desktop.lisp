@@ -15,6 +15,7 @@
    :application-pretty-name
    :application-entry-fn
    :application-config-fn
+   :application-home-page
    
    :launch-application
    :configure-application
