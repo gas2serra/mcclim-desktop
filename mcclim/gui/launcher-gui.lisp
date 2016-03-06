@@ -50,7 +50,7 @@
     (edit-file (application-config-file app))))
 
 (define-launcher-frame-command com-load-application ((app 'application))
-  (load-application-system app t))
+  (load-application app t))
 
 (define-launcher-frame-command com-configure-application ((app 'application))
   (configure-application app t))

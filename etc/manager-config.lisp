@@ -1,7 +1,3 @@
-(in-package :cl-desktop)
+(in-package :cl-desktop-user)
 
-(setf (cl-desktop::manager-force-debug-p *manager*) t)
-(setf (manager-debugger-fn *manager*) #'clim-debugger:debugger)
-(cl-desktop::log-info "cl desktop initialized")
-
-;;(climi::use-pixie)
+(setf (manager-force-debug-p *manager*) t)
