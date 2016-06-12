@@ -33,9 +33,11 @@
 
 To Add
 
-| Name                          | What         | Source                                                    |
-|-------------------------------+--------------+-----------------------------------------------------------|
-| FTD - The Flexi-Trivial Dired | file manager | https://github.com/gabriel-laddel/flexi-trivial-dired.git |
+| Name                          | What                             | Source                                                    | Quicklisp |
+|-------------------------------+----------------------------------+-----------------------------------------------------------+-----------|
+| FTD - The Flexi-Trivial Dired | file manager                     | https://github.com/gabriel-laddel/flexi-trivial-dired.git | No        |
+| icd9it-clim                   | icd9it - clim treeview with info | https://github.com/jschatzer/icd9it-clim.git              | No        |
+| clim-widgets                  | small collection of clim widgets | https://github.com/jschatzer/clim-widgets.git             | No        |
 
 ** Author
 
