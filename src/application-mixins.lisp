@@ -53,12 +53,15 @@
 	    (ql:quickload system-name)
 	  (ql:system-not-found ()
 	    (log-warn (format nil "System ~A non found in quicklisp" name))
-	    (let ((cur-dir (uiop/os:getcwd)))
-	      (uiop/os:chdir (first ql:*local-project-directories*))
-	      (uiop/run-program:run-program
-	       (list "git" "clone" git-repo)
-	       :force-shell t :output t :error-output t)
-	      (uiop/os:chdir cur-dir))))
+	    (if git-repo
+		(let ((cur-dir (uiop/os:getcwd)))
+		  (uiop/os:chdir (first ql:*local-project-directories*))
+		  (uiop/run-program:run-program
+		   (list "git" "clone" git-repo)
+		   :force-shell t :output t :error-output t)
+		  (uiop/os:chdir cur-dir)
+		  (ql:quickload system-name))
+		(log-warn (format nil "Git repository for ~A undefined" name)))))
 	(log-warn (format nil "System name for ~A undefined" name)))))
 
 ;;;
