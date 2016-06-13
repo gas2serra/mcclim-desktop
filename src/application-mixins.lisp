@@ -34,40 +34,32 @@
 ;;;
 
 (defclass simple-cl-application-mixin (simple-application-mixin)
-  ((loading-fn :initarg :loading-fn
-	       :accessor application-loading-fn
-	       :initform nil)
-   (installing-fn :initarg :installing-fn
-	       :accessor application-installing-fn
-	       :initform nil))
-  (:default-initargs
-   :loading-fn #'(lambda (application)
-		   (with-slots (system-name debug-system-p name) application
-		     (if system-name
-			 (if debug-system-p
-			     (asdf:operate 'asdf:load-source-op system-name :force-not t)
-			     (asdf:operate 'asdf:load-op system-name))
-			 (log-warn (format nil "System name for ~A undefined" name)))))
-    :installing-fn #'(lambda (application)
-		       (with-slots (system-name name) application
-			 (if system-name
-			     (ql:quickload system-name)
-			     (log-warn (format nil "System name for ~A undefined" name)))))))
-
+  ())
    
 (defmethod load-application ((application simple-cl-application-mixin) &optional force-p)
   (declare (ignore force-p))
-  (with-slots (loading-fn name) application
-    (if loading-fn
-	(funcall loading-fn application)
-	(log-warn (format nil "Loading function for ~A undefined" name)))))
+  (with-slots (name system-name debug-system-p) application
+    (if system-name
+	(if debug-system-p
+	    (asdf:operate 'asdf:load-source-op system-name :force-not t)
+	    (asdf:operate 'asdf:load-op system-name))
+	(log-warn (format nil "System name for ~A undefined" name)))))
 
 (defmethod install-application ((application simple-cl-application-mixin) &optional force-p)
   (declare (ignore force-p))
-  (with-slots (install-fn name) application
-    (if install-fn
-	(funcall install-fn application)
-	(log-warn (format nil "Installing function for ~A undefined" name)))))
+  (with-slots (name system-name git-repo) application
+    (if system-name
+	(handler-case 
+	    (ql:quickload system-name)
+	  (ql:system-not-found ()
+	    (log-warn (format nil "System ~A non found in quicklisp" name))
+	    (let ((cur-dir (uiop/os:getcwd)))
+	      (uiop/os:chdir (first ql:*local-project-directories*))
+	      (uiop/run-program:run-program
+	       (list "git" "clone" git-repo)
+	       :force-shell t :output t :error-output t)
+	      (uiop/os:chdir cur-dir))))
+	(log-warn (format nil "System name for ~A undefined" name)))))
 
 ;;;
 ;;; Simple Shell Mixin

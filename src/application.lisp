@@ -120,7 +120,7 @@
    (loaded-p :reader application-loaded-p
 	     :initform nil)
    (installed-p :reader application-installed-p
-		:initform t)))
+		:initform nil)))
 
 ;;;
 ;;; protocols
@@ -179,9 +179,10 @@
 ;;; protocol: installing
 
 (defmethod install-application :around ((application cl-application) &optional (force-p nil))
-  (with-slots (installed-p) application
+  (with-slots (installed-p system-name) application
     (when (or force-p (not installed-p))
-      (call-next-method)
+      (unless (asdf:find-system system-name nil)
+	(call-next-method))
       (setf installed-p t)
       (need-reload-application application)
       (note-application-installed application))))

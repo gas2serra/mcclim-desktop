@@ -11,6 +11,3 @@
       #'(lambda (app)
 	  (declare (ignore app))
 	  nil))
-
-
-
