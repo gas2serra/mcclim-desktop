@@ -25,7 +25,8 @@
 						  "emacs" 
 						  "mcclide"
 						  "class-browser"
-						  "clim-demo"))
+						  "clim-demo"
+						  "closure"))
 
 (setf (application-entry-fn *application*) #'launcher-entry-fn)
 (setf (application-config-fn *application*) #'launcher-config-fn)

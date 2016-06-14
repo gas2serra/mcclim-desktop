@@ -30,14 +30,20 @@
 | class-browser | class browser     | https://github.com/pocket7878/clim-class-browser.git | No        |
 | scigraph      | plotting          | https://github.com/robert-strandh/McCLIM             | Yes       |
 | mcclide       | ide               | https://github.com/gas2serra/mcclide                 | No        |
+| closure       | browser           | https://github.com/dym/closure                       | No        |
 
 To Add
 
-| Name                          | What                             | Source                                                    | Quicklisp |
-|-------------------------------+----------------------------------+-----------------------------------------------------------+-----------|
-| FTD - The Flexi-Trivial Dired | file manager                     | https://github.com/gabriel-laddel/flexi-trivial-dired.git | No        |
-| icd9it-clim                   | icd9it - clim treeview with info | https://github.com/jschatzer/icd9it-clim.git              | No        |
-| clim-widgets                  | small collection of clim widgets | https://github.com/jschatzer/clim-widgets.git             | No        |
+| Name                          | What                                                                                | Source                                                    | Quicklisp |
+|-------------------------------+-------------------------------------------------------------------------------------+-----------------------------------------------------------+-----------|
+| FTD - The Flexi-Trivial Dired | file manager                                                                        | https://github.com/gabriel-laddel/flexi-trivial-dired.git | No        |
+| icd9it-clim                   | icd9it - clim treeview with info                                                    | https://github.com/jschatzer/icd9it-clim.git              | No        |
+| clim-widgets                  | small collection of clim widgets                                                    | https://github.com/jschatzer/clim-widgets.git             | No        |
+| McPixel                       | A toy Lisp program for drawing and animating pixel art.                             | https://github.com/ahefner/McPixel                        | No        |
+| tv-series-status              | Check the web for the next episodes of TV series and find new episodes at a glance. | https://github.com/OlafMerkert/tv-series-status.git       | No        |
+| raylisp                       |                                                                                     | https://github.com/nikodemus/raylisp.git                  | No        |
+| bibtext                       | Download bibtex entries for local pdfs from mathscinet.                             | https://github.com/OlafMerkert/bibtex-manager.git         | No        |
+
 
 ** Author
 
