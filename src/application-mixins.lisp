@@ -42,7 +42,7 @@
     (if system-name
 	(if debug-system-p
 	    (asdf:operate 'asdf:load-source-op system-name :force-not t)
-	    (asdf:operate 'asdf:load-op system-name))
+	    (asdf:require-system system-name))
 	(log-warn (format nil "System name for ~A undefined" name)))))
 
 (defmethod install-application ((application simple-cl-application-mixin) &optional force-p)
