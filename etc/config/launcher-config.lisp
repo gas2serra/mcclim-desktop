@@ -26,7 +26,9 @@
 						  "mcclide"
 						  "class-browser"
 						  "clim-demo"
-						  "closure"))
+						  "closure"
+						  "panter"
+						  "dired"))
 
 (setf (application-entry-fn *application*) #'launcher-entry-fn)
 (setf (application-config-fn *application*) #'launcher-config-fn)
