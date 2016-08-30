@@ -27,7 +27,16 @@
 
 ** Installation
 
+Clone the project into local-projects of quicklisp.
+
+#+BEGIN_SRC lisp
+(ql:quickload :cl-desktop) 
+(ql:quickload :mcclim-desktop) ;; GUI
+#+END_SRC
+
+
 ** Applications
+The applications are automatically installed using quicklisp or calling the clone command of git.
 
 | Name                          | What              | Source                                                    | Quicklisp |
 |-------------------------------+-------------------+-----------------------------------------------------------+-----------|
@@ -49,7 +58,7 @@
 | panter                        | mcclim utilities  | https://github.com/gas2serra/mcclim-panter                | No        |
 | FTD - The Flexi-Trivial Dired | file manager      | https://github.com/gabriel-laddel/flexi-trivial-dired.git | No        |
 
-To Add
+To add:
 
 | Name                          | What                                                                                | Source                                                    | Quicklisp |
 |-------------------------------+-------------------------------------------------------------------------------------+-----------------------------------------------------------+-----------|
