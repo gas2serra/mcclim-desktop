@@ -13,6 +13,7 @@
 		;; standard pathnames
 		:find-file)
   (:export
+   :initialize-mcclim-manager
    :launcher-run))
 
 (in-package :mcclim-desktop)

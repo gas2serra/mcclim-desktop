@@ -28,7 +28,8 @@
 						  "clim-demo"
 						  "closure"
 						  "panter"
-						  "dired"))
+						  "dired"
+						  "browser"))
 
 (setf (application-entry-fn *application*) #'launcher-entry-fn)
 (setf (application-config-fn *application*) #'launcher-config-fn)

@@ -60,11 +60,9 @@
     (edit-file (application-config-file app))))
 
 (define-launcher-frame-command com-open-home-page ((app 'application))
-  (trivial-open-browser:open-browser (application-home-page app)))
-
-
-
-
+  (launch-application (find-application "browser") :args (list (application-home-page app)))
+  ;;(trivial-open-browser:open-browser (application-home-page app)))
+  )
 
 ;;
 ;; command traslators
