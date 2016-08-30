@@ -16,6 +16,8 @@
    :application-entry-fn
    :application-config-fn
    :application-home-page
+
+   :initialize-manager
    
    :launch-application
    :configure-application

@@ -2,48 +2,63 @@
 
 ** Usage
 
+*** CL
+
 #+BEGIN_SRC lisp
-(asdf:require-system :mcclim-desktop)
-(mcclim-desktop:launcher-run)
+
+(cl-desktop:initialize-manager)
+
+(cl-desktop:launch-application 
+         (cl-desktop:find-application "climacs"))
+
+(launch-application 
+         (find-application "climacs") 
+         :args '("/etc/passwd"))
+
 #+END_SRC
 
-#+RESULTS:
-: #<SB-THREAD:THREAD "launcher" RUNNING {10047A4033}>
+*** GUI
+
+#+BEGIN_SRC lisp
+(asdf:require-system :mcclim-desktop)
+
+(mcclim-desktop:launcher-run)
+#+END_SRC
 
 ** Installation
 
 ** Applications
 
-| Name          | What              | Source                                               | Quicklisp |
-|---------------+-------------------+------------------------------------------------------+-----------|
-| beirc         | irc               | https://github.com/MrNeutron/beirc                   | Yes       |
-| clim-chess    | chess             | https://github.com/stassats/clim-chess               | No        |
-| clim-pkg-doc  | package browser   | https://github.com/jschatzer/clim-pkg-doc            | Yes       |
-| spectacle     | image editor      | https://github.com/slyrus/spectacle                  | No        |
-| climc         | instant messaging | https://github.com/nlamirault/climc                  | Yes       |
-| climon        | simon game        | https://github.com/nlamirault/climon                 | Yes       |
-| ernestine     | music browser     | https://github.com/nlamirault/ernestine              | Yes       |
-| sudoku-mcclim | sudoku            | https://github.com/tortkis/sudoku-mcclim             | No        |
-| climacs       | editor            | https://github.com/robert-strandh/Climacs            | Yes       |
-| gsharp        | score editor      | https://github.com/informatimago/gsharp              | Yes       |
-| listener      | REPL              | https://github.com/robert-strandh/McCLIM             | Yes       |
-| class-browser | class browser     | https://github.com/pocket7878/clim-class-browser.git | No        |
-| scigraph      | plotting          | https://github.com/robert-strandh/McCLIM             | Yes       |
-| mcclide       | ide               | https://github.com/gas2serra/mcclide                 | No        |
-| closure       | browser           | https://github.com/dym/closure                       | No        |
+| Name                          | What              | Source                                                    | Quicklisp |
+|-------------------------------+-------------------+-----------------------------------------------------------+-----------|
+| beirc                         | irc               | https://github.com/MrNeutron/beirc                        | Yes       |
+| clim-chess                    | chess             | https://github.com/stassats/clim-chess                    | No        |
+| clim-pkg-doc                  | package browser   | https://github.com/jschatzer/clim-pkg-doc                 | Yes       |
+| spectacle                     | image editor      | https://github.com/slyrus/spectacle                       | No        |
+| climc                         | instant messaging | https://github.com/nlamirault/climc                       | Yes       |
+| climon                        | simon game        | https://github.com/nlamirault/climon                      | Yes       |
+| ernestine                     | music browser     | https://github.com/nlamirault/ernestine                   | Yes       |
+| sudoku-mcclim                 | sudoku            | https://github.com/tortkis/sudoku-mcclim                  | No        |
+| climacs                       | editor            | https://github.com/robert-strandh/Climacs                 | Yes       |
+| gsharp                        | score editor      | https://github.com/informatimago/gsharp                   | Yes       |
+| listener                      | REPL              | https://github.com/robert-strandh/McCLIM                  | Yes       |
+| class-browser                 | class browser     | https://github.com/pocket7878/clim-class-browser.git      | No        |
+| scigraph                      | plotting          | https://github.com/robert-strandh/McCLIM                  | Yes       |
+| mcclide                       | ide               | https://github.com/gas2serra/mcclide                      | No        |
+| closure                       | browser           | https://github.com/dym/closure                            | No        |
+| panter                        | mcclim utilities  | https://github.com/gas2serra/mcclim-panter                | No        |
+| FTD - The Flexi-Trivial Dired | file manager      | https://github.com/gabriel-laddel/flexi-trivial-dired.git | No        |
 
 To Add
 
 | Name                          | What                                                                                | Source                                                    | Quicklisp |
 |-------------------------------+-------------------------------------------------------------------------------------+-----------------------------------------------------------+-----------|
-| FTD - The Flexi-Trivial Dired | file manager                                                                        | https://github.com/gabriel-laddel/flexi-trivial-dired.git | No        |
 | icd9it-clim                   | icd9it - clim treeview with info                                                    | https://github.com/jschatzer/icd9it-clim.git              | No        |
 | clim-widgets                  | small collection of clim widgets                                                    | https://github.com/jschatzer/clim-widgets.git             | No        |
 | McPixel                       | A toy Lisp program for drawing and animating pixel art.                             | https://github.com/ahefner/McPixel                        | No        |
 | tv-series-status              | Check the web for the next episodes of TV series and find new episodes at a glance. | https://github.com/OlafMerkert/tv-series-status.git       | No        |
 | raylisp                       |                                                                                     | https://github.com/nikodemus/raylisp.git                  | No        |
 | bibtext                       | Download bibtex entries for local pdfs from mathscinet.                             | https://github.com/OlafMerkert/bibtex-manager.git         | No        |
-
 
 ** Author
 
