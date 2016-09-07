@@ -27,7 +27,8 @@
 						  "class-browser"
 						  "clim-demo"
 						  "closure"
-						  "panter"
+						  "apropos-navigator"
+						  "task-manager"
 						  "dired"
 						  "browser"))
 

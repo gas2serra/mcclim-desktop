@@ -1,9 +1,9 @@
 (in-package :cl-desktop-user)
 
-(register-application "panter" 'standard-mcclim-application
-		      :pretty-name "Panter (debugging utilities)"
+(register-application "apropos-navigator" 'standard-mcclim-application
+		      :pretty-name "Apropos Navigator"
 		      :icon nil
-		      :home-page "https://github.com/gas2serra/mcclim-panter"
+		      :home-page "https://github.com/gas2serra/mcclim-panter/tree/master/Apps/apropos/"
 		      :git-repo "https://github.com/gas2serra/mcclim-panter.git"
 		      :system-name "mcclim-panter"
 		      :debug-p nil
