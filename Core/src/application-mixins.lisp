@@ -11,23 +11,13 @@
 (defclass simple-application-mixin ()
   ((entry-fn :initarg :entry-fn
 	     :accessor application-entry-fn
-	     :initform nil)
-   (config-fn :initarg :config-fn
-	      :accessor application-config-fn
-	      :initform nil)))
+	     :initform nil)))
 
-(defmethod run-application ((application simple-application-mixin) &rest args)
+(defmethod run-application-1 ((application simple-application-mixin) &rest args)
   (with-slots (entry-fn name) application
     (if entry-fn
 	(apply entry-fn application args)
 	(log-warn (format nil "Entry function for ~A undefined" name)))))
-
-(defmethod configure-application ((application simple-application-mixin) &optional force-p)
-  (declare (ignore force-p))
-  (with-slots (config-fn name) application
-    (if config-fn
-	(funcall config-fn application)
-	(log-warn (format nil "Config function for ~A undefined" name)))))
 
 ;;;
 ;;; Simple CL Appplication Mixin
@@ -105,7 +95,8 @@
 
 ;;; protocol: application config file
 
-(defmethod configure-application :before ((application standard-application-mixin) &optional force-p)
+(defmethod configure-application-1 :before ((application standard-application-mixin)
+					    &optional force-p)
   (declare (ignore force-p))
   (with-slots (name) application
     (let ((config-file (application-config-file application)))

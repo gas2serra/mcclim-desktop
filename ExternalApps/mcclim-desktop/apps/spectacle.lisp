@@ -5,7 +5,4 @@
 		      :icon nil
 		      :home-page "https://github.com/slyrus/spectacle"
 		      :git-repo "https://github.com/slyrus/spectacle.git"
-		      :system-name "spectacle"
-		      :debug-p nil
-		      :debug-system-p nil
-		      :frame-class nil)
+		      :system-name "spectacle")

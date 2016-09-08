@@ -35,6 +35,10 @@
    :manager-debugger-fn
 
    #:run-launcher
+
+
+   #:*clim-debugger*
+   #:*swank-debugger*
   ))
 
 

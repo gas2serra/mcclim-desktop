@@ -5,7 +5,4 @@
 		      :icon nil
 		      :home-page "https://github.com/dym/closure"
 		      :git-repo "https://github.com/gas2serra/closure.git"
-		      :system-name "closure"
-		      :debug-p nil
-		      :debug-system-p nil
-		      :frame-class nil)
+		      :system-name "closure")

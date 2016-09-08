@@ -16,7 +16,7 @@
   :version "0.1"
   :author "Alessandro Serra"
   :license "GPLv3"
-  :depends-on (:mcclim :alexandria)
+  :depends-on (:mcclim :clouseau :alexandria)
   :components ((:file "mcclim-desktop-core")
 	       (:module "src"
 			:serial t
@@ -30,6 +30,8 @@
 			 (:file "manager-mixins")
 			 (:file "standard-application")
 			 (:file "standard-manager")
+			 (:file "clim-debugger")
+			 (:file "debugger")
 			 (:file "init"))))
   :description ""
   :long-description "")

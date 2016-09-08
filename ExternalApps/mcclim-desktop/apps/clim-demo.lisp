@@ -5,7 +5,4 @@
 		      :icon nil
 		      :home-page "https://github.com/robert-strandh/McCLIM"
 		      :git-repo "https://github.com/robert-strandh/McCLIM.git"
-		      :system-name "clim-examples"
-		      :debug-p nil
-		      :debug-system-p nil
-		      :frame-class nil)
+		      :system-name "clim-examples")

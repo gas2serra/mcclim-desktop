@@ -14,7 +14,12 @@
 		:initialize-manager
 		;; standard pathnames
 		:find-file
-		*manager*)
+
+		#:application-file
+		#:configure-application
+		#:application-config-file
+		#:application-home-page
+		#:*manager*)
   (:export
    :run-launcher))
 

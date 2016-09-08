@@ -6,11 +6,12 @@
 
 (defclass manager ()
   ((name->application :initform (make-hash-table :test #'equal))
-   (force-debug-p :initarg :force-debug-p
-		  :accessor manager-force-debug-p
-		  :initform nil)
+   (debugger-fn :initarg :debugger-fn
+		:accessor manager-debugger-fn
+		:initform nil)
    (configured-p :reader manager-configured-p
-		 :initform nil)))
+		 :initform nil)
+   (log-lock :initform (clim-sys:make-lock "manager-log"))))
 
 ;;;
 ;;; protocols 
@@ -60,6 +61,9 @@
 
 ;;; protocol: configure
 
+(defmethod configure-manager ((manager manager) &optional force-p)
+  (declare (ignore manager force-p)))
+
 (defmethod configure-manager :around ((manager manager) &optional (force-p nil))
   (with-slots (configured-p) manager
     (when (or force-p (not configured-p))
@@ -69,6 +73,20 @@
 
 (defmethod note-manager-configured ((manager manager))
   (log-info (format nil "configured manager")))
+
+;;; protocol: log
+
+(defmethod manager-log-info :around ((manager manager) msg)
+  (declare (ignore manager msg))
+  (with-slots (log-lock) manager
+    (clim-sys:with-lock-held (log-lock)
+      (call-next-method))))
+
+(defmethod manager-log-warn :around ((manager manager) msg)
+  (declare (ignore manager msg))
+  (with-slots (log-lock) manager
+    (clim-sys:with-lock-held (log-lock)
+      (call-next-method))))
 
 ;;;
 ;;; Utility functions
@@ -83,9 +101,6 @@
 (defun register-application (name type &rest args)
   (add-application-1 *manager*
    (apply #'make-application name type args)))
-
-(defun debugger-hook (debug-p &optional (manager *manager*))
-  (manager-debugger-hook manager debug-p))
 
 (defun log-info (msg &optional (manager *manager*))
   (manager-log-info manager msg))

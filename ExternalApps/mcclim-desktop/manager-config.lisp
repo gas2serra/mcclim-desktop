@@ -1,4 +1,3 @@
 (in-package :mcclim-desktop-user)
 
-(setf (manager-force-debug-p *manager*) t)
-
+(setf (manager-debugger-fn *manager*) *clim-debugger*)

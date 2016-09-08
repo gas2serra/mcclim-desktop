@@ -21,8 +21,10 @@
 (defun refresh-desktop-search-pathnames ()
   (setf *mcclim-desktop-search-pathnames* (list *system-directory*))
   (maphash #'(lambda (k v)
+	       (declare (ignore k))
 	       (when (cdr v)
-		 (let ((p (uiop:merge-pathnames* "mcclim-desktop/" (asdf:component-pathname (cdr v)))))
+		 (let ((p (uiop:merge-pathnames* "mcclim-desktop/"
+						 (asdf:component-pathname (cdr v)))))
 		   (when (probe-file p)
 		     (push p *mcclim-desktop-search-pathnames*)))))
 	   asdf::*defined-systems*)
@@ -38,6 +40,9 @@
 				   relative-pathname d))
 		    *mcclim-desktop-search-pathnames*)))
 
+(defun find-user-file (relative-pathname)
+   (probe-file (uiop:merge-pathnames*
+		relative-pathname *user-directory*)))
 
 ;;;
 ;;; Create a new application or config file
@@ -46,19 +51,29 @@
 (defun create-user-config-file (name)
   (let ((dest (uiop:merge-pathnames*
 		   (format nil *application-config-file-name* name)
-		   *user-directory*)))
+		   *user-directory*))
+	(source (or
+		 (find-file (format nil *application-config-file-name* name))
+		 (find-file (format nil *application-config-file-name* "_%sample_")))))
     (uiop:ensure-all-directories-exist (list dest))
-    (uiop:copy-file (uiop:merge-pathnames*
-		     (format nil *application-config-file-name* "_%sample_")
-		     *system-directory*)
-		    dest)))
+    (uiop:copy-file source dest)
+    source))
   
 (defun create-user-application-file (name)
   (let ((dest (uiop:merge-pathnames*
 		   (format nil *application-file-name* name)
-		   *user-directory*)))
+		   *user-directory*))
+	(source (or
+		 (find-file (format nil *application-file-name* name))
+		 (find-file (format nil *application-file-name* "_%sample_")))))
     (uiop:ensure-all-directories-exist (list dest))
-    (uiop:copy-file (uiop:merge-pathnames*
-		     (format nil *application-file-name* "_%sample_")
-		     *system-directory*)
-		    dest)))
+    (uiop:copy-file source dest)
+    source))
+
+(defun user-config-file (name)
+  (or (find-user-file (format nil *application-config-file-name* name))
+      (create-user-config-file name)))
+
+(defun user-application-file (name)
+  (or (find-user-file (format nil *application-file-name* name))
+      (create-user-application-file name)))

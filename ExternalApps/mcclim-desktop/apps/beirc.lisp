@@ -5,7 +5,4 @@
 		      :icon nil
 		      :home-page "https://github.com/MrNeutron/beirc"
 		      :git-repo "https://github.com/MrNeutron/beirc.git"
-		      :system-name "beirc"
-		      :debug-p nil
-		      :debug-system-p nil
-		      :frame-class nil)
+		      :system-name "beirc")

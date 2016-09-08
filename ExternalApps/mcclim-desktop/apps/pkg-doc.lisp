@@ -5,7 +5,4 @@
 		      :icon nil
 		      :home-page "https://github.com/jschatzer/clim-pkg-doc"
 		      :git-repo "https://github.com/jschatzer/clim-pkg-doc.git"
-		      :system-name "clim-pkg-doc"
-		      :debug-p nil
-		      :debug-system-p nil
-		      :frame-class nil)
+		      :system-name "clim-pkg-doc")

@@ -1,7 +1,5 @@
 (in-package :mcclim-desktop-user)
 
-(setf *application* (find-application "climacs"))
-
 (setf (application-entry-fn *application*)
       #'(lambda (app &rest args)
 	  (declare (ignore app))
@@ -9,11 +7,6 @@
 		(climacs:climacs)
 		(climacs:edit-file (car args)))))
       
-(setf (application-config-fn *application*)
-      #'(lambda (app)
-	  (declare (ignore app))
-	  nil))
-
 (in-package drei)
 
 (define-command (com-paste-x-clipboard :name t :command-table drei:editing-table) ()

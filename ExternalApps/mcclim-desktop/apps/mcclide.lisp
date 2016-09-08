@@ -5,7 +5,4 @@
 		      :icon nil
 		      :home-page "https://github.com/gas2serra/mcclide" 
 		      :git-repo "https://github.com/gas2serra/mcclide.git"
-		      :system-name "mcclide"
-		      :debug-p nil
-		      :debug-system-p nil
-		      :frame-class nil)
+		      :system-name "mcclide")

@@ -1,36 +1,34 @@
 (in-package :mcclim-desktop-user)
 
-(setf *application* (find-application "launcher"))
+;;(setf *application* (find-application "launcher"))
 
-(defun launcher-entry-fn (application &rest args)
-  (declare (ignore application args))
-  (mcclim-desktop-launcher::run-launcher-gui))
+(setf (application-entry-fn *application*)
+      #'(lambda (application &rest args)
+	  (declare (ignore application args))
+	  (mcclim-desktop-launcher::run-launcher-gui)))
 
-(defun launcher-config-fn (application)
-  (declare (ignore application))
-  (setf mcclim-desktop::*applications* nil)
-  (mcclim-desktop-launcher::register-launcher-applications "sudoku"
-						  "climacs"
-						  "editor"
-						  "beirc"
-						  "chess"
-						  "climc"
-						  "climon"
-						  "ernestine"
-						  "spectacle"
-						  "listener"
-						  "pkg-doc" 
-						  "scigraph"
-						  "gsharp" 
-						  "emacs" 
-						  "mcclide"
-						  "class-browser"
-						  "clim-demo"
-						  "closure"
-						  "apropos-navigator"
-						  "task-manager"
-						  "dired"
-						  "browser"))
+(setf mcclim-desktop-launcher::*applications* nil)
 
-(setf (application-entry-fn *application*) #'launcher-entry-fn)
-(setf (application-config-fn *application*) #'launcher-config-fn)
+(mcclim-desktop-launcher::register-launcher-applications
+ "sudoku"
+ "climacs"
+ "editor"
+ "beirc"
+ "chess"
+ "climc"
+ "climon"
+ "ernestine"
+ "spectacle"
+ "listener"
+ "pkg-doc" 
+ "scigraph"
+ "gsharp" 
+ "emacs" 
+ "mcclide"
+ "class-browser"
+ "clim-demo"
+ "closure"
+ "apropos-navigator"
+ "task-manager"
+ "dired"
+ "browser")

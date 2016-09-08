@@ -5,7 +5,5 @@
 		      :icon nil
 		      :home-page "https://github.com/stassats/clim-chess"
 		      :git-repo "https://github.com/stassats/clim-chess.git"
-		      :system-name "clim-chess"
-		      :debug-p nil
-		      :debug-system-p nil
-		      :frame-class nil)
+		      :system-name "clim-chess")
+

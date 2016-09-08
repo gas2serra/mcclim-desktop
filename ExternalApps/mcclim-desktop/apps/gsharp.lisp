@@ -5,7 +5,4 @@
 		      :icon nil
 		      :home-page "https://github.com/informatimago/gsharp"
 		      :git-repo "https://github.com/informatimago/gsharp.git"
-		      :system-name "gsharp"
-		      :debug-p nil
-		      :debug-system-p nil
-		      :frame-class nil)
+		      :system-name "gsharp")

@@ -31,4 +31,7 @@
    ;; manager
    :manager-force-debug-p
    :manager-debugger-fn
+
+   #:*clim-debugger*
+   #:*swank-debugger*
    ))
