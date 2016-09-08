@@ -1,4 +1,4 @@
-(in-package :mcclim-desktop)
+(in-package :mcclim-desktop-launcher)
 
 (defvar *applications* nil)
 

@@ -4,12 +4,12 @@
 
 (defun launcher-entry-fn (application &rest args)
   (declare (ignore application args))
-  (mcclim-desktop::run-launcher-gui))
+  (mcclim-desktop-launcher::run-launcher-gui))
 
 (defun launcher-config-fn (application)
   (declare (ignore application))
   (setf mcclim-desktop::*applications* nil)
-  (mcclim-desktop::register-launcher-applications "sudoku"
+  (mcclim-desktop-launcher::register-launcher-applications "sudoku"
 						  "climacs"
 						  "editor"
 						  "beirc"

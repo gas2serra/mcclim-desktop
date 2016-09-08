@@ -16,15 +16,8 @@
   :version "0.1"
   :author "Alessandro Serra"
   :license "GPLv3"
-  :depends-on (:mcclim #|:mcclim-truetype|# :clouseau :clim-listener :cl-desktop :trivial-open-browser)
-  :components ((:module "mcclim" :serial t
-			:components
-			((:file "mcclim-desktop")
-			 (:file "global")
-			 (:file "mcclim-debugger")
-			 (:file "init")))
-	       (:module "mcclim/gui" :serial t
-		:components
-		((:file "launcher-gui")	
-		 (:file "main"))))	
+  :depends-on (:mcclim :mcclim-desktop-core
+		       :clouseau :clim-listener :trivial-open-browser
+		       :mcclim-desktop-launcher)
+  :components ((:file "mcclim-desktop"))
   :description "")

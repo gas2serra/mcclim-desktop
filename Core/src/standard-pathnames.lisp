@@ -4,11 +4,11 @@
 ;;;; Application and Config Files
 ;;;;
 
-(defparameter *cl-desktop-directory*
-  (asdf:component-pathname (asdf:find-system :cl-desktop)))
+(defparameter *mcclim-desktop-directory*
+  (asdf:component-pathname (asdf:find-system :mcclim-desktop)))
 
-(defparameter *system-directory* (uiop:merge-pathnames* "etc/" *cl-desktop-directory*))
-(defparameter *user-directory* (uiop:merge-pathnames* "~/.cl-desktop/"))
+(defparameter *system-directory* (uiop:merge-pathnames* "etc/" *mcclim-desktop-directory*))
+(defparameter *user-directory* (uiop:merge-pathnames* "~/.mcclim-desktop/"))
 
 (defparameter *init-file-name* "manager-init.lisp")
 (defparameter *manager-config-file-name* "manager-config.lisp")

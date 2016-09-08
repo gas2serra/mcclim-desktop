@@ -8,15 +8,15 @@
 |#
 
 (in-package :cl-user)
-(defpackage #:cl-desktop-asd
+(defpackage #:mcclim-desktop-asd
   (:use :cl :asdf))
-(in-package #:cl-desktop-asd)
+(in-package #:mcclim-desktop-asd)
 
-(defsystem cl-desktop
+(defsystem mcclim-desktop-core
   :version "0.1"
   :author "Alessandro Serra"
   :license "GPLv3"
-  :depends-on (:alexandria)
+  :depends-on (:mcclim :alexandria)
   :components ((:module "src" :serial t
 			:components
 			((:file "cl-desktop")
@@ -30,5 +30,4 @@
 			 (:file "standard-manager")
 			 (:file "init"))))
   :description ""
-  :long-description ""
-  :in-order-to ((test-op (test-op cl-desktop-test))))
+  :long-description "")

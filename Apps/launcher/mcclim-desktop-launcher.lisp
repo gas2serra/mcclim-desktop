@@ -1,20 +1,22 @@
 (in-package :cl-user)
 
-(defpackage mcclim-desktop
-  (:use :cl :cl-desktop)
+(defpackage mcclim-desktop-launcher
+  (:use :cl)
   (:import-from :cl-desktop
 		;; application classes
 		:application
+		:find-application
+		:launch-application
 		;; manager
 		:refresh-application
 		:manager-log-stream
 		:log-warn
 		:initialize-manager
 		;; standard pathnames
-		:find-file)
+		:find-file
+		*manager*)
   (:export
-   :initialize-mcclim-manager
-   :launcher-run))
+   :run-launcher))
 
-(in-package :mcclim-desktop)
+(in-package :mcclim-desktop-launcher)
 
