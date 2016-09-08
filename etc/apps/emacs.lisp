@@ -1,4 +1,4 @@
-(in-package :cl-desktop-user)
+(in-package :mcclim-desktop-user)
  
 (register-application "emacs" 'standard-shell-application
 		      :pretty-name "Emacs"

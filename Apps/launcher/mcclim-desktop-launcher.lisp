@@ -2,7 +2,7 @@
 
 (defpackage mcclim-desktop-launcher
   (:use :cl)
-  (:import-from :cl-desktop
+  (:import-from :mcclim-desktop-core
 		;; application classes
 		:application
 		:find-application

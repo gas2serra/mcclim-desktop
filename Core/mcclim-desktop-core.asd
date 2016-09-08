@@ -17,10 +17,12 @@
   :author "Alessandro Serra"
   :license "GPLv3"
   :depends-on (:mcclim :alexandria)
-  :components ((:module "src" :serial t
+  :components ((:file "mcclim-desktop-core")
+	       (:module "src"
+			:serial t
+			:depends-on ("mcclim-desktop-core")
 			:components
-			((:file "cl-desktop")
-			 (:file "global")
+			((:file "global")
 			 (:file "application")
 			 (:file "manager")
 			 (:file "standard-pathnames")

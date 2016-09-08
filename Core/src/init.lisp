@@ -1,4 +1,4 @@
-(in-package :cl-desktop)
+(in-package :mcclim-desktop-core)
 
 (defun initialize-manager (&optional (force-p nil))
   (when (or force-p (null *manager*))

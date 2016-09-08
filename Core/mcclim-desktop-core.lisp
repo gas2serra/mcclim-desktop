@@ -1,6 +1,6 @@
 (in-package :cl-user)
 
-(defpackage cl-desktop
+(defpackage mcclim-desktop-core
   (:use :cl)
   (:export
    ;; global
@@ -32,10 +32,3 @@
    :manager-force-debug-p
    :manager-debugger-fn
    ))
-
-
-(defpackage cl-desktop-user
-  (:use :cl :cl-desktop))
-
-(in-package :cl-desktop)
-

@@ -1,4 +1,4 @@
-(in-package :cl-desktop)
+(in-package :mcclim-desktop-core)
 
 ;;;;
 ;;;; Application Classes

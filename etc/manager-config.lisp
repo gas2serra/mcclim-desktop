@@ -1,4 +1,4 @@
-(in-package :cl-desktop-user)
+(in-package :mcclim-desktop-user)
 
 (setf (manager-force-debug-p *manager*) t)
 

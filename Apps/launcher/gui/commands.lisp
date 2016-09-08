@@ -1,47 +1,5 @@
 (in-package :mcclim-desktop-launcher)
 
-(defvar *applications* nil)
-
-(defun edit-file (filename)
-  (let ((editor (find-application "editor")))
-    (launch-application editor :args (list filename))))
-
-(defun register-launcher-applications (&rest names)
-  (dolist (name names)
-    (when (find-application name) 
-      (push name *applications*))))
-
-(clim:define-application-frame launcher-frame ()
-  () 
-  (:panes
-   (application :application
-		:display-function #'display-commands
-		:display-after-commands nil)
-   (app :application :height 100
-	:display-time nil))
-  (:layouts
-   (defaults
-       (clim:vertically ()
-	 application app))))
-
-(defmethod clim:adopt-frame  :after (fm (frame launcher-frame))
-  (declare (ignore fm))
-  (setf (manager-log-stream *manager*)
-	(clim:get-frame-pane frame 'app)))
-
-(defmethod clim:disown-frame  :after (fm (frame launcher-frame))
-  (declare (ignore fm))
-  (setf (manager-log-stream *manager*) *trace-output*))
-
-(defun display-commands (launcher-frame stream)
-  (declare (ignore launcher-frame))
-  (dolist (ae *applications*)
-    (clim:present (find-application ae) 'application :stream stream)))
-
-(clim:define-presentation-method clim:present (app (type application) stream (view clim:textual-view) &key)
-  (with-accessors ((label cl-desktop:application-pretty-name)) app
-    (format stream "~A~%" label)))
-
 (define-launcher-frame-command com-launch-app ((app 'application))
   (launch-application app))
 
@@ -60,9 +18,7 @@
     (edit-file (application-config-file app))))
 
 (define-launcher-frame-command com-open-home-page ((app 'application))
-  (launch-application (find-application "browser") :args (list (application-home-page app)))
-  ;;(trivial-open-browser:open-browser (application-home-page app)))
-  )
+  (launch-application (find-application "browser") :args (list (application-home-page app))))
 
 ;;
 ;; command traslators
@@ -104,15 +60,3 @@
 		 :gesture :help
 		 :documentation "Open home page")
     (object) (list object))
-
-
-
-
-(defmethod clim:frame-standard-output ((frame launcher-frame))
-  (clim:get-frame-pane frame 'app))
-
-(defun run-launcher-gui (&rest args)
-  (declare (ignore args))
-  
-  (clim:run-frame-top-level
-   (clim:make-application-frame 'launcher-frame :pretty-name "Launcher")))

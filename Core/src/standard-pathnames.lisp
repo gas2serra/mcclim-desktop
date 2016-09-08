@@ -1,4 +1,4 @@
-(in-package :cl-desktop)
+(in-package :mcclim-desktop-core)
 
 ;;;;
 ;;;; Application and Config Files
@@ -15,7 +15,7 @@
 (defparameter *application-file-name* "apps/~A.lisp")
 (defparameter *application-config-file-name* "config/~A-config.lisp")
 
-(defparameter *cl-desktop-search-pathnames* 
+(defparameter *mcclim-desktop-search-pathnames* 
   (list *user-directory* *system-directory*))
 
 ;;;
@@ -26,7 +26,7 @@
    (find-if #'probe-file
 	    (mapcar #'(lambda (d) (uiop:merge-pathnames*
 				   relative-pathname d))
-		    *cl-desktop-search-pathnames*)))
+		    *mcclim-desktop-search-pathnames*)))
 
 
 ;;;

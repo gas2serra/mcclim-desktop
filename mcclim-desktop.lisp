@@ -1,7 +1,7 @@
 (in-package :cl-user)
 
 (defpackage mcclim-desktop
-  (:use :cl :cl-desktop)
+  (:use :cl :mcclim-desktop-core)
   (:import-from :mcclim-desktop-launcher
 		:run-launcher)
   (:export
@@ -38,9 +38,9 @@
   ))
 
 
-(defpackage cl-desktop-user
-  (:use :cl :cl-desktop))
+(defpackage mcclim-desktop-user
+  (:use :cl :mcclim-desktop))
 
-(in-package :cl-desktop)
+(in-package :mcclim-desktop)
 
 (mcclim-desktop:initialize-manager)

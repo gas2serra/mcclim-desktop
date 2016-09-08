@@ -1,6 +1,6 @@
-(in-package :cl-desktop-user)
+(in-package :mcclim-desktop-user)
 
-(in-package :cl-desktop-user)
+(in-package :mcclim-desktop-user)
 
 (register-application "system-browser" 'standard-cl-application
 		      :pretty-name "System Browser"		      

@@ -1,6 +1,6 @@
-(in-package :cl-desktop)
+(in-package :mcclim-desktop-user)
 
-(cl-desktop::make-standard-manager)
+(mcclim-desktop-core::make-standard-manager)
 
 
 

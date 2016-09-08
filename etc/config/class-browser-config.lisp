@@ -1,4 +1,4 @@
-(in-package :cl-desktop-user)
+(in-package :mcclim-desktop-user)
 
 ;(setf *application* (find-application "class-browser"))
 

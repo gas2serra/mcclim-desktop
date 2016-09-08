@@ -8,20 +8,24 @@
 |#
 
 (in-package :cl-user)
-(defpackage #:mcclim-desktop-launcher-asd
+(defpackage #:mcclim-desktop-asd
   (:use :cl :asdf))
-(in-package #:mcclim-desktop-launcher-asd)
+(in-package #:mcclim-desktop-asd)
 
 (defsystem mcclim-desktop-launcher
   :version "0.1"
   :author "Alessandro Serra"
   :license "GPLv3"
-  :depends-on (:mcclim :mcclim-desktop-core :trivial-open-browser)
+  :depends-on (:mcclim-desktop-core)
   :components ((:file "mcclim-desktop-launcher")
 	       (:module "gui"
 			:serial t
 			:depends-on ("mcclim-desktop-launcher")
 			:components
-			((:file "launcher-gui")	
+			((:file "parameters")
+			 (:file "utility")
+			 (:file "presentations")
+			 (:file "frame")
+			 (:file "commands")
 			 (:file "main"))))
   :description "")

@@ -1,4 +1,4 @@
-(in-package :cl-desktop-user)
+(in-package :mcclim-desktop-user)
 
 (register-application "browser" 'standard-alias-application
 		      :pretty-name "Browser"
