@@ -12,13 +12,10 @@
   (:use :cl :asdf))
 (in-package #:mcclim-desktop-asd)
 
-(defsystem mcclim-desktop
+(defsystem mcclim-desktop-external-apps
   :version "0.1"
   :author "Alessandro Serra"
   :license "GPLv3"
-  :depends-on (:mcclim :mcclim-desktop-core
-		       :clouseau :clim-listener :trivial-open-browser
-		       :mcclim-desktop-launcher
-		       :mcclim-desktop-external-apps)
-  :components ((:file "mcclim-desktop"))
+  :depends-on (:mcclim-desktop-core)
+  :components ()
   :description "")

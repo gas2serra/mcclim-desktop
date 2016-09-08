@@ -25,7 +25,7 @@
 ;;;
 
 (defgeneric run-application (application &rest args))
-(defgeneric launch-application (application &key end-cb args))
+(defgeneric launch-application (application &key args))
 (defgeneric note-application-start-running (application &rest args))
 (defgeneric note-application-end-running (application &rest args))
 
@@ -36,14 +36,12 @@
 
 ;;; protocol: launch/running
 
-(defmethod launch-application ((application application) &key end-cb args)
+(defmethod launch-application ((application application) &key args)
   (with-slots (name) application
     (clim-sys:make-process 
      #'(lambda ()
 	 (unwind-protect
-	      (apply #'run-application application args)
-	   (when end-cb
-	     (funcall end-cb application :args args))))
+	      (apply #'run-application application args)))
      :name name)))
 
 (defmethod run-application :around ((application application) &rest args)
@@ -222,9 +220,9 @@
 (defclass alias-application (link-application)
   ())
 
-(defmethod launch-application ((application alias-application) &key end-cb args)
+(defmethod launch-application ((application alias-application) &key args)
   (with-slots (reference) application
-    (launch-application reference :end-cb end-cb :args args)))
+    (launch-application reference :args args)))
 
 (defmethod run-application ((application alias-application) &rest args)
   (with-slots (reference) application

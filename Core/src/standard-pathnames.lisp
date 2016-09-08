@@ -18,6 +18,16 @@
 (defparameter *mcclim-desktop-search-pathnames* 
   (list *user-directory* *system-directory*))
 
+(defun refresh-desktop-search-pathnames ()
+  (setf *mcclim-desktop-search-pathnames* (list *system-directory*))
+  (maphash #'(lambda (k v)
+	       (when (cdr v)
+		 (let ((p (uiop:merge-pathnames* "mcclim-desktop/" (asdf:component-pathname (cdr v)))))
+		   (when (probe-file p)
+		     (push p *mcclim-desktop-search-pathnames*)))))
+	   asdf::*defined-systems*)
+  (push *user-directory* *mcclim-desktop-search-pathnames*))
+
 ;;;
 ;;; Utility
 ;;;
