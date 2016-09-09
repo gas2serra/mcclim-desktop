@@ -12,25 +12,17 @@
   (:use :cl :asdf))
 (in-package #:mcclim-desktop-asd)
 
-(defsystem mcclim-desktop-core
+(defsystem mcclim-desktop-debugger
   :version "0.1"
   :author "Alessandro Serra"
   :license "GPLv3"
-  :depends-on (:mcclim :alexandria)
-  :components ((:file "mcclim-desktop-core")
+  :depends-on (:mcclim :clouseau :swank)
+  :components ((:file "mcclim-desktop-debugger")
 	       (:module "src"
 			:serial t
-			:depends-on ("mcclim-desktop-core")
+			:depends-on ("mcclim-desktop-debugger")
 			:components
-			((:file "global")
-			 (:file "application")
-			 (:file "manager")
-			 (:file "standard-pathnames")
-			 (:file "application-mixins")
-			 (:file "manager-mixins")
-			 (:file "standard-application")
-			 (:file "standard-manager")
-			 (:file "api")
-			 (:file "init"))))
+			((:file "clim-debugger")
+			 (:file "global"))))
   :description ""
   :long-description "")

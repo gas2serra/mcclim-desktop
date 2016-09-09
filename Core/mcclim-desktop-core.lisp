@@ -7,6 +7,7 @@
    #:*application*
    #:*application-style*
    #:*manager*
+   #:debugger-hook
    ;; application classes
    #:standard-cl-application
    #:standard-mcclim-application
@@ -58,11 +59,6 @@
    #:load-application-file
    #:reload-application-files
 
-   ;; debuggers
-   #:*clim-debugger*
-   #:*swank-debugger*
-   #:debugger-hook
-
    ;; API
    #:make-application
    #:make-manager
@@ -77,7 +73,8 @@
    #:configure-app
    #:load-app
    #:install-app
-   
+
+
    ;; init
    #:initialize
    ))

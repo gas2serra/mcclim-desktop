@@ -1,7 +1,7 @@
 (in-package :cl-user)
 
 (defpackage mcclim-desktop
-  (:use :cl :mcclim-desktop-core)
+  (:use :cl :mcclim-desktop-core :mcclim-desktop-debugger)
   (:nicknames :desktop)
   (:import-from :mcclim-desktop-launcher
 		:run-launcher)
