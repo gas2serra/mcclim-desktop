@@ -1,7 +1,5 @@
 (in-package :mcclim-desktop-user)
 
-(setf *application* (find-application "mcclide"))
-
 (defun mcclide-entry-fn (application &rest args)
   (declare (ignore application args))
   (mcclide:mcclide))

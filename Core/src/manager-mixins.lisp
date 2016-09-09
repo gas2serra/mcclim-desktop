@@ -40,13 +40,13 @@
 ;;; protocol: find
 
 (defmethod find-application-1 ((manager standard-manager-mixin) name &optional (errorp t))
-  (let ((application (get-application name nil manager)))
+  (let ((application (get-application-1 manager name nil)))
     (unless application
       (let ((application-file (find-file
 			       (format nil *application-file-name* name))))
 	(when application-file
 	  (load application-file)))
-      (setf application (get-application  name errorp manager)))
+      (setf application (get-application-1 manager  name errorp)))
     application))
 
 ;;; protocol: configure

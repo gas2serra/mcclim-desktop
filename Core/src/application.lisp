@@ -24,27 +24,27 @@
 ;;; Application protocols
 ;;;
 
-(defgeneric run-application-1 (application &rest args))
-(defgeneric launch-application-1 (application &rest args))
+(defgeneric run-application (application &rest args))
+(defgeneric launch-application (application &rest args))
 (defgeneric note-application-start-running (application &rest args))
 (defgeneric note-application-end-running (application &rest args))
 
-(defgeneric configure-application-1 (application &optional force-p))
+(defgeneric configure-application (application &optional force-p))
 (defgeneric ensure-application-configured (application))
 (defgeneric need-reconfigure-application (application))
 (defgeneric note-application-configured (application))
 
 ;;; protocol: launch/running
 
-(defmethod launch-application-1 ((application application) &rest args)
+(defmethod launch-application ((application application) &rest args)
   (with-slots (name) application
     (clim-sys:make-process 
      #'(lambda ()
 	 (unwind-protect
-	      (apply #'run-application-1 application args)))
+	      (apply #'run-application application args)))
      :name name)))
 
-(defmethod run-application-1 :around ((application application) &rest args)
+(defmethod run-application :around ((application application) &rest args)
   (ensure-application-configured application)
   (note-application-start-running application args)
   (unwind-protect
@@ -63,10 +63,10 @@
 
 ;;; protocol: configure
 
-(defmethod configure-application-1 ((application application) &optional (force-p nil))
+(defmethod configure-application ((application application) &optional (force-p nil))
   )
 
-(defmethod configure-application-1 :around ((application application) &optional (force-p nil))
+(defmethod configure-application :around ((application application) &optional (force-p nil))
   (with-slots (configured-p) application
     (when (or force-p (not configured-p))
       (call-next-method)
@@ -76,7 +76,7 @@
 (defmethod ensure-application-configured ((application application))
   (with-slots (configured-p) application
     (when (not configured-p)
-      (configure-application-1 application))))
+      (configure-application application))))
 
 (defmethod need-reconfigure-application ((application application))
   (with-slots (configured-p) application
@@ -136,14 +136,14 @@
 
 ;;; protocol: running
 
-(defmethod run-application-1 :around ((application cl-application) &rest args)
+(defmethod run-application :around ((application cl-application) &rest args)
   (declare (ignore args))
   (let ((*debugger-hook* #'debugger-hook))
     (call-next-method)))
 
 ;;; protocol: config
 
-(defmethod configure-application-1 :around ((application cl-application) &optional (force-p nil))
+(defmethod configure-application :around ((application cl-application) &optional (force-p nil))
   (declare (ignore force-p))
   (ensure-application-loaded application)
   (call-next-method))
@@ -219,17 +219,17 @@
 (defclass alias-application (link-application)
   ())
 
-(defmethod launch-application-1 ((application alias-application) &rest args)
+(defmethod launch-application ((application alias-application) &rest args)
   (with-slots (reference) application
-    (apply #'launch-application-1 reference args)))
+    (apply #'launch-application reference args)))
 
-(defmethod run-application-1 ((application alias-application) &rest args)
+(defmethod run-application ((application alias-application) &rest args)
   (with-slots (reference) application
-    (apply #'run-application-1 reference args)))
+    (apply #'run-application reference args)))
 
-(defmethod configure-application-1 ((application alias-application) &optional force-p)
+(defmethod configure-application ((application alias-application) &optional force-p)
   (with-slots (reference) application
-    (configure-application-1 reference force-p)))
+    (configure-application reference force-p)))
 
 (defclass proxy-application (link-application)
   ())
@@ -240,38 +240,4 @@
 
 (defclass shell-application (application)
   ())
-
-;;;
-;;; Utility Function
-;;;
-
-(defun make-application (name type &rest args)
-  (apply #'make-instance type :name name args))
-
-(defun run-application (application &rest args)
-  (apply #'run-application-1
-	 (typecase application
-	   (string
-	    (find-application application))
-	   (application
-	    application))
-	 args))
-
-(defun launch-application (application &rest args)
-  (apply #'launch-application-1
-	 (typecase application
-	   (string
-	    (find-application application))
-	   (application
-	    application))
-	 args))
-
-(defun configure-application (application &optional force-p)
-  (configure-application-1
-   (typecase application
-     (string
-      (find-application application))
-     (application
-      application))
-   force-p))
 

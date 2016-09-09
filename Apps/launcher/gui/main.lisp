@@ -6,4 +6,4 @@
    (clim:make-application-frame 'launcher-frame :pretty-name "Launcher")))
 
 (defun run-launcher ()
-  (launch-application (find-application "launcher")))
+  (mcclim-desktop-core::launch-application (mcclim-desktop-core::find-application-1 *manager* "launcher")))

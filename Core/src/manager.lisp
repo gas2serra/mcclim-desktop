@@ -88,22 +88,4 @@
     (clim-sys:with-lock-held (log-lock)
       (call-next-method))))
 
-;;;
-;;; Utility functions
-;;;
 
-(defun get-application (name &optional (errorp t) (manager *manager*))
-  (get-application-1 manager name errorp))
-
-(defun find-application (name &optional (errorp t) (manager *manager*))
-  (find-application-1 manager name errorp))
-
-(defun register-application (name type &rest args)
-  (add-application-1 *manager*
-   (apply #'make-application name type args)))
-
-(defun log-info (msg &optional (manager *manager*))
-  (manager-log-info manager msg))
-
-(defun log-warn (msg &optional (manager *manager*))
-  (manager-log-warn manager msg))

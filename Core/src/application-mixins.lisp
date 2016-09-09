@@ -13,7 +13,7 @@
 	     :accessor application-entry-fn
 	     :initform nil)))
 
-(defmethod run-application-1 ((application simple-application-mixin) &rest args)
+(defmethod run-application ((application simple-application-mixin) &rest args)
   (with-slots (entry-fn name) application
     (if entry-fn
 	(apply entry-fn application args)
@@ -95,7 +95,7 @@
 
 ;;; protocol: application config file
 
-(defmethod configure-application-1 :before ((application standard-application-mixin)
+(defmethod configure-application :before ((application standard-application-mixin)
 					    &optional force-p)
   (declare (ignore force-p))
   (with-slots (name) application

@@ -1,7 +1,5 @@
 (in-package :mcclim-desktop-user)
 
-;;(setf *application* (find-application "launcher"))
-
 (setf (application-entry-fn *application*)
       #'(lambda (application &rest args)
 	  (declare (ignore application args))

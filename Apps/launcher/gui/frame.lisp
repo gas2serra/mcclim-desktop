@@ -25,7 +25,7 @@
 (defun display-commands (launcher-frame stream)
   (declare (ignore launcher-frame))
   (dolist (ae *applications*)
-    (clim:present (find-application ae) 'application :stream stream)))
+    (clim:present (mcclim-desktop-core::find-application-1 *manager* ae) 'application :stream stream)))
 
 
 

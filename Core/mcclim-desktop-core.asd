@@ -32,6 +32,7 @@
 			 (:file "standard-manager")
 			 (:file "clim-debugger")
 			 (:file "debugger")
+			 (:file "api")
 			 (:file "init"))))
   :description ""
   :long-description "")

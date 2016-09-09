@@ -18,7 +18,7 @@
     (edit-file (application-config-file app))))
 
 (define-launcher-frame-command com-open-home-page ((app 'application))
-  (launch-application (find-application "browser") (application-home-page app)))
+  (launch-application (mcclim-desktop-core::find-application-1 *manager* "browser") (application-home-page app)))
 
 ;;
 ;; command traslators
