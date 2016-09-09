@@ -1,8 +1,9 @@
 (in-package :mcclim-desktop-debugger)
 
 ;;;
-;;; Debugging
+;;; Parameters
 ;;;
 
 (defparameter *clim-debugger* #'clim-debugger:debugger)
 (defparameter *swank-debugger* #'swank:swank-debugger-hook)
+

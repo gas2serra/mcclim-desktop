@@ -23,6 +23,6 @@
 			:depends-on ("mcclim-desktop-debugger")
 			:components
 			((:file "clim-debugger")
-			 (:file "global"))))
+			 (:file "parameters"))))
   :description ""
   :long-description "")

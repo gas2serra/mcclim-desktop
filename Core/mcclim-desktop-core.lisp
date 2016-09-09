@@ -38,7 +38,6 @@
    #:application-file
    #:application-config-file
    #:application-style-file
-   #:application-default-style-file
    
    ;; manager classes
    #:standard-manager

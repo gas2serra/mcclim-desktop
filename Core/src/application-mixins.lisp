@@ -80,8 +80,10 @@
 
 (defgeneric application-file (application &optional force-p force-user-p))
 (defgeneric application-config-file (application &optional force-p force-user-p))
-(defgeneric application-style-file (application &optional force-p force-user-p))
-(defgeneric application-default-style-file (application &optional force-p force-user-p))
+(defgeneric application-style-file (application &optional force-p force-user-p force-style))
+
+(defgeneric load-application-config-file (application))
+(defgeneric load-application-style-file (application &optional force-style))
 
 ;;; protocol: application files
 
@@ -96,42 +98,41 @@
     (find-application-config-file name force-p force-user-p)))
 
 (defmethod application-style-file ((application standard-application-mixin)
-				   &optional force-p force-user-p)
+				   &optional force-p force-user-p force-style)
   (with-slots (name style) application
-    (find-application-style-file name (or style *application-style*) force-p force-user-p)))
+    (find-application-style-file name (or force-style style *application-style*)
+				 force-p force-user-p)))
 
-(defmethod application-default-style-file ((application standard-application-mixin)
-					   &optional force-p force-user-p)
+;;; protocol: load files
+
+(defmethod load-application-config-file ((application standard-application-mixin))
   (with-slots (name) application
-    (find-application-style-file name :default force-user-p)))
-  
-
-;;; protocol: application config file
-
-(defmethod configure-application :before ((application standard-application-mixin)
-					    &optional force-p)
-  (declare (ignore force-p))
-  (with-slots (name style) application
     (let ((config-file (application-config-file application)))
       (if config-file
 	  (let ((*application* application))
 	    (load config-file))
-	  (log-warn (format nil "Config file (~A) for ~A not found"
-			    (application-relative-config-file-pathname name) name))))
-    (let ((style-file (application-style-file application)))
-      (if style-file
-	  (let ((*application* application))
-	    (load style-file))
-	  (progn
-	    (log-warn (format nil "Style file (~A) for ~A not found"
-			      (application-relative-style-file-pathname name (or style *application-style*)) name))
-	    (unless (eq style-file :default)
-	      (let ((style-file (application-default-style-file application)))
-		(if style-file
-		    (let ((*application* application))
-		      (load style-file))
-		    (log-warn (format nil "Style file (~A) for ~A not found"
-				      (application-relative-style-file-pathname name :default) name))))))))))
+	  (log-warn (format nil "Config file for ~A not found" name))))))
+
+(defmethod load-application-style-file ((application standard-application-mixin)
+					&optional force-style)
+  (with-slots (name style) application
+    (let ((sty (or force-style style *application-style*)))
+      (let ((style-file (application-style-file application nil nil sty)))
+	(if style-file
+	    (let ((*application* application))
+	      (load style-file))
+	    (progn
+	      (log-warn (format nil "Style file (~A) for ~A not found" sty name))
+	      (unless (eq sty :default)
+		(load-application-style-file application :default))))))))
+
+;;; protocol: configure
+
+(defmethod configure-application :before ((application standard-application-mixin)
+					    &optional force-p)
+  (declare (ignore force-p))
+  (load-application-config-file application)
+  (load-application-style-file application))
     
 ;;;
 ;;; Standard CL Application Mixin

@@ -59,12 +59,12 @@
 (defmethod note-application-start-running ((application application) &rest args)
   (declare (ignore args))
   (with-slots (name) application
-    (log-info (format nil "start running ~A application" name))))
+    (log-info (format nil "Start running ~A application" name))))
 
 (defmethod note-application-end-running ((application application) &rest args)
   (declare (ignore args))
   (with-slots (name) application
-    (log-info (format nil "end runnig ~A application" name))))
+    (log-info (format nil "End runnig ~A application" name))))
 
 ;;; protocol: configure
 
@@ -89,9 +89,10 @@
 
 (defmethod note-application-configured ((application application))
   (with-slots (name) application
-    (log-info (format nil "configured ~A application" name))))
+    (log-info (format nil "Configured ~A application" name))))
 
 ;;; initialize
+
 (defmethod initialize-instance :after ((application application) &rest initargs)
   (declare (ignore initargs))
   (with-slots (name pretty-name) application
@@ -99,6 +100,7 @@
       (setf pretty-name name))))
 
 ;;; print-object
+
 (defmethod print-object ((obj application) stream)
    (print-unreadable-object (obj stream :type t :identity t)
      (princ (application-name obj) stream)))
@@ -176,7 +178,7 @@
 
 (defmethod note-application-loaded ((application cl-application))
   (with-slots (name) application
-    (log-info (format nil "loaded ~A application" name))))
+    (log-info (format nil "Loaded ~A application" name))))
 
 ;;; protocol: installing
 
@@ -201,7 +203,7 @@
 
 (defmethod note-application-installed ((application cl-application))
   (with-slots (name) application
-    (log-info (format nil "installed ~A application" name))))
+    (log-info (format nil "Installed ~A application" name))))
 
 ;;;
 ;;; McClim Application
@@ -226,7 +228,7 @@
 
 (defmethod launch-application ((application alias-application) &key args cb-fn)
   (with-slots (reference) application
-    (apply #'launch-application reference :args args :cb-fn cb-fn)))
+    (funcall #'launch-application reference :args args :cb-fn cb-fn)))
 
 (defmethod run-application ((application alias-application) &rest args)
   (with-slots (reference) application
