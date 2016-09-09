@@ -43,6 +43,11 @@
   (load-application-file manager name)
   (get-application manager name errorp))
 
+(defmethod discover-applications ((manager standard-manager-mixin))
+  (dolist (name (find-all-application-names))
+    (load-application-file manager name t)))
+
+
 ;;; protocol: configure
 
 (defmethod configure-manager :before ((manager standard-manager-mixin) &optional force-p)
@@ -66,13 +71,19 @@
 (defmethod reload-application-files ((manager standard-manager-mixin))
   (with-slots (name->application) manager
     (maphash #'(lambda (name application)
-		 (declare (ignore name))
-		 (reload-application-file manager application))
+		 (declare (ignore application))
+		 (load-application-file manager name t))
 	     name->application)))
 
 ;; initialize
 
 (defmethod initialize-instance :after ((manager manager) &rest initargs)
   (declare (ignore manager initargs))
-  (uiop:ensure-all-directories-exist (list *user-directory*)))
+  (uiop:ensure-all-directories-exist (list *user-directory*
+					   (uiop:merge-pathnames*
+					    *application-file-directory*
+					    *user-directory*)
+					   (uiop:merge-pathnames*
+					    *application-config-directory*
+					    *user-directory*))))
   

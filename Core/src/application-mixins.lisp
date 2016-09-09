@@ -81,20 +81,30 @@
 (defgeneric application-file (application &optional force-p force-user-p))
 (defgeneric application-config-file (application &optional force-p force-user-p))
 (defgeneric application-style-file (application &optional force-p force-user-p))
+(defgeneric application-default-style-file (application &optional force-p force-user-p))
 
 ;;; protocol: application files
 
-(defmethod application-file ((application standard-application-mixin) &optional force-p force-user-p)
+(defmethod application-file ((application standard-application-mixin)
+			     &optional force-p force-user-p)
   (with-slots (name) application
     (find-application-file name force-p force-user-p)))
 	
-(defmethod application-config-file ((application standard-application-mixin) &optional force-p force-user-p)
+(defmethod application-config-file ((application standard-application-mixin)
+				    &optional force-p force-user-p)
   (with-slots (name) application
     (find-application-config-file name force-p force-user-p)))
 
-(defmethod application-style-file ((application standard-application-mixin) &optional force-p force-user-p)
+(defmethod application-style-file ((application standard-application-mixin)
+				   &optional force-p force-user-p)
   (with-slots (name style) application
-    (find-application-style-file name style force-p force-user-p)))
+    (find-application-style-file name (or style *application-style*) force-p force-user-p)))
+
+(defmethod application-default-style-file ((application standard-application-mixin)
+					   &optional force-p force-user-p)
+  (with-slots (name) application
+    (find-application-style-file name :default force-user-p)))
+  
 
 ;;; protocol: application config file
 
@@ -112,8 +122,16 @@
       (if style-file
 	  (let ((*application* application))
 	    (load style-file))
-	  (log-warn (format nil "Style file (~A) for ~A not found"
-			    (application-relative-style-file-pathname name style) name))))))
+	  (progn
+	    (log-warn (format nil "Style file (~A) for ~A not found"
+			      (application-relative-style-file-pathname name (or style *application-style*)) name))
+	    (unless (eq style-file :default)
+	      (let ((style-file (application-default-style-file application)))
+		(if style-file
+		    (let ((*application* application))
+		      (load style-file))
+		    (log-warn (format nil "Style file (~A) for ~A not found"
+				      (application-relative-style-file-pathname name :default) name))))))))))
     
 ;;;
 ;;; Standard CL Application Mixin

@@ -17,9 +17,9 @@
    (icon :initarg :icon
 	 :accessor application-icon
 	 :initform nil)
-   (style :initarg :slyle
+   (style :initarg :style
 	  :accessor application-style
-	  :initform :default)
+	  :initform nil)
    (configured-p :reader application-configured-p
 		 :initform nil)))
 

@@ -7,8 +7,9 @@
 		:run-launcher)
   (:export
    ;; global
-   :*application*
-   :*manager*
+   #:*application*
+   #:*application-style*
+   #:*manager*
    ;; application classes
    #:standard-cl-application
    #:standard-mcclim-application
@@ -48,6 +49,7 @@
    #:manager-log-stream
    ;; manager protocols
    #:discover-application
+   #:discover-applications
    #:add-application
    #:configure-manager
    #:manager-log-info

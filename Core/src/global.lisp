@@ -7,6 +7,9 @@
 (defvar *application* nil
   "The current application")
 
+(defvar *application-style* nil
+  "The current application style")
+
 (defvar *manager* nil
   "The manager")
 

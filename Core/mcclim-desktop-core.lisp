@@ -4,8 +4,9 @@
   (:use :cl)
   (:export
    ;; global
-   :*application*
-   :*manager*
+   #:*application*
+   #:*application-style*
+   #:*manager*
    ;; application classes
    #:standard-cl-application
    #:standard-mcclim-application
@@ -36,6 +37,7 @@
    #:application-file
    #:application-config-file
    #:application-style-file
+   #:application-default-style-file
    
    ;; manager classes
    #:standard-manager
@@ -45,13 +47,14 @@
    #:manager-log-stream
    ;; manager protocols
    #:get-application
-   #:discover-application
    #:add-application
    #:configure-manager
    #:manager-log-info
    #:manager-log-warn
    #:manager-applications
    #:manager-map-applications
+   #:discover-application
+   #:discover-applications
    #:load-application-file
    #:reload-application-files
 

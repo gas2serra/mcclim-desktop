@@ -18,7 +18,6 @@
 ;;;
 
 (defgeneric get-application (manager name &optional errorp))
-(defgeneric discover-application (manager name &optional errorp))
 (defgeneric add-application (manager application))
 (defgeneric note-manager-added-application (manager application))
 
@@ -30,6 +29,9 @@
 
 (defgeneric manager-applications (manager))
 (defgeneric manager-map-applications (manager fn))
+
+(defgeneric discover-application (manager name &optional errorp))
+(defgeneric discover-applications (manager))
 
 ;;; protocol: get/add
 

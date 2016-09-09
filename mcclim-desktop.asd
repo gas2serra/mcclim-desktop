@@ -18,7 +18,6 @@
   :license "GPLv3"
   :depends-on (:mcclim :mcclim-desktop-core
 		       :clouseau :clim-listener :trivial-open-browser
-		       :mcclim-desktop-launcher
-		       :mcclim-desktop-external-apps)
+		       :mcclim-desktop-launcher)
   :components ((:file "mcclim-desktop"))
   :description "")
