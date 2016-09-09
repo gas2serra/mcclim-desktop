@@ -34,49 +34,45 @@
 ;;; protocols 
 ;;;
 
-(defgeneric manager-setup (manager))
+(defgeneric load-application-file (manager name &optional force-p))
 (defgeneric reload-application-files (manager))
 
-;;; protocol: find
+;;; protocol: discover
 
-(defmethod find-application-1 ((manager standard-manager-mixin) name &optional (errorp t))
-  (let ((application (get-application-1 manager name nil)))
-    (unless application
-      (let ((application-file (find-file
-			       (format nil *application-file-name* name))))
-	(when application-file
-	  (load application-file)))
-      (setf application (get-application-1 manager  name errorp)))
-    application))
+(defmethod discover-application ((manager standard-manager-mixin) name &optional (errorp t))
+  (load-application-file manager name)
+  (get-application manager name errorp))
 
 ;;; protocol: configure
 
 (defmethod configure-manager :before ((manager standard-manager-mixin) &optional force-p)
   (declare (ignore force-p))
   (let ((config-file (find-file *manager-config-file-name*)))
-    (when config-file
-	(if (probe-file config-file)
-	    (let ((*manager* manager))
-	      (load config-file))
-	    (log-warn (format nil "Config file (~A) for manager not found" config-file))))))
+    (if config-file
+	(let ((*manager* manager))
+	  (load config-file))
+	(log-warn (format nil "Config file (~A) for manager not found" *manager-config-file-name*)))))
 
-;;; methods
+;;; protocol: load
 
-(defmethod manager-setup ((manager standard-manager-mixin))
-  (uiop:ensure-all-directories-exist (list *user-directory*)))
+(defmethod load-application-file (manager name &optional force-p)
+  (let ((application (get-application manager name nil)))
+    (when (or (null application) force-p)
+      (let ((application-file
+	     (find-application-file name)))
+	(when application-file
+	  (load application-file))))))
 
 (defmethod reload-application-files ((manager standard-manager-mixin))
   (with-slots (name->application) manager
     (maphash #'(lambda (name application)
-		 (declare (ignore application))
-		 (let ((application-file (find-file
-					  (format nil *application-file-name* name))))
-		   (when application-file
-		     (load application-file))))
-		 name->application)))
+		 (declare (ignore name))
+		 (reload-application-file manager application))
+	     name->application)))
 
-(defmethod refresh-application ((manager standard-manager-mixin) application)
-  (let ((application-file (find-file
-			   (format nil *application-file-name* (application-name application)))))
-    (when application-file
-      (load application-file))))
+;; initialize
+
+(defmethod initialize-instance :after ((manager manager) &rest initargs)
+  (declare (ignore manager initargs))
+  (uiop:ensure-all-directories-exist (list *user-directory*)))
+  

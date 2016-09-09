@@ -6,14 +6,14 @@
 
 #+BEGIN_SRC lisp
 
-(mcclim-desktop:initialize-mcclim-manager)
+(mcclim-desktop:initialize)
 
 (cl-desktop:launch-application 
          (cl-desktop:find-application "climacs"))
 
 (cl-desktop:launch-application 
          (cl-desktop:find-application "climacs") 
-         :args '("/etc/passwd"))
+         "/etc/passwd")
 
 #+END_SRC
 

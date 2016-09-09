@@ -22,7 +22,8 @@
 			:serial t
 			:depends-on ("mcclim-desktop-core")
 			:components
-			((:file "global")
+			((:file "clim-debugger")
+			 (:file "global")
 			 (:file "application")
 			 (:file "manager")
 			 (:file "standard-pathnames")
@@ -30,8 +31,6 @@
 			 (:file "manager-mixins")
 			 (:file "standard-application")
 			 (:file "standard-manager")
-			 (:file "clim-debugger")
-			 (:file "debugger")
 			 (:file "api")
 			 (:file "init"))))
   :description ""

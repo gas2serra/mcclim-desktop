@@ -17,6 +17,9 @@
    (icon :initarg :icon
 	 :accessor application-icon
 	 :initform nil)
+   (style :initarg :slyle
+	  :accessor application-style
+	  :initform :default)
    (configured-p :reader application-configured-p
 		 :initform nil)))
 
@@ -25,7 +28,7 @@
 ;;;
 
 (defgeneric run-application (application &rest args))
-(defgeneric launch-application (application &rest args))
+(defgeneric launch-application (application &key args cb-fn))
 (defgeneric note-application-start-running (application &rest args))
 (defgeneric note-application-end-running (application &rest args))
 
@@ -36,12 +39,14 @@
 
 ;;; protocol: launch/running
 
-(defmethod launch-application ((application application) &rest args)
+(defmethod launch-application ((application application) &key args cb-fn)
   (with-slots (name) application
     (clim-sys:make-process 
      #'(lambda ()
 	 (unwind-protect
-	      (apply #'run-application application args)))
+	      (let ((res (apply #'run-application application args)))
+		(when cb-fn
+		  (funcall cb-fn res application args)))))
      :name name)))
 
 (defmethod run-application :around ((application application) &rest args)
@@ -64,7 +69,7 @@
 ;;; protocol: configure
 
 (defmethod configure-application ((application application) &optional (force-p nil))
-  )
+  (declare (ignore application force-p)))
 
 (defmethod configure-application :around ((application application) &optional (force-p nil))
   (with-slots (configured-p) application
@@ -219,9 +224,9 @@
 (defclass alias-application (link-application)
   ())
 
-(defmethod launch-application ((application alias-application) &rest args)
+(defmethod launch-application ((application alias-application) &key args cb-fn)
   (with-slots (reference) application
-    (apply #'launch-application reference args)))
+    (apply #'launch-application reference :args args :cb-fn cb-fn)))
 
 (defmethod run-application ((application alias-application) &rest args)
   (with-slots (reference) application

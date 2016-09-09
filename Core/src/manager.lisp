@@ -17,29 +17,28 @@
 ;;; protocols 
 ;;;
 
-(defgeneric get-application-1 (manager name &optional errorp))
-(defgeneric find-application-1 (manager name &optional errorp))
-(defgeneric add-application-1 (manager application))
+(defgeneric get-application (manager name &optional errorp))
+(defgeneric discover-application (manager name &optional errorp))
+(defgeneric add-application (manager application))
 (defgeneric note-manager-added-application (manager application))
 
 (defgeneric configure-manager (manager &optional force-p))
 (defgeneric note-manager-configured (manager))
 
-(defgeneric manager-debugger-hook (manager debug-p))
 (defgeneric manager-log-info (manager msg))
 (defgeneric manager-log-warn (manager msg))
 
-(defgeneric get-applications (manager))
-(defgeneric map-applications (manager fn))
+(defgeneric manager-applications (manager))
+(defgeneric manager-map-applications (manager fn))
 
 ;;; protocol: get/add
 
-(defmethod get-application-1 ((manager manager) name &optional (errorp t))
+(defmethod get-application ((manager manager) name &optional (errorp t))
   (with-slots (name->application) manager
     (or (gethash name name->application)
 	(and errorp (error "Application ~A not found" name)))))
 
-(defmethod add-application-1 ((manager manager) application)
+(defmethod add-application ((manager manager) application)
   (with-slots (name) application
     (with-slots (name->application) manager
       (setf (gethash name name->application) application)))
@@ -51,11 +50,11 @@
 
 ;;; protocol: access applications
 
-(defmethod get-applications ((manager manager))
+(defmethod manager-applications ((manager manager))
   (with-slots (name->application) manager
     (alexandria:hash-table-values name->application)))
 
-(defmethod map-applications ((manager manager) fn)
+(defmethod manager-map-applications ((manager manager) fn)
   (with-slots (name->application) manager
     (alexandria:maphash-values fn name->application)))
 
@@ -87,5 +86,3 @@
   (with-slots (log-lock) manager
     (clim-sys:with-lock-held (log-lock)
       (call-next-method))))
-
-

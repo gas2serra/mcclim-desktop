@@ -8,10 +8,10 @@
 		:find-application
 		:launch-application
 		;; manager
-		:refresh-application
+		:load-application-file
 		:manager-log-stream
 		:log-warn
-		:initialize-manager
+		:initialize
 		;; standard pathnames
 		:find-file
 

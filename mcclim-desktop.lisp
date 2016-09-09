@@ -2,6 +2,7 @@
 
 (defpackage mcclim-desktop
   (:use :cl :mcclim-desktop-core)
+  (:nicknames :desktop)
   (:import-from :mcclim-desktop-launcher
 		:run-launcher)
   (:export
@@ -9,42 +10,82 @@
    :*application*
    :*manager*
    ;; application classes
-   :standard-cl-application
-   :standard-mcclim-application
-   :standard-shell-application
-   :standard-alias-application
-   ;; application
-   :application-pretty-name
-   :application-entry-fn
-   :application-config-fn
-   :application-home-page
-
-   :initialize-manager
+   #:standard-cl-application
+   #:standard-mcclim-application
+   #:standard-shell-application
+   #:standard-alias-application
+   ;; application slots
+   #:application-name
+   #:application-pretty-name
+   #:application-icon
+   #:application-style
+   #:application-configured-p
+   #:application-home-page
+   #:application-git-repo
+   #:application-system-name
+   #:application-debug-system-p
+   #:application-loaded-p
+   #:application-installed-p
+   #:application-frame-class
+   #:application-link-reference
+   #:application-entry-fn
+   #:application-make-command-fn
+   ;; application protocols
+   #:run-application
+   #:launch-application
+   #:configure-application
+   #:load-application
+   #:install-application
+   #:application-file
+   #:application-config-file
+   #:application-style-file
    
-   :launch-application
-   :configure-application
-   :load-application
+   ;; manager classes
+   #:standard-manager
+   ;; manager slots
+   #:manager-debugger-fn
+   #:manager-configured-p
+   #:manager-log-stream
+   ;; manager protocols
+   #:discover-application
+   #:add-application
+   #:configure-manager
+   #:manager-log-info
+   #:manager-log-warn
+   #:manager-applications
+   #:manager-map-applications
+   #:load-application-file
+   #:reload-application-files
    
-   :application-config-file
-   :application-file
-   ;; manager utilities
-   :register-application
-   :find-application
-   ;; manager
-   :manager-force-debug-p
-   :manager-debugger-fn
-
-   #:run-launcher
-
-
+   ;; debuggers
    #:*clim-debugger*
    #:*swank-debugger*
+   #:debugger-hook
+   
+   ;; API
+   #:make-application
+   #:make-manager
+   #:register-application
+   #:find-application
+   #:log-info
+   #:log-warn
+   #:applications
+   #:map-applications
+   #:run-app
+   #:launch-app
+   #:configure-app
+   #:load-app
+   #:install-app
+   ;; init
+   #:initialize
+   ;; gui
+   #:run-launcher
   ))
 
 
 (defpackage mcclim-desktop-user
   (:use :cl :mcclim-desktop))
 
-(in-package :mcclim-desktop)
+(in-package :mcclim-desktop-user)
 
-(mcclim-desktop:initialize-manager)
+(initialize)

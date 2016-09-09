@@ -4,7 +4,7 @@
   (launch-application app))
 
 (define-launcher-frame-command com-refresh-application ((app 'application))
-  (refresh-application *manager* app))
+  (load-application-file *manager* app t))
 
 (define-launcher-frame-command com-configure-application ((app 'application))
   (configure-application app t))
@@ -18,7 +18,8 @@
     (edit-file (application-config-file app))))
 
 (define-launcher-frame-command com-open-home-page ((app 'application))
-  (launch-application (mcclim-desktop-core::find-application-1 *manager* "browser") (application-home-page app)))
+  (launch-application (find-application "browser")
+		      :args (list (application-home-page app))))
 
 ;;
 ;; command traslators

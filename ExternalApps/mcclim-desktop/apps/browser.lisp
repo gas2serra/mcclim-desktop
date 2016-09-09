@@ -4,7 +4,7 @@
 		      :pretty-name "Browser"
 		      :icon nil
 		      ;;:reference (find-application "closure")
-		      :reference (mcclim-desktop-core::find-application-1 mcclim-desktop-core::*manager* "system-browser")
+		      :reference (find-application "system-browser")
 		      )
 						   
 

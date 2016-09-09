@@ -60,7 +60,7 @@
 
 (defclass simple-shell-application-mixin (simple-application-mixin)
   ((make-command-fn :initarg :make-command-fn
-		    :accessor shell-application-make-command-fn
+		    :accessor application-make-command-fn
 		    :initform nil))
   (:default-initargs
    :entry-fn #'(lambda (application &rest args)
@@ -78,38 +78,46 @@
 
 ;;; protocols
 
-(defgeneric application-file (application))
-(defgeneric application-config-file (application))
+(defgeneric application-file (application &optional force-p force-user-p))
+(defgeneric application-config-file (application &optional force-p force-user-p))
+(defgeneric application-style-file (application &optional force-p force-user-p))
 
-;;; protocol: application file
+;;; protocol: application files
 
-(defmethod application-file ((application standard-application-mixin))
+(defmethod application-file ((application standard-application-mixin) &optional force-p force-user-p)
   (with-slots (name) application
-    (find-file (format nil *application-file-name* name))))
-
-;;; protocol: application config file
-
-(defmethod application-config-file ((application standard-application-mixin))
+    (find-application-file name force-p force-user-p)))
+	
+(defmethod application-config-file ((application standard-application-mixin) &optional force-p force-user-p)
   (with-slots (name) application
-    (find-file (format nil *application-config-file-name* name))))
+    (find-application-config-file name force-p force-user-p)))
+
+(defmethod application-style-file ((application standard-application-mixin) &optional force-p force-user-p)
+  (with-slots (name style) application
+    (find-application-style-file name style force-p force-user-p)))
 
 ;;; protocol: application config file
 
 (defmethod configure-application :before ((application standard-application-mixin)
 					    &optional force-p)
   (declare (ignore force-p))
-  (with-slots (name) application
+  (with-slots (name style) application
     (let ((config-file (application-config-file application)))
-      (when config-file
-	(if (probe-file config-file)
-	    (let ((*application* application))
-	      (load config-file))
-	    (log-warn (format nil "Config file (~A) for ~A not found" config-file name)))))))
-
+      (if config-file
+	  (let ((*application* application))
+	    (load config-file))
+	  (log-warn (format nil "Config file (~A) for ~A not found"
+			    (application-relative-config-file-pathname name) name))))
+    (let ((style-file (application-style-file application)))
+      (if style-file
+	  (let ((*application* application))
+	    (load style-file))
+	  (log-warn (format nil "Style file (~A) for ~A not found"
+			    (application-relative-style-file-pathname name style) name))))))
+    
 ;;;
 ;;; Standard CL Application Mixin
 ;;;
 
 (defclass standard-cl-application-mixin (standard-application-mixin)
   ())
-

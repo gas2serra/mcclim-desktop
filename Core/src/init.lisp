@@ -1,9 +1,9 @@
 (in-package :mcclim-desktop-core)
 
-(defun initialize-manager (&optional (force-p nil))
+(defun initialize (&optional force-p)
   (when (or force-p (null *manager*))
     (refresh-desktop-search-pathnames)
     (let ((init-file (find-file *init-file-name*)))
       (when init-file
 	(load init-file))))
-  (configure-manager *manager*))
+   (configure-manager *manager*))
