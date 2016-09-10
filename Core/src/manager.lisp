@@ -11,7 +11,8 @@
 		:initform nil)
    (configured-p :reader manager-configured-p
 		 :initform nil)
-   (log-lock :initform (clim-sys:make-lock "manager-log"))))
+   ;;(log-lock :initform (clim-sys:make-lock "manager-log"))
+   ))
 
 ;;;
 ;;; protocols 
@@ -76,7 +77,7 @@
   (log-info (format nil "configured manager")))
 
 ;;; protocol: log
-
+#|
 (defmethod manager-log-info :around ((manager manager) msg)
   (declare (ignore manager msg))
   (with-slots (log-lock) manager
@@ -88,3 +89,4 @@
   (with-slots (log-lock) manager
     (clim-sys:with-lock-held (log-lock)
       (call-next-method))))
+|#

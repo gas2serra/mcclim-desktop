@@ -23,6 +23,7 @@
 			:depends-on ("mcclim-desktop-core")
 			:components
 			((:file "global")
+			 (:file "logger")
 			 (:file "application")
 			 (:file "manager")
 			 (:file "standard-pathnames")

@@ -7,14 +7,14 @@
 ;;;
 ;;; Simple Manager Mixin
 ;;;
-
+#|
 (defclass simple-manager-mixin ()
   ((log-stream :initarg :log-stream
 	       :accessor manager-log-stream
 	       :initform *trace-output*)))
-
+|#
 ;;; protocol: logs
-
+#|
 (defmethod manager-log-info ((manager simple-manager-mixin) msg)
   (with-slots (log-stream) manager
     (format log-stream "Info: ~A~%" msg)))
@@ -22,7 +22,7 @@
 (defmethod manager-log-warn ((manager simple-manager-mixin) msg)
   (with-slots (log-stream) manager
     (format log-stream "Warn: ~A~%" msg)))
-
+|#
 ;;;;
 ;;;; Standard Manager Mixin
 ;;;;

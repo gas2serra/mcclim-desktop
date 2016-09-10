@@ -8,6 +8,13 @@
    #:*application-style*
    #:*manager*
    #:debugger-hook
+
+   ;; logger
+   #:*logger*
+   #:logger-stream
+   #:make-logger
+   #:standard-logger
+   
    ;; application classes
    #:standard-cl-application
    #:standard-mcclim-application
@@ -44,13 +51,11 @@
    ;; manager slots
    #:manager-debugger-fn
    #:manager-configured-p
-   #:manager-log-stream
+
    ;; manager protocols
    #:get-application
    #:add-application
    #:configure-manager
-   #:manager-log-info
-   #:manager-log-warn
    #:manager-applications
    #:manager-map-applications
    #:discover-application

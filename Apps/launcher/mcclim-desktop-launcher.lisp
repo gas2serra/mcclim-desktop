@@ -9,7 +9,6 @@
 		:launch-application
 		;; manager
 		:load-application-file
-		:manager-log-stream
 		:log-warn
 		:initialize
 		;; standard pathnames
@@ -19,7 +18,11 @@
 		#:configure-application
 		#:application-config-file
 		#:application-home-page
-		#:*manager*)
+		#:*manager*
+		;; logger
+		#:*logger*
+		#:logger-stream
+		)
   (:export
    :run-launcher))
 

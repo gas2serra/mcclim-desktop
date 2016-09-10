@@ -32,13 +32,13 @@
 
 (defun make-manager (type &rest args)
   (setf *manager* (apply #'make-instance type args)))
-
+#|
 (defun log-info (msg &optional (manager *manager*))
   (manager-log-info manager msg))
 
 (defun log-warn (msg &optional (manager *manager*))
   (manager-log-warn manager msg))
-
+|#
 (defun register-application (name type &rest args)
   (add-application *manager*
 		   (apply #'make-application name type args)))

@@ -10,6 +10,14 @@
    #:*application*
    #:*application-style*
    #:*manager*
+
+   ;; logger
+   #:*logger*
+   #:make-logger
+   #:logger-stream
+   #:standard-logger
+   
+   
    ;; application classes
    #:standard-cl-application
    #:standard-mcclim-application
