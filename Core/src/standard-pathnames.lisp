@@ -23,17 +23,17 @@
 ;;; Relative pathnames
 ;;;
 
-(defun application-relative-file-pathname (application-name)
+(defun %application-relative-file-pathname (application-name)
   (uiop:merge-pathnames*
    (format nil *application-file-name* (string-downcase application-name))
    *application-file-directory*))
 
-(defun application-relative-config-file-pathname (application-name)
+(defun %application-relative-config-file-pathname (application-name)
   (uiop:merge-pathnames*
    (format nil *application-config-file-name* (string-downcase application-name))
    *application-config-directory*))
 
-(defun application-relative-style-file-pathname (application-name style)
+(defun %application-relative-style-file-pathname (application-name style)
   (uiop:merge-pathnames*
    (format nil *application-style-file-name* (string-downcase application-name) (string-downcase style))
    *application-config-directory*))
@@ -48,7 +48,7 @@
 				  relative-pathname d))
 		   *mcclim-desktop-search-pathnames*)))
 
-(defun find-user-file (relative-pathname)
+(defun %find-user-file (relative-pathname)
   (probe-file (uiop:merge-pathnames*
 	       relative-pathname *user-directory*)))
 
@@ -56,7 +56,7 @@
 ;;; Create a new application or config file
 ;;;
 
-(defun create-user-file (name sample-pathname)
+(defun %create-user-file (name sample-pathname)
   (log-warn (format nil "Create file (~A) in the user directory (~A)" name *user-directory*))
   (let ((dest (uiop:merge-pathnames* name *user-directory*))
 	(source (or
@@ -74,39 +74,39 @@
 (defun find-application-file (name &optional force-p force-user-p)
   (let ((file 
 	 (if force-user-p
-	     (find-user-file (application-relative-file-pathname name))
-	     (find-file (application-relative-file-pathname name)))))
+	     (%find-user-file (%application-relative-file-pathname name))
+	     (find-file (%application-relative-file-pathname name)))))
     (when (and (not file) force-p)
-      (setf file (create-user-file
-		  (application-relative-file-pathname name)
+      (setf file (%create-user-file
+		  (%application-relative-file-pathname name)
 		  (or
-		   (find-application-file name)
-		   (find-application-file *sample-file-name*)))))
+		   (%find-application-file name)
+		   (%find-application-file *sample-file-name*)))))
     file))
 
 (defun find-application-config-file (name &optional force-p force-user-p)
   (let ((file 
 	 (if force-user-p
-	     (find-user-file (application-relative-config-file-pathname name))
-	     (find-file (application-relative-config-file-pathname name)))))
+	     (%find-user-file (%application-relative-config-file-pathname name))
+	     (find-file (%application-relative-config-file-pathname name)))))
     (when (and (not file) force-p)
-      (setf file (create-user-file
-		  (application-relative-config-file-pathname name)
-		  (or (find-application-config-file name)
-		      (find-application-config-file *sample-file-name*)))))
+      (setf file (%create-user-file
+		  (%application-relative-config-file-pathname name)
+		  (or (%find-application-config-file name)
+		      (%find-application-config-file *sample-file-name*)))))
     file))
 
 (defun find-application-style-file (name style &optional force-p force-user-p)
   (let ((file 
 	 (if force-user-p
-	     (find-user-file (application-relative-style-file-pathname name style))
-	     (find-file (application-relative-style-file-pathname name style)))))
+	     (%find-user-file (%application-relative-style-file-pathname name style))
+	     (find-file (%application-relative-style-file-pathname name style)))))
     (when (and (not file) force-p)
-      (setf file (create-user-file
-		  (application-relative-style-file-pathname name style)
-		  (or (find-application-style-file name style)
-		      (find-application-style-file name :default)
-		      (find-application-style-file *sample-file-name* :default)))))
+      (setf file (%create-user-file
+		  (%application-relative-style-file-pathname name style)
+		  (or (%find-application-style-file name style)
+		      (%find-application-style-file name :default)
+		      (%find-application-style-file *sample-file-name* :default)))))
 
     file))
 
