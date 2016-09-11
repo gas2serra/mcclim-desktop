@@ -2,7 +2,7 @@
 
 (defun run-launcher-gui (&rest args)
   (declare (ignore args))
-  (setf *applications* (mcclim-desktop-core:applications))
+  (setf *applications* (applications))
   (clim:run-frame-top-level
    (clim:make-application-frame 'launcher-frame :pretty-name "Launcher")))
 

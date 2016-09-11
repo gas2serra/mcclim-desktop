@@ -1,4 +1,4 @@
-(in-package :mcclim-desktop-user)
+(in-package :desktop-user)
 
 (setf (application-entry-fn *application*)
       #'(lambda (app &rest args)

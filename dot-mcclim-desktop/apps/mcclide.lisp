@@ -1,4 +1,4 @@
-(in-package :mcclim-desktop-user)
+(in-package :desktop-user)
 
 (register-application "mcclide" 'standard-mcclim-application
 		      :pretty-name "Mcclim IDE"

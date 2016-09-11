@@ -1,4 +1,4 @@
-(in-package :mcclim-desktop-user)
+(in-package :desktop-user)
 
 (register-application "apropos-navigator" 'standard-mcclim-application
 		      :pretty-name "Apropos Navigator"

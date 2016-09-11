@@ -1,4 +1,4 @@
-(in-package :mcclim-desktop-debugger)
+(in-package :desktop-internals)
 
 ;;;
 ;;; Parameters

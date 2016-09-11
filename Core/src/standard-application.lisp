@@ -1,4 +1,4 @@
-(in-package :mcclim-desktop-core)
+(in-package :desktop-internals)
 
 ;;;;
 ;;;; Standard Application

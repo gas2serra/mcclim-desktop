@@ -1,4 +1,4 @@
-(in-package :mcclim-desktop)
+(in-package :desktop-user)
 
 (register-application "editor" 'standard-alias-application
 		      :pretty-name "Editor"

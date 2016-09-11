@@ -1,9 +1,9 @@
-(in-package :mcclim-desktop-user)
+(in-package :desktop-user)
 
 (setf (application-entry-fn *application*)
       #'(lambda (app &rest args)
 	  (declare (ignore app args))
-	  (clim-class-browser:browse-class 'mcclim-desktop::application)))
+	  (clim-class-browser:browse-class 'desktop-user::application)))
 
 
 

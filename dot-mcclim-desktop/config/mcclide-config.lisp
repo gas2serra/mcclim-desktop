@@ -1,4 +1,4 @@
-(in-package :mcclim-desktop-user)
+(in-package :desktop-user)
 
 (defun mcclide-entry-fn (application &rest args)
   (declare (ignore application args))

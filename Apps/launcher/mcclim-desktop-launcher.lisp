@@ -2,19 +2,21 @@
 
 (defpackage mcclim-desktop-launcher
   (:use :cl)
-  (:import-from :mcclim-desktop-core
+  (:import-from :desktop
 		;; application classes
-		:application
-		:find-application
-		:launch-application
+		#:application
+		#:application-pretty-name
+		#:find-application
+		#:launch-application
 		;; manager
-		:log-warn
+		#:log-warn
 		;; standard pathnames
-		:find-file
+		#:find-file
 		#:application-file
 		#:configure-application
 		#:application-config-file
 		#:application-home-page
+		#:applications
 		;; logger
 		#:*logger*
 		#:logger-stream

@@ -1,26 +1,27 @@
-(in-package :cl-user)
+(in-package :common-lisp-user)
 
-(defpackage mcclim-desktop
-  (:use :cl :mcclim-desktop-core :mcclim-desktop-debugger)
-  (:nicknames :desktop)
-  (:import-from :mcclim-desktop-launcher
-		:run-launcher)
+(defpackage :desktop
+  (:use :common-lisp)
+  (:nicknames :desk)
   (:export
-   ;; logger
-   #:*logger*
-   #:make-logger
-   #:logger-stream
-   #:standard-logger
-
-   ;; debugger
+      ;; debugger
    #:*debugger*
    #:debugger-hook
+   #:*clim-debugger*
+   #:*swank-debugger*
 
-   ;; global
+   ;; logger
+   #:*logger*
+   #:logger-stream
+   #:make-logger
+   #:standard-logger
+
+      ;; global
    #:*application*
    #:*application-style*
 
    ;; application classes
+   #:application
    #:standard-cl-application
    #:standard-mcclim-application
    #:standard-shell-application
@@ -50,19 +51,13 @@
    #:application-file
    #:application-config-file
    #:application-style-file
-   
-   ;; debuggers
-   #:*clim-debugger*
-   #:*swank-debugger*
-   #:debugger-hook
 
 
    #:discover-application
    #:discover-applications
-
-   
    ;; API
    #:make-application
+   #:make-manager
    #:register-application
    #:find-application
    #:log-info
@@ -74,16 +69,21 @@
    #:configure-app
    #:load-app
    #:install-app
+
+   #:find-file
+
    ;; init
    #:init
-   ;; gui
-   #:run-launcher
-  ))
+   ))
 
+(defpackage :desktop-sys
+  (:use :common-lisp)
+  (:export
+   ))
 
-(defpackage mcclim-desktop-user
-  (:use :cl :mcclim-desktop))
+(defpackage :desktop-internals
+  (:use :desktop :desktop-sys :common-lisp)
+  (:nicknames :deski))
 
-(in-package :mcclim-desktop-user)
-
-(init)
+(defpackage :desktop-user
+  (:use :desktop :common-lisp))

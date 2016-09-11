@@ -1,4 +1,4 @@
-(in-package :mcclim-desktop-debugger)
+(in-package :desktop-internals)
 
 ;;; LOAD THE CLIM DEBUGGER
 (load (merge-pathnames "Apps/Debugger/clim-debugger.lisp"

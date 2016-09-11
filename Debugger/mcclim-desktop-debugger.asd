@@ -17,10 +17,10 @@
   :author "Alessandro Serra"
   :license "GPLv3"
   :depends-on (:mcclim :clouseau :swank)
-  :components ((:file "mcclim-desktop-debugger")
+  :components (;;(:file "mcclim-desktop-debugger")
 	       (:module "src"
 			:serial t
-			:depends-on ("mcclim-desktop-debugger")
+			;;:depends-on ("mcclim-desktop-debugger")
 			:components
 			((:file "clim-debugger")
 			 (:file "parameters"))))

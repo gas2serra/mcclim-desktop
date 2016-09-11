@@ -1,4 +1,4 @@
-(in-package :mcclim-desktop-core)
+(in-package :desktop-internals)
 
 (defun init ()
   (ensure-all-user-directories-exist)

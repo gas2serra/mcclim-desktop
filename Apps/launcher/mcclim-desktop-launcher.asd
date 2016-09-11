@@ -20,7 +20,7 @@
   :components ((:file "mcclim-desktop-launcher")
 	       (:module "gui"
 			:serial t
-			:depends-on ("mcclim-desktop-launcher")
+			;;:depends-on ("mcclim-desktop-launcher")
 			:components
 			((:file "parameters")
 			 (:file "utility")
