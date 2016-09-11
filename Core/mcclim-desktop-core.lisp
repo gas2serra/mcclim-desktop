@@ -16,8 +16,6 @@
       ;; global
    #:*application*
    #:*application-style*
-   #:*manager*
-   
 
    ;; application classes
    #:standard-cl-application
@@ -49,24 +47,10 @@
    #:application-file
    #:application-config-file
    #:application-style-file
-   
-   ;; manager classes
-   #:standard-manager
-   ;; manager slots
-   #:manager-debugger-fn
-   #:manager-configured-p
 
-   ;; manager protocols
-   #:get-application
-   #:add-application
-   #:configure-manager
-   #:manager-applications
-   #:manager-map-applications
+
    #:discover-application
    #:discover-applications
-   #:load-application-file
-   #:reload-application-files
-
    ;; API
    #:make-application
    #:make-manager
@@ -84,5 +68,5 @@
 
 
    ;; init
-   #:initialize
+   #:init
    ))

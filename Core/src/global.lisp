@@ -10,9 +10,6 @@
 (defvar *application-style* nil
   "The current application style")
 
-(defvar *manager* nil
-  "The manager")
-
 (defvar *debugger* nil
   "The current debugger")
 

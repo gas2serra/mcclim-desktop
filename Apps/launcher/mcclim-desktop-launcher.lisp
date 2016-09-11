@@ -8,17 +8,13 @@
 		:find-application
 		:launch-application
 		;; manager
-		:load-application-file
 		:log-warn
-		:initialize
 		;; standard pathnames
 		:find-file
-
 		#:application-file
 		#:configure-application
 		#:application-config-file
 		#:application-home-page
-		#:*manager*
 		;; logger
 		#:*logger*
 		#:logger-stream

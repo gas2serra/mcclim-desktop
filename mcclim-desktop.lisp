@@ -19,7 +19,6 @@
    ;; global
    #:*application*
    #:*application-style*
-   #:*manager*
 
    ;; application classes
    #:standard-cl-application
@@ -52,32 +51,18 @@
    #:application-config-file
    #:application-style-file
    
-   ;; manager classes
-   #:standard-manager
-   ;; manager slots
-   #:manager-debugger-fn
-   #:manager-configured-p
-   #:manager-log-stream
-   ;; manager protocols
-   #:discover-application
-   #:discover-applications
-   #:add-application
-   #:configure-manager
-   #:manager-log-info
-   #:manager-log-warn
-   #:manager-applications
-   #:manager-map-applications
-   #:load-application-file
-   #:reload-application-files
-   
    ;; debuggers
    #:*clim-debugger*
    #:*swank-debugger*
    #:debugger-hook
+
+
+   #:discover-application
+   #:discover-applications
+
    
    ;; API
    #:make-application
-   #:make-manager
    #:register-application
    #:find-application
    #:log-info
@@ -90,7 +75,7 @@
    #:load-app
    #:install-app
    ;; init
-   #:initialize
+   #:init
    ;; gui
    #:run-launcher
   ))
@@ -101,4 +86,4 @@
 
 (in-package :mcclim-desktop-user)
 
-(initialize)
+(init)

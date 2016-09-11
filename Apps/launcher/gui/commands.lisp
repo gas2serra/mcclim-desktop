@@ -4,7 +4,8 @@
   (launch-application app))
 
 (define-launcher-frame-command com-refresh-application ((app 'application))
-  (load-application-file *manager* app t))
+  ;;(load-application-file *manager* app t))
+  )
 
 (define-launcher-frame-command com-configure-application ((app 'application))
   (configure-application app t))

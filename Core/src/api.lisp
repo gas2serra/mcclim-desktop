@@ -39,6 +39,8 @@
 (defun log-warn (msg &optional (manager *manager*))
   (manager-log-warn manager msg))
 |#
+
+#|
 (defun register-application (name type &rest args)
   (add-application *manager*
 		   (apply #'make-application name type args)))
@@ -57,3 +59,23 @@
 
 (defun map-applications (fn)
   (manager-map-applications *manager* fn))
+|#
+
+(defun register-application (name type &rest args)
+  (register-new-application
+		   (apply #'make-application name type args)))
+
+(defun find-application (application-designator &optional (errorp t))
+  (or (find-registered-application application-designator nil)
+      (discover-application 
+       (typecase application-designator
+	 (string
+	  application-designator)
+	 (symbol
+	  (string-downcase (string application-designator)))))))
+
+(defun applications ()
+  (registered-applications))
+
+(defun map-applications (fn)
+  (map-registered-applications fn))
