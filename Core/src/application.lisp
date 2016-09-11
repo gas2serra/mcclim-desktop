@@ -41,7 +41,7 @@
 
 (defmethod launch-application ((application application) &key args cb-fn)
   (with-slots (name) application
-    (clim-sys:make-process 
+    (bt:make-thread 
      #'(lambda ()
 	 (unwind-protect
 	      (let ((res (apply #'run-application application args)))

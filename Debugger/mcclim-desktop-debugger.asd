@@ -1,5 +1,5 @@
 #|
-  This file is a part of cl-desktop project.
+  This file is a part of mcclim-desktop project.
   Copyright (c) 2016 Alessandro Serra (gas2serra@gmail.com)
 |#
 
@@ -17,10 +17,8 @@
   :author "Alessandro Serra"
   :license "GPLv3"
   :depends-on (:mcclim :clouseau :swank)
-  :components (;;(:file "mcclim-desktop-debugger")
-	       (:module "src"
+  :components ((:module "src"
 			:serial t
-			;;:depends-on ("mcclim-desktop-debugger")
 			:components
 			((:file "clim-debugger")
 			 (:file "parameters"))))

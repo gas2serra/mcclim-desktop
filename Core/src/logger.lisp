@@ -12,7 +12,7 @@
 ;;;
 
 (defclass logger ()
-  ((lock :initform (clim-sys:make-lock "logger"))))
+  ((lock :initform (bt:make-lock "logger"))))
 
 ;;;
 ;;; logger protocols
@@ -26,19 +26,19 @@
 (defmethod logger-log-info :around ((logger logger) msg)
   (declare (ignore msg))
   (with-slots (lock) logger
-    (clim-sys:with-lock-held (lock)
+    (bt:with-lock-held (lock)
       (call-next-method))))
 
 (defmethod logger-log-warn :around ((logger logger) msg)
   (declare (ignore msg))
   (with-slots (lock) logger
-    (clim-sys:with-lock-held (lock)
+    (bt:with-lock-held (lock)
       (call-next-method))))
 
 (defmethod logger-log-error :around ((logger logger) msg)
   (declare (ignore msg))
   (with-slots (lock) logger
-    (clim-sys:with-lock-held (lock)
+    (bt:with-lock-held (lock)
       (call-next-method))))
 
 ;;;
