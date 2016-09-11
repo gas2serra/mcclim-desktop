@@ -95,12 +95,12 @@
 (defmethod application-config-file ((application standard-application-mixin)
 				    &optional force-p force-user-p)
   (with-slots (name) application
-    (find-application-config-file name force-p force-user-p)))
+    (find-config-file name nil force-p force-user-p)))
 
 (defmethod application-style-file ((application standard-application-mixin)
 				   &optional force-p force-user-p force-style)
   (with-slots (name style) application
-    (find-application-style-file name (or force-style style *application-style*)
+    (find-config-file name (or force-style style *application-style*)
 				 force-p force-user-p)))
 
 ;;; protocol: load files

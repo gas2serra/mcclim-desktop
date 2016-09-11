@@ -32,34 +32,6 @@
 
 (defun make-manager (type &rest args)
   (setf *manager* (apply #'make-instance type args)))
-#|
-(defun log-info (msg &optional (manager *manager*))
-  (manager-log-info manager msg))
-
-(defun log-warn (msg &optional (manager *manager*))
-  (manager-log-warn manager msg))
-|#
-
-#|
-(defun register-application (name type &rest args)
-  (add-application *manager*
-		   (apply #'make-application name type args)))
-
-(defun find-application (application-designator &optional (errorp t) (manager *manager*))
-  (typecase application-designator
-    (string
-     (discover-application *manager* (string-downcase application-designator)))
-    (symbol
-     (find-application (string-downcase (string application-designator)) errorp manager))
-    (application
-     application-designator)))
-
-(defun applications ()
-  (manager-applications *manager*))
-
-(defun map-applications (fn)
-  (manager-map-applications *manager* fn))
-|#
 
 (defun register-application (name type &rest args)
   (register-new-application

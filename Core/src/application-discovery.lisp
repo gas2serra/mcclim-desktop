@@ -14,8 +14,8 @@
   (find-registered-application name))
   
 (defun discover-applications (&optional force-p)
-  (dolist (name (find-all-application-names))
-    (discover-application name force-p)))
+  (dolist (file (find-application-files))
+    (discover-application (pathname-name file) force-p)))
 
 (defun refresh-application (name)
   (discover-application name t))
