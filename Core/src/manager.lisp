@@ -6,9 +6,9 @@
 
 (defclass manager ()
   ((name->application :initform (make-hash-table :test #'equal))
-   (debugger-fn :initarg :debugger-fn
-		:accessor manager-debugger-fn
-		:initform nil)
+   ;;(debugger-fn :initarg :debugger-fn
+   ;;:accessor manager-debugger-fn
+   ;;:initform nil)
    (configured-p :reader manager-configured-p
 		 :initform nil)
    ;;(log-lock :initform (clim-sys:make-lock "manager-log"))

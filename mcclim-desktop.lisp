@@ -6,18 +6,21 @@
   (:import-from :mcclim-desktop-launcher
 		:run-launcher)
   (:export
-   ;; global
-   #:*application*
-   #:*application-style*
-   #:*manager*
-
    ;; logger
    #:*logger*
    #:make-logger
    #:logger-stream
    #:standard-logger
-   
-   
+
+   ;; debugger
+   #:*debugger*
+   #:debugger-hook
+
+   ;; global
+   #:*application*
+   #:*application-style*
+   #:*manager*
+
    ;; application classes
    #:standard-cl-application
    #:standard-mcclim-application

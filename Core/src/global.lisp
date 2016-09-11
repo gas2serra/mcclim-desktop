@@ -13,8 +13,11 @@
 (defvar *manager* nil
   "The manager")
 
+(defvar *debugger* nil
+  "The current debugger")
+
 ;;; debugger hook
 (defun debugger-hook (condition me-or-my-encapsulation)
-  (when *manager*
-    (funcall (manager-debugger-fn *manager*) condition me-or-my-encapsulation)))
+  (when *debugger*
+    (funcall *debugger* condition me-or-my-encapsulation)))
 

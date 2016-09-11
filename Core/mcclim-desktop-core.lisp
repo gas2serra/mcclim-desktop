@@ -3,10 +3,8 @@
 (defpackage mcclim-desktop-core
   (:use :cl)
   (:export
-   ;; global
-   #:*application*
-   #:*application-style*
-   #:*manager*
+   ;; debugger
+   #:*debugger*
    #:debugger-hook
 
    ;; logger
@@ -14,7 +12,13 @@
    #:logger-stream
    #:make-logger
    #:standard-logger
+
+      ;; global
+   #:*application*
+   #:*application-style*
+   #:*manager*
    
+
    ;; application classes
    #:standard-cl-application
    #:standard-mcclim-application
