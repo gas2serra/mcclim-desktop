@@ -17,10 +17,10 @@
   :author "Alessandro Serra"
   :license "GPLv3"
   :depends-on (:mcclim-desktop)
-  :components ((:file "mcclim-desktop-launcher")
+  :components ((:file "packages")
 	       (:module "gui"
 			:serial t
-			:depends-on ("mcclim-desktop-launcher")
+			:depends-on ("packages")
 			:components
 			((:file "parameters")
 			 (:file "utility")
@@ -28,4 +28,4 @@
 			 (:file "frame")
 			 (:file "commands")
 			 (:file "main"))))
-  :description "")
+  :description "McCLIM Desktop Launcher")

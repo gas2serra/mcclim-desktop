@@ -24,7 +24,6 @@
 	(source (or
 		 (find-file relative-pathname)
 		 copy-from-pathname)))
-    (format t ">> ~A ~A~%" relative-pathname copy-from-pathname)
     (uiop:ensure-all-directories-exist (list dest))
     (when source
       (uiop:copy-file source dest))
@@ -62,8 +61,8 @@
 
 (defun find-system-directories ()
   (setf *system-directories* nil)
-  (dolist (system (asdf/find-system:registered-systems*))
-    (let ((pathname (asdf:component-pathname system)))
+  (dolist (system-name (asdf/find-system:registered-systems))
+    (let ((pathname (asdf:component-pathname (asdf:find-system system-name))))
       (when pathname
 	(let ((p (uiop:merge-pathnames* *system-directory-relative-pathaname*
 					pathname)))

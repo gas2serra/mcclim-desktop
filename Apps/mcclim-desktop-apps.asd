@@ -18,4 +18,4 @@
   :license "GPLv3"
   :depends-on (:mcclim-desktop
 	       :mcclim-desktop-launcher)
-  :description "")
+  :description "McCLIM Desktop Apps")

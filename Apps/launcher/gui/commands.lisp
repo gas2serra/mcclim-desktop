@@ -1,64 +1,105 @@
 (in-package :mcclim-desktop-launcher)
 
-(define-launcher-frame-command com-launch-app ((app 'application))
+
+(define-desktop-launcher-command (com-quit  :menu t
+					    :name "Quit"
+					    :keystroke (#\q :meta))
+    ()
+  (clim:frame-exit clim:*application-frame*))
+
+(define-desktop-launcher-command (com-refresh  :menu t
+					       :name "Refresh"
+					       :keystroke (#\r :meta))
+    ()
+  (refresh-applications)
+  (update-applications))
+
+(define-desktop-launcher-command (com-clear-log
+				  :name "Clear Log"
+				  :keystroke (#\c :meta))
+    ()
+  (clim:window-clear
+   (clim:find-pane-named clim:*application-frame* 'log-display)))
+
+(define-desktop-launcher-command (com-launch-app :name "Launch App")
+		
+    ((app 'application :gesture :select))
   (launch-application app))
 
-(define-launcher-frame-command com-refresh-application ((app 'application))
-  ;;(load-application-file *manager* app t))
-  )
-
-(define-launcher-frame-command com-configure-application ((app 'application))
-  (configure-application app t))
-
-(define-launcher-frame-command com-edit-application-file ((app 'application))
-  (when (application-file app)
-    (edit-file (application-file app))))
-
-(define-launcher-frame-command com-edit-config-file ((app 'application))
-  (when (application-config-file app)
-    (edit-file (application-config-file app))))
-
-(define-launcher-frame-command com-open-home-page ((app 'application))
+(define-desktop-launcher-command (com-open-home-page :name "Open Home Page")
+    ((app 'application :gesture :help))
   (launch-application (find-application "browser")
 		      :args (list (application-home-page app))))
+
+(define-desktop-launcher-command (com-edit-app-file :name "Edit App")
+    ((app 'application :gesture :help))
+  (with-slots (force-user-p) clim:*application-frame*
+    (when (application-file app t force-user-p)
+      (edit-file (application-file app)
+		 :cb-fn #'(lambda (&rest rest)
+			    (declare (ignore rest))
+			    (refresh-application (application-name app)))))))
+
+(define-desktop-launcher-command (com-edit-config-file :name "Edit Config")
+    ((app 'application :gesture :help))
+  (with-slots (force-user-p) clim:*application-frame*
+    (when (application-config-file app t force-user-p)
+      (edit-file (application-config-file app)
+		 :cb-fn #'(lambda (&rest rest)
+			    (declare (ignore rest))
+			    (when (application-configured-p app)
+			      (configure-application app t)))))))
+
+(define-desktop-launcher-command (com-edit-style-file :name "Edit Style")
+    ((app 'application :gesture :help))
+  (with-slots (force-user-p) clim:*application-frame*
+    (when (application-style-file app t force-user-p)
+      (edit-file (application-style-file app)
+		 :cb-fn #'(lambda (&rest rest)
+			    (declare (ignore rest))
+			    (when (application-configured-p app)
+			      (configure-application app t)))))))
+
+#|
 
 ;;
 ;; command traslators
 ;;
 
 (clim:define-presentation-to-command-translator launch-app
-    (application com-launch-app launcher-frame
+    (application com-launch-app desktop-launcher
 		 :gesture :select
 		 :documentation "Launch")
     (object) (list object))
 
 (clim:define-presentation-to-command-translator refresh-application
-    (application com-refresh-application launcher-frame
+    (application com-refresh-application desktop-launcher
 		       :gesture :help
 		       :documentation "Refresh")
   (object) (list object))
 
 (clim:define-presentation-to-command-translator configure-application
-    (application com-configure-application launcher-frame
+    (application com-configure-application desktop-launcher
 		 :gesture :help
 		 :documentation "Configure")
   (object) (list object))
 
 
 (clim:define-presentation-to-command-translator edit-application-file
-    (application com-edit-application-file launcher-frame
+    (application com-edit-application-file desktop-launcher
 		 :gesture :help
 		 :documentation "Edit application file")
     (object) (list object))
 
 (clim:define-presentation-to-command-translator edit-config-file
-    (application com-edit-config-file launcher-frame
+    (application com-edit-config-file desktop-launcher
 		 :gesture :help
 		 :documentation "Edit config file")
     (object) (list object))
 
 (clim:define-presentation-to-command-translator open-home-page
-    (application com-open-home-page launcher-frame
+    (application com-open-home-page desktop-launcher
 		 :gesture :help
 		 :documentation "Open home page")
     (object) (list object))
+|#

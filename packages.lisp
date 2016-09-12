@@ -30,6 +30,7 @@
    #:application-pretty-name
    #:application-icon
    #:application-style
+   #:application-menu-p
    #:application-configured-p
    #:application-home-page
    #:application-git-repo
@@ -96,6 +97,7 @@
    #:logger-stream
    ;; application
    #:application
+   #:need-reconfigure-application
    #:load-application-config-file
    #:load-application-style-file
    ;; applications

@@ -30,6 +30,9 @@
    (style :initarg :style
 	  :accessor application-style
 	  :initform nil)
+   (menu-p :initarg :menu-p
+	   :initform t
+	   :accessor application-menu-p)
    (configured-p :reader application-configured-p
 		 :initform nil)))
 
@@ -257,4 +260,3 @@
 
 (defclass shell-application (application)
   ())
-

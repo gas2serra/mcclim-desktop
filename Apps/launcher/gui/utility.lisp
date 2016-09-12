@@ -1,8 +1,8 @@
 (in-package :mcclim-desktop-launcher)
 
-(defun edit-file (filename)
+(defun edit-file (filename &key cb-fn)
   (let ((editor (find-application "editor")))
-    (launch-application editor :args (list filename))))
+    (launch-application editor :args (list filename) :cb-fn cb-fn)))
 
 #|
 (defun register-launcher-applications (&rest names)

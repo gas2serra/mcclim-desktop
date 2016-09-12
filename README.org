@@ -10,16 +10,24 @@
          (desktop:find-application "climacs"))
 
 (desktop:launch-application 
-         (desktop:find-application "climacs") 
-         "/etc/passwd")
+	  (desktop:find-application "climacs") 
+	  :args '("/etc/passwd"))
+#+END_SRC
+
+or 
+
+#+BEGIN_SRC lisp
+
+(desk:launch-app "ernestine") 
+
+(desk:launch-app :climacs :args '("/etc/passwd"))
 
 #+END_SRC
 
 *** GUI
 
 #+BEGIN_SRC lisp
-(desktop:launch-application 
-         (desktop:find-application "launcher"))
+(desk:launch-app "launcher") 
 #+END_SRC
 
 ** Installation
