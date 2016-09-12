@@ -4,28 +4,27 @@
   (:use :common-lisp)
   (:nicknames :desk)
   (:export
-      ;; debugger
-   #:*debugger*
-   #:debugger-hook
-   #:*clim-debugger*
-   #:*swank-debugger*
-
+   ;; debugger
+   #:use-debugger
+  
    ;; logger
-   #:*logger*
-   #:logger-stream
+   #:use-logger
    #:make-logger
    #:standard-logger
-
-      ;; global
+   #:log-info
+   #:log-warn
+   #:log-error
+   
+   ;; global application variables
    #:*application*
    #:*application-style*
 
    ;; application classes
-   #:application
    #:standard-cl-application
    #:standard-mcclim-application
    #:standard-shell-application
    #:standard-alias-application
+   
    ;; application slots
    #:application-name
    #:application-pretty-name
@@ -51,17 +50,18 @@
    #:application-file
    #:application-config-file
    #:application-style-file
+   
+   ;; refresh
+   #:refresh-application
+   #:refresh-applications
 
-
-   #:discover-application
-   #:discover-applications
+   ;; standard pathname
+   
    ;; API
    #:make-application
-   #:make-manager
    #:register-application
    #:find-application
-   #:log-info
-   #:log-warn
+   #:find-applications
    #:applications
    #:map-applications
    #:run-app
@@ -70,10 +70,53 @@
    #:load-app
    #:install-app
 
-   #:find-file
+   ;; initialization
+   #:initialize
+   #:configure
+   
+   ;; debuggers
+   #:*clim-debugger*
+   #:*swank-debugger*
+   ))
 
-   ;; init
-   #:init
+(defpackage :desktop-extensions
+  (:use :desktop :common-lisp)
+  (:export
+   ;; debugger
+   #:*debugger*
+   #:with-debugger
+   ;; logger
+   #:*logger*
+   #:with-logger
+   #:logger-log-info
+   #:logger-log-warn
+   #:logger-log-error
+   #:logger
+   #:stream-logger-mixin
+   #:logger-stream
+   ;; application
+   #:application
+   #:load-application-config-file
+   #:load-application-style-file
+   ;; applications
+   #:*registered-applications*
+   #:register-new-application
+   #:remove-registered-application
+   #:remove-registered-applications
+   #:find-registered-application
+   #:registered-applications
+   #:map-registered-applications
+   ;; standard pathname
+   #:find-user-file
+   #:create-user-file
+   #:find-user-files
+   #:find-system-file
+   #:find-system-files
+   #:find-system-directories
+   #:find-file   
+   ;; discovering
+   #:discover-application
+   #:discover-applications
    ))
 
 (defpackage :desktop-sys
@@ -82,7 +125,7 @@
    ))
 
 (defpackage :desktop-internals
-  (:use :desktop :desktop-sys :common-lisp)
+  (:use :desktop :desktop-extensions :desktop-sys :common-lisp)
   (:nicknames :deski))
 
 (defpackage :desktop-user

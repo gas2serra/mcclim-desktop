@@ -17,7 +17,9 @@
   (with-slots (entry-fn name) application
     (if entry-fn
 	(apply entry-fn application args)
-	(log-warn (format nil "Entry function for ~A undefined" name)))))
+	(progn
+	  (log-error (format nil "Entry function for ~A undefined" name))
+	  (error "Entry function for ~A undefined" name)))))
 
 ;;;
 ;;; Simple CL Appplication Mixin
@@ -67,7 +69,10 @@
 		 (with-slots (make-command-fn name) application
 		   (if make-command-fn
 		       (uiop:run-program (apply make-command-fn args))
-		       (log-warn (format nil "Make command function for ~A undefined" name)))))))
+		       (progn
+			 (log-error (format nil "Make command function for ~A undefined" name))
+			 (error "Make command function for ~A undefined" name)))))))
+		       
 
 ;;;;
 ;;;; Standard Application Mixin
@@ -111,7 +116,9 @@
       (if config-file
 	  (let ((*application* application))
 	    (load config-file))
-	  (log-warn (format nil "Config file for ~A not found" name))))))
+	  (log-warn (format nil "Config file (~A) for ~A not found"
+			    (config-file-relative-pathname name)
+			    name))))))
 
 (defmethod load-application-style-file ((application standard-application-mixin)
 					&optional force-style)
@@ -122,7 +129,9 @@
 	    (let ((*application* application))
 	      (load style-file))
 	    (progn
-	      (log-warn (format nil "Style file (~A) for ~A not found" sty name))
+	      (log-warn (format nil "Style file (~A) for ~A not found"
+				(config-file-relative-pathname name sty)
+				name))
 	      (unless (eq sty :default)
 		(load-application-style-file application :default))))))))
 

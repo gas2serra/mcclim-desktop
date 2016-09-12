@@ -23,6 +23,3 @@
 (defun refresh-applications ()
   (remove-registered-applications)
   (discover-applications t))
-
-
-

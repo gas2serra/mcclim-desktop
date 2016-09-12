@@ -1,15 +1,26 @@
 (in-package :desktop-internals)
 
 ;;;;
-;;;; Logger
+;;;; Logging
 ;;;;
 
 (defvar *logger* nil
   "The current logger")
 
-;;;
-;;; class
-;;;
+;;; functions
+
+(defun use-logger (logger)
+  (setq *logger* logger))
+
+;;; macros
+
+(defmacro with-logger ((logger) &body body)
+  `(let ((*logger* ,logger))
+     ,@body))
+
+;;;;
+;;;; logger class
+;;;;
 
 (defclass logger ()
   ((lock :initform (bt:make-lock "logger"))))
@@ -41,9 +52,12 @@
     (bt:with-lock-held (lock)
       (call-next-method))))
 
-;;;
-;;; simple functions
-;;;
+;;;;
+;;;; simple functions
+;;;;
+
+(defun make-logger (type &rest args)
+  (apply #'make-instance type args))
 
 (defun log-info (msg)
   (logger-log-info *logger* msg))
@@ -54,9 +68,9 @@
 (defun log-error (msg)
   (logger-log-error *logger* msg))
 
-;;;
-;;; mixin
-;;;
+;;;;
+;;;; logger mixin
+;;;;
 
 (defclass stream-logger-mixin (logger)
   ((stream :initarg :stream
@@ -75,12 +89,10 @@
   (with-slots (stream) logger
     (format stream "Error: ~A~%" msg)))
 
-;;;
-;;; standard class
-;;;
+;;;;
+;;;; standard logger
+;;;;
 
 (defclass standard-logger (stream-logger-mixin logger)
   ())
 
-(defun make-logger (type &rest args)
-  (setf *logger* (apply #'make-instance type args)))

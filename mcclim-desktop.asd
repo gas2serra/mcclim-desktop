@@ -16,11 +16,11 @@
     :components ((:file "packages")))
 
 (defsystem mcclim-desktop
-  :version "0.1"
+  :version "0.2"
   :author "Alessandro Serra"
   :license "GPLv3"
   :depends-on (:mcclim-desktop-internals
 	       :mcclim-desktop-core
 	       :mcclim-desktop-debugger)
   :components ((:file "init"))
-  :description "")
+  :description "McCLIM Desktop")

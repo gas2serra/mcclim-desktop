@@ -1,6 +1,16 @@
 (in-package :desktop-internals)
 
 ;;;;
+;;;; Global Variables
+;;;;
+
+(defvar *application* nil
+  "The current application")
+
+(defvar *application-style* nil
+  "The current application style")
+
+;;;;
 ;;;; Application Classes
 ;;;;
 

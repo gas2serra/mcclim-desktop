@@ -1,6 +1,6 @@
 (in-package :desktop-internals)
 
-(defun init ()
+(defun initialize ()
   (ensure-all-user-directories-exist)
   (find-system-directories)
   (let ((init-file (find-file *init-file-name*)))

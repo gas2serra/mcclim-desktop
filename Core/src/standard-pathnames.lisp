@@ -1,7 +1,12 @@
 (in-package :desktop-internals)
 
+
+;;;;
+;;;; Desktop standard pathnames
+;;;;
+
 ;;;
-;;; user directories
+;;; user directory
 ;;;
 
 (defparameter *user-directory* (uiop:merge-pathnames* "~/.mcclim-desktop/"))
@@ -65,6 +70,7 @@
 	  (when (probe-file p)
 	    (push p *system-directories*))))))
   *system-directories*)
+
 ;;;
 ;;; both
 ;;;

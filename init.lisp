@@ -1,3 +1,4 @@
 (in-package :desktop-user)
 
-(init)
+;; initialize the desktop environment
+(initialize)

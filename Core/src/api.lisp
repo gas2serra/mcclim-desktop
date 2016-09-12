@@ -11,6 +11,28 @@
 (defun make-application (name type &rest args)
   (apply #'make-instance type :name (string-downcase name) args))
 
+(defun register-application (name type &rest args)
+  (register-new-application
+   (apply #'make-application name type args)))
+
+(defun find-application (application-designator &optional (errorp t))
+  (or (find-registered-application application-designator nil)
+      (discover-application 
+       (typecase application-designator
+	 (string
+	  application-designator)
+	 (symbol
+	  (string-downcase (string application-designator)))))))
+
+(defun find-applications ()
+  (discover-applications))
+
+(defun applications ()
+  (registered-applications))
+
+(defun map-applications (fn)
+  (map-registered-applications fn))
+
 (defun run-app (application &rest args)
   (apply #'run-application (find-application application) args))
 
@@ -25,29 +47,3 @@
 
 (defun install-app (application &optional force-p)
   (install-application (find-application application) force-p))
-
-;;;
-;;; manager
-;;;
-
-(defun make-manager (type &rest args)
-  (setf *manager* (apply #'make-instance type args)))
-
-(defun register-application (name type &rest args)
-  (register-new-application
-		   (apply #'make-application name type args)))
-
-(defun find-application (application-designator &optional (errorp t))
-  (or (find-registered-application application-designator nil)
-      (discover-application 
-       (typecase application-designator
-	 (string
-	  application-designator)
-	 (symbol
-	  (string-downcase (string application-designator)))))))
-
-(defun applications ()
-  (registered-applications))
-
-(defun map-applications (fn)
-  (map-registered-applications fn))

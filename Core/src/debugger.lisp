@@ -1,20 +1,27 @@
 (in-package :desktop-internals)
 
 ;;;;
-;;;; Global Variables
+;;;; Debugging
 ;;;;
-
-(defvar *application* nil
-  "The current application")
-
-(defvar *application-style* nil
-  "The current application style")
 
 (defvar *debugger* nil
   "The current debugger")
 
+;;; functions
+
+(defun use-debugger (debugger)
+  (setq *debugger* debugger))
+
+;;; macros
+
+(defmacro with-debugger ((debugger) &body body)
+  `(let ((*debugger* ,debugger))
+     ,@body))
+
+;;;
 ;;; debugger hook
+;;;
+
 (defun debugger-hook (condition me-or-my-encapsulation)
   (when *debugger*
     (funcall *debugger* condition me-or-my-encapsulation)))
-

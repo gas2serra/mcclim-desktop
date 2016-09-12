@@ -13,7 +13,7 @@
 (in-package #:mcclim-desktop-asd)
 
 (defsystem mcclim-desktop-debugger
-  :version "0.1"
+  :version "0.2"
   :author "Alessandro Serra"
   :license "GPLv3"
   :depends-on (:mcclim :clouseau :swank)
@@ -22,5 +22,4 @@
 			:components
 			((:file "clim-debugger")
 			 (:file "parameters"))))
-  :description ""
-  :long-description "")
+  :description "McCLIM Desktop Debugger")

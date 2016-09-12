@@ -13,22 +13,22 @@
 (in-package #:mcclim-desktop-asd)
 
 (defsystem mcclim-desktop-core
-  :version "0.1"
+  :version "0.2"
   :author "Alessandro Serra"
   :license "GPLv3"
   :depends-on (:bordeaux-threads :alexandria)
   :components ((:module "src"
 			:serial t
 			:components
-			((:file "global")
+			((:file "debugger")
 			 (:file "logger")
+			 (:file "standard-pathnames")
 			 (:file "application")
 			 (:file "applications")
-			 (:file "standard-pathnames")
 			 (:file "application-discovery")
 			 (:file "application-mixins")
 			 (:file "standard-application")
 			 (:file "api")
 			 (:file "init"))))
-  :description ""
-  :long-description "")
+  :description "McCLIM Desktop")
+
