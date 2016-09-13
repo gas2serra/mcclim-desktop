@@ -124,6 +124,8 @@
 (defpackage :desktop-sys
   (:use :common-lisp)
   (:export
+   #:copy-to-x11-clipboard
+   #:paste-from-x11-clipboard
    ))
 
 (defpackage :desktop-internals
