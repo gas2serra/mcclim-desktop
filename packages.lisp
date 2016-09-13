@@ -31,6 +31,7 @@
    #:application-icon
    #:application-style
    #:application-menu-p
+   #:application-requires-args-p
    #:application-configured-p
    #:application-home-page
    #:application-git-repo

@@ -33,6 +33,9 @@
    (menu-p :initarg :menu-p
 	   :initform t
 	   :accessor application-menu-p)
+   (requires-args-p :initarg :requires-args-p
+		    :initform nil
+		    :accessor application-requires-args-p)
    (configured-p :reader application-configured-p
 		 :initform nil)))
 
