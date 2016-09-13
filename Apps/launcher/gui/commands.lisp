@@ -1,4 +1,4 @@
-(in-package :mcclim-desktop-launcher)
+(in-package :desktop-launcher)
 
 
 (define-desktop-launcher-command (com-quit  :menu t

@@ -1,9 +1,9 @@
-(in-package :mcclim-desktop-launcher)
+(in-package :desktop-launcher)
 
 (defvar *applications* nil)
 
 (defun update-applications ()
   (setf *applications*
-	(sort (remove-if-not #'application-menu-p (applications))
+	(sort (applications)
 	      #'string<
 	      :key #'application-pretty-name)))

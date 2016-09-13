@@ -1,4 +1,4 @@
-(in-package :mcclim-desktop-launcher)
+(in-package :desktop-launcher)
 
 (defun run-launcher (&key (new-process nil)
 		       (width nil)

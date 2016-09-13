@@ -1,4 +1,4 @@
-(in-package :mcclim-desktop-launcher)
+(in-package :desktop-launcher)
 
 (clim:define-presentation-method clim:present (app (type application)
 						   stream

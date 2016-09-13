@@ -1,9 +1,10 @@
-(in-package :mcclim-desktop-launcher)
+(in-package :desktop-launcher)
 
 (clim:define-application-frame desktop-launcher ()
   ((force-user-p :initform t)
    (system-debugger)
-   (system-style))
+   (system-style)
+   (view-option :initform "menu"))
   (:menu-bar t)
   (:panes
    (application-display :application
@@ -31,6 +32,11 @@
       (clim:radio-box-current-selection "system")
       "my"
       "default"))
+   (view-option
+    (clim:with-radio-box (:orientation :vertical
+				       :value-changed-callback '%update-view-option)
+      (clim:radio-box-current-selection "menu")
+      "all"))
    (clear-log-action :push-button
 		     :activate-callback #'(lambda (gadget)
 					    (declare (ignore gadget))
@@ -50,6 +56,8 @@
 		debugger-option)
 	      (clim:labelling (:label "Style")
 		style-option)
+	      (clim:labelling (:label "View")
+		view-option)
 	      clim:+fill+
 	      (clim:labelling (:label "Actions")
 		clear-log-action))))
@@ -114,8 +122,23 @@
 	 (setf *application-style* :default)))))
   (dolist (app *applications*)
     (need-reconfigure-application app)))
+
+(defun %update-view-option (this-gadget selected-gadget)
+  (declare (ignore this-gadget))
+  (with-slots (view-option) clim:*application-frame*
+    (let ((label (clim:gadget-label selected-gadget)))
+      (cond
+	((string= label "menu")
+	 (setf view-option "menu"))
+	((string= label "all")
+	 (setf view-option "all")))))
+  (clim:redisplay-frame-pane clim:*application-frame*
+			     (clim:find-pane-named clim:*application-frame* 'application-display)))
+  
       
 (defun %update-application-display (desktop-launcher stream)
   (declare (ignore desktop-launcher))
-  (dolist (app *applications*)
-    (clim:present (find-application app) 'application :stream stream)))
+  (with-slots (view-option) clim:*application-frame*
+    (dolist (app *applications*)
+      (if (or (string= view-option "all") (application-menu-p app))
+	  (clim:present (find-application app) 'application :stream stream)))))

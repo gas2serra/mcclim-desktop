@@ -1,4 +1,4 @@
-(in-package :mcclim-desktop-launcher)
+(in-package :desktop-launcher)
 
 (defun edit-file (filename &key cb-fn)
   (let ((editor (find-application "editor")))
