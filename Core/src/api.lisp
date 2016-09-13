@@ -47,3 +47,10 @@
 
 (defun install-app (application &optional force-p)
   (install-application (find-application application) force-p))
+
+(defun use-application-as-debugger (application-designator)
+  (let ((app (find-application application-designator)))
+    (unless (application-configured-p app)
+      (configure-application app))
+    (use-debugger #'(lambda (c e)
+		      (funcall (desk:application-entry-fn app) app c e)))))

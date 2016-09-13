@@ -22,6 +22,7 @@
   :depends-on (:mcclim-desktop-internals
 	       :mcclim-desktop-sys
 	       :mcclim-desktop-core
-	       :mcclim-desktop-debugger)
+	       ;;	       :mcclim-desktop-debugger
+	       )
   :components ((:file "init"))
   :description "McCLIM Desktop")

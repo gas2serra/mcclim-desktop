@@ -1,6 +1,5 @@
 (in-package :desktop-user)
 
-;;(use-debugger *clim-debugger*)
-(use-debugger *swank-debugger*)
+(use-application-as-debugger "swank-debugger")
 (setf *application-style* :my)
 (find-applications)

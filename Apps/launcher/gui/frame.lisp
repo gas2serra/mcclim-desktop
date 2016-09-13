@@ -23,7 +23,8 @@
 				       :value-changed-callback '%update-debugger-option)
       (clim:radio-box-current-selection "system")
       "swank"
-      "clim"))
+      "clim"
+      "panter"))
    (style-option
     (clim:with-radio-box (:orientation :vertical
 				       :value-changed-callback '%update-style-option)
@@ -94,9 +95,11 @@
 	((string= label "system")
 	 (use-debugger system-debugger))
 	((string= label "swank")
-	 (use-debugger *swank-debugger*))
+	 (use-application-as-debugger "swank-debugger"))
 	((string= label "clim")
-	 (use-debugger *clim-debugger*))))))
+	 (use-application-as-debugger "clim-debugger"))
+	((string= label "panter")
+	 (use-application-as-debugger "panter-debugger"))))))
 
 (defun %update-style-option (this-gadget selected-gadget)
   (declare (ignore this-gadget))

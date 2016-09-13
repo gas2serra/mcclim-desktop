@@ -70,6 +70,7 @@
    #:configure-app
    #:load-app
    #:install-app
+   #:use-application-as-debugger
 
    ;; initialization
    #:initialize

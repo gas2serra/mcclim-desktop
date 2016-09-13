@@ -16,7 +16,7 @@
   :version "0.1"
   :author "Alessandro Serra"
   :license "GPLv3"
-  :depends-on (:mcclim-desktop)
+  :depends-on (:mcclim :mcclim-desktop)
   :components ((:file "packages")
 	       (:module "gui"
 			:serial t
