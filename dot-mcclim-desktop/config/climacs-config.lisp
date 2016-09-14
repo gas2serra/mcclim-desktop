@@ -7,6 +7,9 @@
 		(climacs:climacs)
 		(climacs::%edit-file (car args)))))
 
+;;;
+;;; patch
+;;;
 (in-package :climacs)
 
 (defun %edit-file (thing &rest args
@@ -31,15 +34,3 @@ can be a filename (edit the file) or symbol (edit its function definition)."
         (apply #'climacs-common command args)))
   t)
 
-
-(in-package drei)
-
-(define-command (com-paste-x-clipboard :name t :command-table drei:editing-table) ()
-  (flexichain:insert-sequence (point) (uiop:run-program "xclip -selection clipboard -o" :output :string)))
-
-(define-command (com-copy-x-clipboard :name t :command-table drei:view-table) ()
-  (with-input-from-string (input-stream (coerce (kill-ring-yank *kill-ring*) 'string))
-    (uiop:run-program "xclip -selection clipboard -i " :output nil :input input-stream)))
-
-(esa-io::set-key 'com-paste-x-clipboard 'drei:editing-table '((#\y :META :CONTROL)))
-(esa-io::set-key 'com-copy-x-clipboard 'drei:view-table '((#\w :META :CONTROL)))
