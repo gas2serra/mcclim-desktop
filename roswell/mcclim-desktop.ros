@@ -1,0 +1,15 @@
+#!/bin/sh
+#|-*- mode:lisp -*-|#
+#|
+exec ros -m my-mcclim -- $0 "$@"
+|#
+
+(require :mcclim-desktop)
+
+(defun main (&rest argv)
+  (declare (ignorable argv))
+  #+ sbcl (sb-ext:enable-debugger)
+  (desktop:run-app "launcher"))
+
+
+
