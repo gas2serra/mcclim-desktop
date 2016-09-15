@@ -34,6 +34,7 @@
     ((app 'application))
   (with-slots (force-user-p) clim:*application-frame*
     (when (application-file app t force-user-p)
+      (refresh-application (application-name app))
       (edit-file (application-file app)
 		 :cb-fn #'(lambda (&rest rest)
 			    (declare (ignore rest))
@@ -43,6 +44,8 @@
     ((app 'application))
   (with-slots (force-user-p) clim:*application-frame*
     (when (application-config-file app t force-user-p)
+      (when (application-configured-p app)
+	(configure-application app t))
       (edit-file (application-config-file app)
 		 :cb-fn #'(lambda (&rest rest)
 			    (declare (ignore rest))
@@ -52,6 +55,8 @@
 (define-desktop-launcher-command (com-edit-style-file :name "Edit Style")
     ((app 'application))
   (with-slots (force-user-p) clim:*application-frame*
+    (when (application-configured-p app)
+      (configure-application app t))
     (when (application-style-file app t force-user-p)
       (edit-file (application-style-file app)
 		 :cb-fn #'(lambda (&rest rest)
