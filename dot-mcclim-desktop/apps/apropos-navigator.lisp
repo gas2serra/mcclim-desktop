@@ -5,5 +5,5 @@
 		      :icon nil
 		      :home-page "https://github.com/gas2serra/mcclim-panter/tree/master/Apps/apropos/"
 		      :git-repo "https://github.com/gas2serra/mcclim-panter.git"
-		      :system-name "mcclim-panter"
+		      :system-name "mcclim-panter-apps"
 		      :frame-class nil)

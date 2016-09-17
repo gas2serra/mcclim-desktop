@@ -3,7 +3,7 @@
 (setf (application-entry-fn *application*)
       #'(lambda (app)
 	  (declare (ignore app))
-	  (mcclim-panter:run-apropos-navigator)))
+	  (panter-apps:run-apropos-navigator)))
 
 
 

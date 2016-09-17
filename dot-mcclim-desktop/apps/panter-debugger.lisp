@@ -7,4 +7,4 @@
 		      :requires-args-p t
 		      :home-page "https://github.com/gas2serra/mcclim-panter/tree/master/Apps/debugger/"
 		      :git-repo "https://github.com/gas2serra/mcclim-panter.git"
-		      :system-name "mcclim-panter")
+		      :system-name "mcclim-panter-apps")
