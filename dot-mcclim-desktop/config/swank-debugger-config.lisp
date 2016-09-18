@@ -5,5 +5,8 @@
 	  (declare (ignore app))
 	  (funcall #'swank:swank-debugger-hook
 		   condition me-or-my-encapsulation)))
+
+(setf (application-debugger-fn *application*)
+      #'swank:swank-debugger-hook)
       
 

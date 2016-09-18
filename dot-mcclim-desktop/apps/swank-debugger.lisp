@@ -1,6 +1,6 @@
 (in-package :desktop-user)
 
-(register-application "swank-debugger" 'standard-mcclim-application
+(register-application "swank-debugger" 'standard-debugger-application
 		      :pretty-name "Swank Debugger"
 		      :icon nil
 		      :menu-p nil

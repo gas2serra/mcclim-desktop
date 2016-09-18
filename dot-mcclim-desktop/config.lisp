@@ -1,15 +1,12 @@
 (in-package :desktop-user)
 
-(use-application-as-debugger "swank-debugger")
+
 (setf *application-style* :my)
 (find-applications)
 
-
-
-
 (configure-application (find-application :listener))
 (configure-application (find-application :climacs))
-
+(use-application-as-debugger "panter-debugger")
 
 (setf clim:*default-server-path*  (list :clx))
 #+nil

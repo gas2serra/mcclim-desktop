@@ -1,6 +1,6 @@
 (in-package :desktop-user)
 
-(register-application "panter-debugger" 'standard-mcclim-application
+(register-application "panter-debugger" 'standard-mcclim-debugger-application
 		      :pretty-name "Panter Debugger"
 		      :icon nil
 		      :menu-p nil

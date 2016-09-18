@@ -52,5 +52,4 @@
   (let ((app (find-application application-designator)))
     (unless (application-configured-p app)
       (configure-application app))
-    (use-debugger #'(lambda (c e)
-		      (funcall (desk:application-entry-fn app) app c e)))))
+    (use-debugger (desk:application-debugger-fn app))))

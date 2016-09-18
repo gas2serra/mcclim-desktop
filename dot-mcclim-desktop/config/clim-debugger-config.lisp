@@ -10,3 +10,5 @@
 	  (funcall #'clim-debugger:debugger
 		   condition me-or-my-encapsulation)))
       
+(setf (application-debugger-fn *application*)
+      #'clim-debugger:debugger)

@@ -26,3 +26,16 @@
 				      simple-shell-application-mixin
 				      shell-application)
   ())
+
+(defclass standard-debugger-application (standard-cl-application-mixin
+					 simple-cl-application-mixin
+					 simple-debugger-application-mixin
+					 cl-application)
+  ())
+
+(defclass standard-mcclim-debugger-application (standard-cl-application-mixin
+						 simple-cl-application-mixin
+						 simple-debugger-application-mixin
+						 mcclim-application)
+  ())
+

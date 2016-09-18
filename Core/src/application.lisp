@@ -161,7 +161,7 @@
 
 (defmethod run-application :around ((application cl-application) &rest args)
   (declare (ignore args))
-  (let ((*debugger-hook* #'debugger-hook))
+  (let ((*debugger-hook* *desktop-debugger-hook*))
     (call-next-method)))
 
 ;;; protocol: config

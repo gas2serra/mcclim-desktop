@@ -6,7 +6,7 @@
   (:export
    ;; debugger
    #:use-debugger
-  
+ 
    ;; logger
    #:use-logger
    #:make-logger
@@ -24,6 +24,8 @@
    #:standard-mcclim-application
    #:standard-shell-application
    #:standard-alias-application
+   #:standard-debugger-application
+   #:standard-mcclim-debugger-application
    
    ;; application slots
    #:application-name
@@ -43,6 +45,7 @@
    #:application-link-reference
    #:application-entry-fn
    #:application-make-command-fn
+   #:application-debugger-fn
    ;; application protocols
    #:run-application
    #:launch-application
@@ -86,7 +89,7 @@
   (:use :desktop :common-lisp)
   (:export
    ;; debugger
-   #:*debugger*
+   #:*desktop-debugger-hook*
    #:with-debugger
    ;; logger
    #:*logger*
@@ -97,6 +100,8 @@
    #:logger
    #:stream-logger-mixin
    #:logger-stream
+   ;;
+   #:simple-debugger-application-mixin
    ;; application
    #:application
    #:need-reconfigure-application

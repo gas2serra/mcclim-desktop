@@ -149,3 +149,12 @@
 
 (defclass standard-cl-application-mixin (standard-application-mixin)
   ())
+
+;;;
+;;; Debugger Application
+;;;
+
+(defclass simple-debugger-application-mixin ()
+  ((debugger-fn :initarg :debugger-fn
+		:accessor application-debugger-fn
+		:initform nil)))
