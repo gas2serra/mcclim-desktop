@@ -1,0 +1,19 @@
+#!/bin/sh
+#|-*- mode:lisp -*-|#
+#|
+exec ros  -- $0 "$@"
+|#
+
+(require :mcclim-desktop)
+(require :bordeaux-threads)
+
+(defun main (&rest argv)
+  (declare (ignorable argv))
+  #+ sbcl (sb-ext:enable-debugger)
+  (desktop:run-app "launcher")
+  (loop while (> (length (bt:all-threads)) 2)
+     do
+       (bt:join-thread (find-if-not #'(lambda (thread)
+					(eq thread (bt:current-thread)))
+				    (bt:all-threads)))))
+
