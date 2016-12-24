@@ -4,5 +4,5 @@
 		      :pretty-name "Closure"
 		      :icon nil
 		      :home-page "https://github.com/dym/closure"
-		      :git-repo "https://github.com/gas2serra/closure.git"
+		      :git-repo "https://github.com/dym/closure.git"
 		      :system-name "closure")
