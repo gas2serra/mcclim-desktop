@@ -3,13 +3,23 @@
 #|
 exec ros -m my-mcclim -- $0 "$@"
 |#
-
 (require :mcclim-desktop)
-(require :bordeaux-threads)
 
-(defun main (&rest argv)
+(defun main (&optional backend &rest argv)
   (declare (ignorable argv))
   #+ sbcl (sb-ext:enable-debugger)
+  (when backend
+    (cond ((equal "clx" backend)
+	   (setf clim:*default-server-path*  (list :clx)))
+	  ((equal "clxv3" backend)
+	   (require :mcclim-clxv3/pretty)
+	   (setf clim:*default-server-path*  (list :clxv3)))
+	  ((equal "clxfb" backend)
+	   (require :mcclim-clx-fb)
+	   (setf clim:*default-server-path*  (list :clx-fb)))
+	  (t
+	   (format t "Usage: ~A [clx | clxv3 | clxfb ]~%" (file-namestring *load-pathname*))
+	   (ros:quit 1))))
   (desktop:run-app "launcher")
   (loop while (> (length (bt:all-threads)) 2)
      do
