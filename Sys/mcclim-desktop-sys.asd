@@ -16,9 +16,11 @@
   :version "0.2"
   :author "Alessandro Serra"
   :license "GPLv3"
-  :depends-on (:asdf)
+  :depends-on (:asdf :drei-mcclim)
   :components ((:module "src"
 			:serial t
 			:components
-			((:file "clipboard"))))
+			((:file "clipboard")
+			 (:file "screenshot")
+			 (:file "kill-ring"))))
   :description "McCLIM Desktop")

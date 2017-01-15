@@ -19,10 +19,9 @@
   :version "0.2"
   :author "Alessandro Serra"
   :license "GPLv3"
-  :depends-on (:mcclim-desktop-internals
+  :depends-on (:mcclim
+	       :mcclim-desktop-internals
 	       :mcclim-desktop-sys
-	       :mcclim-desktop-core
-	       ;;	       :mcclim-desktop-debugger
-	       )
+	       :mcclim-desktop-core)
   :components ((:file "init"))
   :description "McCLIM Desktop")
