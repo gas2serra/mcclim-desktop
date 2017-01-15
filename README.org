@@ -1,10 +1,13 @@
 * McClim Desktop 
+A clim-desktop clone.
 
 ** Usage
 
 *** CL
 
 #+BEGIN_SRC lisp
+
+(desktop:configure)
 
 (desktop:launch-application 
          (desktop:find-application "climacs"))
@@ -17,6 +20,8 @@
 or 
 
 #+BEGIN_SRC lisp
+
+(desk:configure)
 
 (desk:launch-app "ernestine") 
 
@@ -32,13 +37,33 @@ or
 
 ** Installation
 
-Clone the project into local-projects of quicklisp.
+Clone the project into local-projects of quicklisp, then
 
 #+BEGIN_SRC lisp
 (ql:quickload :mcclim-desktop)
+(desktop:configure)
+#+END_SRC
+
+*** roswell
+#+BEGIN_SRC 
+ros install gas2serra/mcclim-desktop
+#+END_SRC
+To execute:
+#+BEGIN_SRC 
+mcclim-desktop-no-dump.ros
+#+END_SRC
+or, using an image file,
+#+BEGIN_SRC 
+dump-mcclim-desktop.ros
+mcclim-desktop.ros
 #+END_SRC
 
 ** Applications
+- Launcher
+  [[file:Apps/launcher/README.org][link]]
+- McClim Panter
+  [[https://github.com/gas2serra/mcclim-panter][link]]
+** External Applications
 The applications are automatically installed using quicklisp or calling the clone command of git.
 
 | Name                          | What              | Source                                                    | Quicklisp |
