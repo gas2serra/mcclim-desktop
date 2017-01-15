@@ -10,8 +10,10 @@
 (setf (application-debugger-fn *application*)
       #'panter-apps:debugger)
 
+#|
 (defmethod desktop:use-debugger ((debugger function))
   ;;(setf *debugger-hook* panter::*debugger-hook*)
   (setf panter:*debugger* debugger))
 
 (setf desktop-extensions:*desktop-debugger-hook* panter::*debugger-hook*)
+|#

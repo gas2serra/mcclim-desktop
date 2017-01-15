@@ -7,6 +7,10 @@
 		   condition me-or-my-encapsulation)))
 
 (setf (application-debugger-fn *application*)
-      #'swank:swank-debugger-hook)
+      #'(lambda (condition me-or-my-encapsulation)
+	  (when swank::*connections*
+	    (funcall #'swank:swank-debugger-hook
+		     condition me-or-my-encapsulation))))
+
       
 

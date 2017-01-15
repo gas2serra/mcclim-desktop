@@ -3,6 +3,7 @@
 (defun initialize ()
   (ensure-all-user-directories-exist)
   (find-system-directories)
+  (init-debugger)
   (let ((init-file (find-file *init-file-name*)))
     (if init-file
 	(load init-file)
