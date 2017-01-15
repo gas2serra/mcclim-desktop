@@ -3,9 +3,10 @@
 #|
 exec ros -m my-mcclim -- $0 "$@"
 |#
+
 (require :mcclim-desktop)
 
-(defun main (&optional backend &rest argv)
+(defun main (&optional (backend "clxv3") &rest argv)
   (declare (ignorable argv))
   #+ sbcl (sb-ext:enable-debugger)
   (when backend
@@ -20,6 +21,7 @@ exec ros -m my-mcclim -- $0 "$@"
 	  (t
 	   (format t "Usage: ~A [clx | clxv3 | clxfb ]~%" (file-namestring *load-pathname*))
 	   (ros:quit 1))))
+  (desktop:configure)
   (desktop:run-app "launcher")
   (loop while (> (length (bt:all-threads)) 2)
      do
