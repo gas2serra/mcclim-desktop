@@ -82,10 +82,11 @@
 
 (defmethod clim:disown-frame  :after (fm (frame desktop-launcher))
   (declare (ignore fm))
+  (setf (logger-stream *logger*) *trace-output*)
   (with-slots (system-debugger system-style) frame
     (use-debugger system-debugger)
-    (setf *application-style* system-style))
-  (setf (logger-stream *logger*) *trace-output*))
+    (setf *application-style* system-style)))
+
 
 ;; updating
 
