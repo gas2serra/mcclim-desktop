@@ -133,6 +133,9 @@
   (:export
    #:copy-to-x11-clipboard
    #:paste-from-x11-clipboard
+   #:copy-to-kill-ring
+   #:paste-from-kill-ring
+   #:take-x11-screenshot
    ))
 
 (defpackage :desktop-internals

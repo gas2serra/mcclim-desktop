@@ -97,6 +97,23 @@ To add:
 | raylisp                       |                                                                                     | https://github.com/nikodemus/raylisp.git                  | No        |
 | bibtext                       | Download bibtex entries for local pdfs from mathscinet.                             | https://github.com/OlafMerkert/bibtex-manager.git         | No        |
 
+** Utility
+*** Clipboard
+#+BEGIN_SRC lisp
+(desktop-sys:copy-to-x11-clipboard "Hello!")
+(desktop-sys:paste-from-x11-clipboard)
+#+END_SRC
+*** Kill ring
+#+BEGIN_SRC lisp
+(desktop-sys:copy-to-kill-ring "Hello!")
+(desktop-sys:paste-from-kill-ring)
+#+END_SRC
+*** Screenshot
+#+BEGIN_SRC lisp
+(desktop-sys:take-x11-screenshot "/tmp/screenshot.png")
+#+END_SRC
+
+
 ** Author
 
 + Alessandro Serra (gas2serra@gmail.com)
