@@ -20,7 +20,7 @@
    #:log-info
    #:log-warn
    #:log-error
-   
+
    ;; global application variables
    #:*application*
    #:*application-style*
@@ -82,8 +82,6 @@
    #:install-app
    #:use-application-as-debugger
    #:use-application-as-external-debugger
-
-   
    ))
 
 (defpackage :desktop-extensions
@@ -91,6 +89,7 @@
   (:export
    ;; debugger
    #:*debugger*
+   #:*external-debugger*
    
    ;; logger
    #:*logger*
@@ -101,10 +100,23 @@
    #:logger
    #:stream-logger-mixin
    #:logger-stream
-   ;;
+   
+   ;; application mixin
+   #:simple-application-mixin
+   #:simple-cl-application-mixin
+   #:simple-shell-application-mixin
+   #:standard-application-mixin
+   #:standard-cl-application-mixin
    #:simple-debugger-application-mixin
+
    ;; application
    #:application
+   #:cl-application
+   #:mcclim-application
+   #:link-application
+   #:alias-application
+   #:proxy-application 
+   #:shell-application
    #:need-reconfigure-application
    #:load-application-config-file
    #:load-application-style-file
