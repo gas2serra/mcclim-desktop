@@ -162,7 +162,7 @@
 (defmethod run-application :around ((application cl-application) &rest args)
   (declare (ignore args))
   (swank/backend:call-with-debugger-hook
-   *desktop-debugger-hook*
+   #'debugger-hook
    (lambda ()
      (call-next-method))))
 

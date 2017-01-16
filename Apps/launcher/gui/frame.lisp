@@ -74,7 +74,7 @@
 (defmethod clim:adopt-frame  :after (fm (frame desktop-launcher))
   (declare (ignore fm))
   (with-slots (system-debugger system-style) frame
-    (setf system-debugger *desktop-debugger-hook*)
+    (setf system-debugger deski::*debugger*)
     (setf system-style *application-style*))
   (setf (logger-stream *logger*)
 	(clim:get-frame-pane frame 'log-display))

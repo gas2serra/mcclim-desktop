@@ -53,3 +53,9 @@
     (unless (application-configured-p app)
       (configure-application app))
     (use-debugger (desk:application-debugger-fn app))))
+
+(defun use-application-as-external-debugger (application-designator)
+  (let ((app (find-application application-designator)))
+    (unless (application-configured-p app)
+      (configure-application app))
+    (use-external-debugger (desk:application-debugger-fn app))))

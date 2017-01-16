@@ -5,7 +5,9 @@
   (:nicknames :desk)
   (:export
    ;; debugger
+   #:install-debugger-globally
    #:use-debugger
+   #:use-external-debugger
  
    ;; logger
    #:use-logger
@@ -75,6 +77,7 @@
    #:load-app
    #:install-app
    #:use-application-as-debugger
+   #:use-application-as-external-debugger
 
    ;; initialization
    #:initialize
