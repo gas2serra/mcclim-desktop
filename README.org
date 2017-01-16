@@ -61,8 +61,12 @@ mcclim-desktop.ros
 ** Applications
 - Launcher
   [[file:Apps/launcher/README.org][link]]
-- McClim Panter
-  [[https://github.com/gas2serra/mcclim-panter][link]]
+-- Apropos Navigator
+-  [[file:Apps/apropos/README.org][link]]
+-- Debugger
+-  [[file:Apps/debugger/README.org][link]]
+-- Task Manager
+-  [[file:Apps/task-manager/README.org][link]]
 ** External Applications
 The applications are automatically installed using quicklisp or calling the clone command of git.
 

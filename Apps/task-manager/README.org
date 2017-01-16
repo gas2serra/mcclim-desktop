@@ -1,0 +1,43 @@
+* Task Manager (mcclim-desktop)
+
+** Usage
+
+*** CL
+
+#+BEGIN_SRC lisp
+
+(desktop:run-task-manager)
+
+#+END_SRC
+
+*** listener
+
+#+BEGIN_SRC
+
+,Run Task Manager
+
+#+END_SRC
+
+
+** Tested
+
+*** Backends
+- CLX
+- CLXv3
+
+*** CL
+- sbcl 16.1.2
+- ccl 1.11
+
+
+** Author
+
++ Alessandro Serra (gas2serra@gmail.com)
+
+** Copyright
+
+Copyright (c) 2016 Alessandro Serra (gas2serra@gmail.com)
+
+** License
+
+Licensed under the GPLv3 License.

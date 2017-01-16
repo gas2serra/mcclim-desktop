@@ -16,9 +16,9 @@
 ;;; debugger
 ;;;
 
-(clim-listener::define-listener-command (com-enable-panter-debugger :name t) ()
-  (format t "Enabled panter debugger~%")
-  (use-application-as-debugger "panter-debugger"))
+(clim-listener::define-listener-command (com-enable-desktop-debugger :name t) ()
+  (format t "Enabled desktop debugger~%")
+  (use-application-as-debugger "desktop-debugger"))
 
 (clim-listener::define-listener-command (com-enable-swank-debugger :name t) ()
   (format t "Enabled swank debugger~%")

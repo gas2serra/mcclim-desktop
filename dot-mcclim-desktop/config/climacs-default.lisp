@@ -32,3 +32,4 @@
 
 (esa-io::set-key 'com-apropos-navigator
 		 'drei-lisp-syntax::lisp-table '((#\s :meta :control)))
+

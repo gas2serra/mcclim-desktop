@@ -19,6 +19,7 @@
 ;;; functions
 
 (defun init-debugger ()
+  (setf *debugger* *debugger-hook*)
   (setf *debugger-hook* #'debugger-hook))
 
 (defun use-debugger (debugger)

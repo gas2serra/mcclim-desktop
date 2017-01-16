@@ -17,6 +17,9 @@
   :author "Alessandro Serra"
   :license "GPLv3"
   :depends-on (:mcclim-desktop
-	       :mcclim-desktop-launcher)
+	       :mcclim-desktop-launcher
+	       :mcclim-desktop-task-manager
+	       :mcclim-desktop-apropos
+	       :mcclim-desktop-debugger)
   :components ((:file "packages"))
   :description "McCLIM Desktop Apps")

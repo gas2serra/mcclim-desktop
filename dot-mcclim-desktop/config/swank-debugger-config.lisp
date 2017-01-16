@@ -7,10 +7,9 @@
 		   condition me-or-my-encapsulation)))
 
 (setf (application-debugger-fn *application*)
-      #'(lambda (condition me-or-my-encapsulation)
-	  (when swank::*connections*
-	    (funcall #'swank:swank-debugger-hook
-		     condition me-or-my-encapsulation))))
-
+      (lambda (condition me-or-my-encapsulation)
+	(let ((SWANK/SBCL::*SLDB-STACK-TOP* (sb-di:top-frame)))
+	  (funcall #'swank:swank-debugger-hook
+		   condition me-or-my-encapsulation))))
       
 

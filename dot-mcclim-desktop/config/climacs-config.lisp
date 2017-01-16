@@ -34,3 +34,4 @@ can be a filename (edit the file) or symbol (edit its function definition)."
         (apply #'climacs-common command args)))
   t)
 
+
