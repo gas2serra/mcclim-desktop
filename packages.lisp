@@ -4,6 +4,10 @@
   (:use :common-lisp)
   (:nicknames :desk)
   (:export
+   ;; initialization
+   #:initialize
+   #:configure
+   
    ;; debugger
    #:install-debugger-globally
    #:use-debugger
@@ -79,21 +83,15 @@
    #:use-application-as-debugger
    #:use-application-as-external-debugger
 
-   ;; initialization
-   #:initialize
-   #:configure
    
-   ;; debuggers
-   #:*clim-debugger*
-   #:*swank-debugger*
    ))
 
 (defpackage :desktop-extensions
   (:use :desktop :common-lisp)
   (:export
    ;; debugger
-   #:*desktop-debugger-hook*
-   #:with-debugger
+   #:*debugger*
+   
    ;; logger
    #:*logger*
    #:with-logger

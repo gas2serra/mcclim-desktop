@@ -95,4 +95,3 @@
 
 (defclass standard-logger (stream-logger-mixin logger)
   ())
-
