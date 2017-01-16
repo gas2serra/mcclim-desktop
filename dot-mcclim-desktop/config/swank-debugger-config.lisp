@@ -8,8 +8,7 @@
 
 (setf (application-debugger-fn *application*)
       (lambda (condition me-or-my-encapsulation)
-	(let ((SWANK/SBCL::*SLDB-STACK-TOP* (sb-di:top-frame)))
-	  (funcall #'swank:swank-debugger-hook
-		   condition me-or-my-encapsulation))))
+	(funcall #'deski::desktop-swank-debugger-hook
+		 condition me-or-my-encapsulation)))
       
 
