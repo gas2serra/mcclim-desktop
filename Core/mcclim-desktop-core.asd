@@ -16,7 +16,7 @@
   :version "0.2"
   :author "Alessandro Serra"
   :license "GPLv3"
-  :depends-on (:bordeaux-threads :alexandria)
+  :depends-on (:bordeaux-threads :alexandria :swank)
   :components ((:module "src"
 			:serial t
 			:components

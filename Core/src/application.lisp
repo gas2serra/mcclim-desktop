@@ -161,8 +161,10 @@
 
 (defmethod run-application :around ((application cl-application) &rest args)
   (declare (ignore args))
-  (let ((*debugger-hook* *desktop-debugger-hook*))
-    (call-next-method)))
+  (swank/backend:call-with-debugger-hook
+   *desktop-debugger-hook*
+   (lambda ()
+     (call-next-method))))
 
 ;;; protocol: config
 

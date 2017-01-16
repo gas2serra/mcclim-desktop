@@ -12,8 +12,11 @@
 ;;;
 
 (defun debugger-hook (condition me-or-my-encapsulation)
-  (when *debugger*
-    (funcall *debugger* condition me-or-my-encapsulation)))
+  (if (eq (climi::port-event-process (climi::find-port))
+	  (climi::current-process))
+      (funcall  #'swank:swank-debugger-hook condition me-or-my-encapsulation)
+      (when *debugger*
+	(funcall *debugger* condition me-or-my-encapsulation))))
 
 (defvar *desktop-debugger-hook* #'debugger-hook)
 ;;; functions
