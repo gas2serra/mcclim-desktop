@@ -1,19 +1,30 @@
 (in-package :desktop-launcher)
 
+(defclass log-display-pane (clim:application-pane)
+  ())
+
+(defmethod clim:note-sheet-grafted ((sheet log-display-pane))
+  (setf (logger-stream *logger*) sheet))
+  
+(defmethod clim:note-sheet-degrafted ((sheet log-display-pane))
+  (setf (logger-stream *logger*) *trace-output*))
+  
 (clim:define-application-frame desktop-launcher ()
   ((force-user-p :initform t)
    (system-debugger)
    (system-style)
    (view-option :initform "menu"))
-  (:menu-bar t)
+  (:menu-bar menubar-command-table)
   (:panes
    (application-display :application
 			:height 300
 			:width 50
 			:display-function #'%update-application-display
 			:display-after-commands nil)
-   (log-display :application
-		:display-time nil)
+   (interactor :interactor :display-time :command-loop)
+   (log-display-dummy
+    (clim:make-clim-stream-pane :name 'log-display :type 'log-display-pane :borders t
+				:display-time nil))
    (edit-option
     (clim:with-radio-box (:orientation :vertical
 				       :value-changed-callback '%update-edit-option)
@@ -37,11 +48,12 @@
 				       :value-changed-callback '%update-view-option)
       (clim:radio-box-current-selection "menu")
       "all"))
-   (clear-log-action :push-button
-		     :activate-callback #'(lambda (gadget)
-					    (declare (ignore gadget))
-					    (com-clear-log))
-		     :label "Clear Log"))
+   (clear-action :push-button
+		 :activate-callback #'(lambda (gadget)
+					(declare (ignore gadget))
+					(clim:execute-frame-command
+					 clim:*application-frame* `(com-clear)))
+		 :label "Clear Window"))
   (:layouts
    (defaults
        (clim:vertically ()
@@ -50,24 +62,44 @@
 	    (clim:labelling (:label "Applications")
 	      application-display)
 	    (clim:vertically nil
-	      (clim:labelling (:label "Edit local files")
-		edit-option)
+              (clim:labelling (:label "View")
+                view-option)
 	      (clim:labelling (:label "Debugger")
 		debugger-option)
+              (clim:labelling (:label "Edit local files")
+		edit-option)
 	      (clim:labelling (:label "Style")
-		style-option)
-	      (clim:labelling (:label "View")
-		view-option)
+                style-option)
 	      clim:+fill+
 	      (clim:labelling (:label "Actions")
-		clear-log-action))))
+			      clear-action))))
 	 (1/3 (clim:labelling (:label "Log/Output")
-		log-display))))))
+		log-display-dummy))))
+   (interactor
+    (clim:vertically ()
+      (2/3
+       (clim:horizontally nil
+         (clim:labelling (:label "Applications")
+           application-display)
+         (clim:vertically nil
+           (clim:labelling (:label "View")
+             view-option)
+           (clim:labelling (:label "Debugger")
+             debugger-option)
+           (clim:labelling (:label "Edit local files")
+             edit-option)
+           (clim:labelling (:label "Style")
+             style-option)
+           clim:+fill+
+           (clim:labelling (:label "Actions")
+			   clear-action))))
+      (1/3 (clim:labelling (:label "Interactor")
+             interactor))))))
 
 ;; output
 
 (defmethod clim:frame-standard-output ((frame desktop-launcher))
-  (clim:get-frame-pane frame 'log-display))
+  (clim:find-pane-named clim:*application-frame* 'application-display))
 
 ;; initialization
 
@@ -76,8 +108,6 @@
   (with-slots (system-debugger system-style) frame
     (setf system-debugger *debugger*)
     (setf system-style *application-style*))
-  (setf (logger-stream *logger*)
-	(clim:get-frame-pane frame 'log-display))
   (update-applications))
 
 (defmethod clim:disown-frame  :after (fm (frame desktop-launcher))
@@ -87,6 +117,12 @@
     (use-debugger system-debugger)
     (setf *application-style* system-style)))
 
+;; commands
+
+(define-desktop-launcher-command (com-set-layout :name nil :menu nil)
+    ((layout-name 'symbol))
+  (with-accessors ((layout clim:frame-current-layout)) clim:*application-frame*
+    (setf layout layout-name)))
 
 ;; updating
 
@@ -135,11 +171,27 @@
 	 (setf view-option "all")))))
   (clim:redisplay-frame-pane clim:*application-frame*
 			     (clim:find-pane-named clim:*application-frame* 'application-display)))
-  
-      
+        
 (defun %update-application-display (desktop-launcher stream)
   (declare (ignore desktop-launcher))
   (with-slots (view-option) clim:*application-frame*
     (dolist (app *applications*)
       (if (or (string= view-option "all") (application-menu-p app))
-	  (clim:present (find-application app) 'application :stream stream)))))
+	  (progn
+	    (clim:present (find-application app) 'application :stream stream)
+	    (format stream "~%"))))))
+
+;;;
+;;; Menu
+;;;
+
+(clim:make-command-table 'layout-command-table
+			 :errorp nil
+			 :menu '(("Log/Output" :command (com-set-layout defaults))
+				 ("Interactor" :command (com-set-layout interactor))))
+
+(clim:make-command-table 'menubar-command-table
+			 :errorp nil
+			 :menu '(("Quit" :command com-quit)
+				 ("Refresh" :command com-refresh)
+				 ("Layout" :menu layout-command-table)))

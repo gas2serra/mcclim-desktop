@@ -5,4 +5,12 @@
 						   (view clim:textual-view)
 						   &key)
   (with-accessors ((label application-pretty-name)) app
-    (format stream "~A~%" label)))
+    (write-string label stream)))
+
+(clim:define-presentation-method clim:accept ((type application) stream view &key)
+  (values
+   (clim:completing-from-suggestions (stream :partial-completers '(#\Space))
+     (mapcar #'(lambda (o)
+		 (clim:suggest (application-pretty-name o) o))
+	     *applications*))))
+
