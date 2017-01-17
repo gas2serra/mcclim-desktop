@@ -38,15 +38,8 @@
 			    (clim:stream-increment-cursor-position pane 5 3)
 			    (clim:present frame
 					  'clim:application-frame
-					  :view clim:+textual-view+
+					  :view +extended-textual-view+
 					  :stream pane))))
-
-#|
-(dolist (package matching-packages)
-  (fresh-line pane)
-  (clim:stream-increment-cursor-position pane 5 0)
-  (clim:present package 'package :stream pane :view clim:+textual-view+))))))
-|#
 
 (defun %render-thread-display (frame pane)
   (declare (ignore frame))
