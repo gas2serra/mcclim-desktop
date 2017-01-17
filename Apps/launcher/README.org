@@ -1,18 +1,18 @@
 * Launcher (mcclim-desktop)
 
+#+CAPTION: Screenshot
+#+NAME:   fig:screenshot
+[[./doc/img/screenshot-01.jpg]]
+
+
 ** Usage
 
 ** Installation
 
 ** Keystroke
 
-| Keystroke   | Command   |
-|-------------+-----------|
-| (#\q :meta) | quit      |
-| (#\r :meta) | refresh   |
-| (#\c :meta) | clear log |
-
-** Todo
-- Add interactor
-- Add layout
-- Move logs to file
+| Keystroke   | Command      |
+|-------------+--------------|
+| (#\q :meta) | quit         |
+| (#\r :meta) | refresh      |
+| (#\c :meta) | clear window |
