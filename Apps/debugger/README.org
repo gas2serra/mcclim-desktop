@@ -3,6 +3,10 @@
 An improved version of the standard clim debugger. This project started 
 from the wanderful code of @gabriel-laddel ([[https://github.com/robert-strandh/McCLIM/issues/55][link]]).
 
+#+CAPTION: Screenshot
+#+NAME:   fig:screenshot
+[[./doc/img/screenshot-01.jpg]]
+
 ** Usage
 
 ** Installation
