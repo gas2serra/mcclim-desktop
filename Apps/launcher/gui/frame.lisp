@@ -90,9 +90,7 @@
              edit-option)
            (clim:labelling (:label "Style")
              style-option)
-           clim:+fill+
-           (clim:labelling (:label "Actions")
-			   clear-action))))
+	   clim:+fill+)))
       (1/3 (clim:labelling (:label "Interactor")
              interactor))))))
 

@@ -20,8 +20,7 @@
     ()
   (let ((pane (or (clim:find-pane-named clim:*application-frame* 'log-display)
 		  (clim:find-pane-named clim:*application-frame* 'interactor))))
-    (clim:window-clear pane)
-    (clim:redisplay-frame-pane clim:*application-frame* pane :force-p t)))
+    (clim:window-clear pane)))      
 
 (define-desktop-launcher-command (com-launch-app :name "Launch App")	
     ((app application :prompt " Which app? "))
