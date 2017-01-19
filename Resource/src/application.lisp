@@ -35,6 +35,17 @@
     (launch-application editor :args (list filename) :cb-fn cb-fn)))
 
 ;; commands
+
+(clim:define-command (com-list-apps :command-table desktop-application-command-table
+				     :menu nil
+				     :name "List apps")
+    ((all-p boolean :default nil :prompt "all apps?"))
+  (dolist (app (registered-applications))
+    (when (or all-p (application-menu-p app))
+      (progn
+	(clim:present app 'application :stream *standard-output*)
+	(format *standard-output* "~%")))))
+
 (clim:define-command (com-launch-app :command-table desktop-application-command-table
 				     :menu nil
 				     :name "Launch app")
