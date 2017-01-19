@@ -1,7 +1,7 @@
 (in-package :desktop-user)
 
-(register-application "launcher" 'standard-mcclim-application
-		      :pretty-name "Launcher"
+(register-application "app-manager" 'standard-mcclim-application
+		      :pretty-name "App Manager"
 		      :icon nil
                       :menu-p t
 		      :home-page "https://github.com/gas2serra/mcclim-desktop"
