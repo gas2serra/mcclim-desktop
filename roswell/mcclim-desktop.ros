@@ -22,7 +22,7 @@ exec ros -m my-mcclim -- $0 "$@"
 	   (format t "Usage: ~A [clx | clxv3 | clxfb ]~%" (file-namestring *load-pathname*))
 	   (ros:quit 1))))
   (desktop:configure)
-  (desktop:run-app "launcher")
+  (desktop:run-app "console")
   (loop while (> (length (bt:all-threads)) 2)
      do
        (bt:join-thread (find-if-not #'(lambda (thread)
