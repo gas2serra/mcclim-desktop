@@ -1,9 +1,7 @@
 (in-package :desktop-app-manager)
 
 (clim:define-application-frame desktop-app-manager ()
-  (
-   (system-style)
-   (view-option :initform "menu"))
+  ((view-option :initform "menu"))
   (:menu-bar menubar-command-table)
   (:command-table (desktop-app-manager
 		   :inherit-from (deski::desktop-application-command-table)))
@@ -23,12 +21,6 @@
 				       :value-changed-callback '%update-edit-option)
       (clim:radio-box-current-selection "yes")
       "no"))
-   (style-option
-    (clim:with-radio-box (:orientation :vertical
-				       :value-changed-callback '%update-style-option)
-      (clim:radio-box-current-selection "system")
-      "my"
-      "default"))
    (view-option
     (clim:with-radio-box (:orientation :vertical
 				       :value-changed-callback '%update-view-option)
@@ -47,8 +39,6 @@
              view-option)
            (clim:labelling (:label "Edit local files")
              edit-option)
-           (clim:labelling (:label "Style")
-             style-option)
 	   clim:+fill+)))
       (1/3 (clim:labelling (:label "Interactor")
              interactor))))))
@@ -61,15 +51,10 @@
 ;; initialization
 
 (defmethod clim:adopt-frame  :after (fm (frame desktop-app-manager))
-  (declare (ignore fm))
-  (with-slots (system-style) frame
-    (setf system-style *application-style*)))
+  (declare (ignore fm)))
 
 (defmethod clim:disown-frame  :after (fm (frame desktop-app-manager))
-  (declare (ignore fm))
-  (setf (logger-stream *logger*) *trace-output*)
-  (with-slots (system-style) frame
-    (setf *application-style* system-style)))
+  (declare (ignore fm)))
 
 ;; commands
 
@@ -79,20 +64,6 @@
   (declare (ignore this-gadget))
   (setf deski::*force-user-app-files-p*
 	(string= (clim:gadget-label selected-gadget) "yes")))
-
-(defun %update-style-option (this-gadget selected-gadget)
-  (declare (ignore this-gadget))
-  (with-slots (system-style) clim:*application-frame*
-    (let ((label (clim:gadget-label selected-gadget)))
-      (cond
-	((string= label "system")
-	 (setf *application-style* system-style))
-	((string= label "my")
-	 (setf *application-style* :my))
-	((string= label "default")
-	 (setf *application-style* :default)))))
-  (dolist (app (deski::registered-applications))
-    (need-reconfigure-application app)))
 
 (defun %update-view-option (this-gadget selected-gadget)
   (declare (ignore this-gadget))

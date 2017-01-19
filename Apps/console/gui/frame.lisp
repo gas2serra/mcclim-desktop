@@ -1,9 +1,7 @@
 (in-package :desktop-console)
 
 (clim:define-application-frame desktop-console ()
-  ((system-debugger)
-   (system-style)
-   (view-option :initform "menu"))
+  ((system-debugger))
   (:menu-bar menubar-command-table)
   (:command-table (desktop-console
 		   :inherit-from (deski::desktop-application-command-table
@@ -29,64 +27,37 @@
       (clim:radio-box-current-selection "system")
       "swank"
       "clim"
-      "desktop"))
-   (edit-option
-    (clim:with-radio-box (:orientation :horizontal
-				       :value-changed-callback '%update-edit-option)
-      (clim:radio-box-current-selection "yes")
-      "no"))
-   (style-option
-    (clim:with-radio-box (:orientation :vertical
-				       :value-changed-callback '%update-style-option)
-      (clim:radio-box-current-selection "system")
-      "my"
-      "default"))
-   (view-option
-    (clim:with-radio-box (:orientation :vertical
-				       :value-changed-callback '%update-view-option)
-      (clim:radio-box-current-selection "menu")
-      "all")))
+      "desktop")))
   (:top-level (clim:default-frame-top-level :prompt 'print-listener-prompt))
   (:layouts
    (default
        (clim:horizontally ()
 	 (clim:vertically ()
-	   (clim:horizontally ()
-	     (clim:labelling (:label "View")
-	       view-option)
-	     (clim:labelling (:label "Style")
-	       style-option))
 	   (clim:+fill+
 	    (clim:labelling (:label "Applications")
 	      application-display))
-	   (clim:labelling (:label "Edit local files")
-	     edit-option))
+	   (clim:labelling (:label "Debugger")
+	     debugger-option))
 	 (clim:+fill+
 	  (clim:labelling (:label "Console")
 	    (clim:vertically ()
 	      (clim:+fill+ interactor)
 	      doc
-	      wholine)))
-	 (clim:vertically ()
-	   (clim:labelling (:label "Debugger")
-	     debugger-option)
-	   clim:+fill+)))))
+	      wholine)))))))
 
 ;; initialization
 
 (defmethod clim:adopt-frame  :after (fm (frame desktop-console))
   (declare (ignore fm))
-  (with-slots (system-debugger system-style) frame
-    (setf system-debugger *debugger*)
-    (setf system-style *application-style*))
+  (with-slots (system-debugger) frame
+    (setf system-debugger *debugger*))
   (update-applications))
 
 (defmethod clim:disown-frame  :after (fm (frame desktop-console))
   (declare (ignore fm))
   (setf (logger-stream *logger*) *trace-output*)
-  (with-slots (system-debugger system-style) frame
-    (use-debugger system-debugger)
-    (setf *application-style* system-style)))
+  (with-slots (system-debugger) frame
+    (use-debugger system-debugger)))
   
 ;; utility
 
@@ -144,40 +115,13 @@
 	((string= label "desktop")
 	 (use-application-as-debugger "desktop-debugger"))))))
 
-(defun %update-style-option (this-gadget selected-gadget)
-  (declare (ignore this-gadget))
-  (with-slots (system-style) clim:*application-frame*
-    (let ((label (clim:gadget-label selected-gadget)))
-      (cond
-	((string= label "system")
-	 (setf *application-style* system-style))
-	((string= label "my")
-	 (setf *application-style* :my))
-	((string= label "default")
-	 (setf *application-style* :default)))))
-  (dolist (app *applications*)
-    (need-reconfigure-application app)))
-
-(defun %update-view-option (this-gadget selected-gadget)
-  (declare (ignore this-gadget))
-  (with-slots (view-option) clim:*application-frame*
-    (let ((label (clim:gadget-label selected-gadget)))
-      (cond
-	((string= label "menu")
-	 (setf view-option "menu"))
-	((string= label "all")
-	 (setf view-option "all")))))
-  (clim:redisplay-frame-pane clim:*application-frame*
-			     (clim:find-pane-named clim:*application-frame* 'application-display)))
-        
 (defun %update-application-display (desktop-console stream)
   (declare (ignore desktop-console))
   (with-slots (view-option) clim:*application-frame*
     (dolist (app *applications*)
-      (if (or (string= view-option "all") (application-menu-p app))
-	  (progn
-	    (clim:present (find-application app) 'application :stream stream)
-	    (format stream "~%"))))))
+      (when (application-menu-p app)
+	(clim:present (find-application app) 'application :stream stream)
+	(format stream "~%")))))
 
 
 ;;;

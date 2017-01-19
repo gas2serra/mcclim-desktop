@@ -14,12 +14,20 @@
   (clim:window-clear *standard-output*))
 
 (define-desktop-console-command (com-refresh  :menu nil
-					      :name "Refresh"
+					      :name "Refresh Apps"
 					      :keystroke (#\r :meta))
     ()
   (refresh-applications)
-  (update-applications))
+  (update-applications)
+  nil)
 
+(clim:define-presentation-to-command-translator launch-app
+    (application deski::com-launch-app desktop-console
+		 :gesture :select
+		 :documentation "launch app"
+		 :tester ((app) (not (application-requires-args-p app))))
+    (app)
+  (list app))
 
 (defvar *use-background-eval* nil)
 

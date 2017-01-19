@@ -23,7 +23,6 @@
 
    ;; global application variables
    #:*application*
-   #:*application-style*
 
    ;; application classes
    #:standard-cl-application
@@ -37,7 +36,6 @@
    #:application-name
    #:application-pretty-name
    #:application-icon
-   #:application-style
    #:application-menu-p
    #:application-requires-args-p
    #:application-configured-p

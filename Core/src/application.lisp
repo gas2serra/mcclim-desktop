@@ -7,9 +7,6 @@
 (defvar *application* nil
   "The current application")
 
-(defvar *application-style* nil
-  "The current application style")
-
 ;;;;
 ;;;; Application Classes
 ;;;;
@@ -27,9 +24,6 @@
    (icon :initarg :icon
 	 :accessor application-icon
 	 :initform nil)
-   (style :initarg :style
-	  :accessor application-style
-	  :initform nil)
    (menu-p :initarg :menu-p
 	   :initform t
 	   :accessor application-menu-p)

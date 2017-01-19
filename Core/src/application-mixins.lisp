@@ -104,8 +104,8 @@
 
 (defmethod application-style-file ((application standard-application-mixin)
 				   &optional force-p force-user-p force-style)
-  (with-slots (name style) application
-    (find-config-file name (or force-style style *application-style*)
+  (with-slots (name) application
+    (find-config-file name (or force-style nil)
 				 force-p force-user-p)))
 
 ;;; protocol: load files
@@ -122,8 +122,8 @@
 
 (defmethod load-application-style-file ((application standard-application-mixin)
 					&optional force-style)
-  (with-slots (name style) application
-    (let ((sty (or force-style style *application-style*)))
+  (with-slots (name) application
+    (let ((sty (or force-style)))
       (let ((style-file (application-style-file application nil nil sty)))
 	(if style-file
 	    (let ((*application* application))

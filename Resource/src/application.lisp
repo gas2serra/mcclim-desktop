@@ -99,8 +99,8 @@
 
 (clim:define-presentation-to-command-translator launch-app
     (application com-launch-app desktop-application-command-table
-		 :gesture :select
 		 :documentation "launch app"
+		 :gesture :help
 		 :tester ((app) (not (application-requires-args-p app))))
     (app)
   (list app))

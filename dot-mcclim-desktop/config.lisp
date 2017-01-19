@@ -1,6 +1,5 @@
 (in-package :desktop-user)
 
-(setf *application-style* :my)
 (find-applications)
 
 (configure-application (find-application :listener))
