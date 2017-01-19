@@ -7,6 +7,12 @@
     ()
   (clim:frame-exit clim:*application-frame*))
 
+(define-desktop-console-command (com-clear-output :name "Clear output history"
+						  :command-table application-commands
+						  :provide-output-destination-keyword nil)
+    ()
+  (clim:window-clear *standard-output*))
+
 (define-desktop-console-command (com-refresh  :menu nil
 					      :name "Refresh"
 					      :keystroke (#\r :meta))

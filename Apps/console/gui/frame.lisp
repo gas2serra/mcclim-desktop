@@ -6,7 +6,9 @@
    (view-option :initform "menu"))
   (:menu-bar menubar-command-table)
   (:command-table (desktop-console
-		   :inherit-from (deski::desktop-application-command-table)))
+		   :inherit-from (deski::desktop-application-command-table
+				  deski::frame-command-table
+				  deski::thread-command-table)))
   (:panes
    (application-display :application
 			:width 150
@@ -90,7 +92,7 @@
 
 (defun print-listener-prompt (stream frame)
   (declare (ignore frame))
-  (princ (package-name *package*) stream)
+  (print-package-name stream)
   (princ "> " stream))
 
 ;; output
@@ -125,9 +127,8 @@
 
 (defun %update-edit-option (this-gadget selected-gadget)
   (declare (ignore this-gadget))
-  (with-slots (force-user-p) clim:*application-frame*
-    (setf force-user-p
-	  (string= (clim:gadget-label selected-gadget) "yes"))))
+  (setf deski::*force-user-app-files-p*
+	(string= (clim:gadget-label selected-gadget) "yes")))
 
 (defun %update-debugger-option (this-gadget selected-gadget)
   (declare (ignore this-gadget))
@@ -185,7 +186,8 @@
 
 (clim:make-command-table 'menubar-console-command-table
 			 :errorp nil
-			 :menu '(("Quit" :command (com-quit))))
+			 :menu '(("Clear Output" :command (com-clear-output))
+				 ("Quit" :command (com-quit))))
 
 (clim:make-command-table 'menubar-application-command-table
 			 :errorp nil

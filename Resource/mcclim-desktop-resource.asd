@@ -20,6 +20,8 @@
   :components ((:module "src"
 			:serial t
 			:components
-			((:file "application"))))
+			((:file "views")
+			 (:file "application")
+			 (:file "frame")
+			 (:file "thread"))))
   :description "McCLIM Desktop")
-
