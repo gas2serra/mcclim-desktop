@@ -1,0 +1,13 @@
+* Launcher (mcclim-desktop)
+
+#+CAPTION: Screenshot
+#+NAME:   fig:screenshot
+[[./doc/img/screenshot-01.jpg]]
+
+
+** Usage
+
+** Installation
+
+** Keystroke
+

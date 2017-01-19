@@ -12,17 +12,14 @@
   (:use :cl :asdf))
 (in-package #:mcclim-desktop-asd)
 
-(defsystem mcclim-desktop-internals
-    :components ((:file "packages")))
-
-(defsystem mcclim-desktop
+(defsystem mcclim-desktop-resource
   :version "0.2"
   :author "Alessandro Serra"
   :license "GPLv3"
-  :depends-on (:mcclim
-	       :mcclim-desktop-internals
-	       :mcclim-desktop-sys
-	       :mcclim-desktop-core
-	       :mcclim-desktop-resource)
-  :components ((:file "init"))
+  :depends-on (:mcclim-desktop-core)
+  :components ((:module "src"
+			:serial t
+			:components
+			((:file "application"))))
   :description "McCLIM Desktop")
+

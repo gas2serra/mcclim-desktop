@@ -20,6 +20,8 @@
 	       :mcclim-desktop-launcher
 	       :mcclim-desktop-task-manager
 	       :mcclim-desktop-apropos
-	       :mcclim-desktop-debugger)
+	       :mcclim-desktop-debugger
+	       :mcclim-desktop-console
+	       )
   :components ((:file "packages"))
   :description "McCLIM Desktop Apps")

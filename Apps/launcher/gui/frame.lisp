@@ -8,13 +8,15 @@
   
 (defmethod clim:note-sheet-degrafted ((sheet log-display-pane))
   (setf (logger-stream *logger*) *trace-output*))
-  
+
+
 (clim:define-application-frame desktop-launcher ()
-  ((force-user-p :initform t)
-   (system-debugger)
+  ((system-debugger)
    (system-style)
    (view-option :initform "menu"))
   (:menu-bar menubar-command-table)
+  (:command-table (desktop-launcher
+		   :inherit-from (deski::desktop-application-command-table)))
   (:panes
    (application-display :application
 			:height 300
@@ -126,9 +128,8 @@
 
 (defun %update-edit-option (this-gadget selected-gadget)
   (declare (ignore this-gadget))
-  (with-slots (force-user-p) clim:*application-frame*
-    (setf force-user-p
-	  (string= (clim:gadget-label selected-gadget) "yes"))))
+  (setf deski::*force-user-app-files-p*
+	(string= (clim:gadget-label selected-gadget) "yes")))
 
 (defun %update-debugger-option (this-gadget selected-gadget)
   (declare (ignore this-gadget))
@@ -193,3 +194,4 @@
 			 :menu '(("Quit" :command com-quit)
 				 ("Refresh" :command com-refresh)
 				 ("Layout" :menu layout-command-table)))
+
