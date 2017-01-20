@@ -8,10 +8,12 @@
 		#:run-apropos-navigator)
   (:import-from desktop-debugger
 		#:debugger)
-
+  (:import-from desktop-console
+		#:run-console)
   (:export
    #:run-launcher
    #:run-task-manager
    #:run-apropos-navigator
+   #:run-console
    #:debugger))
 
