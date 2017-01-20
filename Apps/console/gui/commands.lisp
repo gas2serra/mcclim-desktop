@@ -19,7 +19,10 @@
 					      :keystroke (#\r :meta))
     ()
   (refresh-applications)
-  (update-applications)
+  (clim:redisplay-frame-pane clim:*application-frame*
+			     (clim:find-pane-named clim:*application-frame*
+						   'application-display)
+			     :force-p t)
   nil)
 
 (clim:define-presentation-to-command-translator launch-app

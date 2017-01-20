@@ -10,7 +10,7 @@
 				  deski::frame-command-table
 				  deski::thread-command-table)))
   #|
-  (:command-table (listener
+  (:command-table (desktop-console
                    :inherit-from (application-commands
                                   lisp-commands
                                   asdf-commands
@@ -24,10 +24,10 @@
   (:disabled-commands )
   (:panes
    (application-display :application
-			:width 150
+			:width 200
 			:height 300
 			:display-function #'%update-application-display
-			:display-after-commands nil)
+			:display-time nil)
    (interactor-container
     (clim:make-clim-stream-pane
      :type 'listener-interactor-pane
@@ -71,11 +71,10 @@
   (declare (ignore fm))
   (with-slots (system-debugger) frame
     (setf system-debugger *debugger*))
-  (update-applications))
+  (in-package :desk))
 
 (defmethod clim:disown-frame  :after (fm (frame desktop-console))
   (declare (ignore fm))
-  (setf (logger-stream *logger*) *trace-output*)
   (with-slots (system-debugger) frame
     (use-debugger system-debugger)))
   
@@ -91,14 +90,13 @@
 (defmethod clim:frame-standard-output ((frame desktop-console))
   (clim:get-frame-pane frame 'interactor))
 
-
 ;; read command
+
 (clim:define-presentation-type empty-input ())
 
 (clim:define-presentation-method clim:present 
     (object (type empty-input) stream view &key &allow-other-keys)
   (princ "" stream))
-
 
 (defmethod clim:read-frame-command ((frame desktop-console) &key (stream *standard-input*))  
   "Specialized for the listener, read a lisp form to eval, or a command."
@@ -116,11 +114,6 @@
 
 ;; updating
 
-(defun %update-edit-option (this-gadget selected-gadget)
-  (declare (ignore this-gadget))
-  (setf deski::*force-user-app-files-p*
-	(string= (clim:gadget-label selected-gadget) "yes")))
-
 (defun %update-debugger-option (this-gadget selected-gadget)
   (declare (ignore this-gadget))
   (with-slots (system-debugger) clim:*application-frame*
@@ -137,12 +130,13 @@
 
 (defun %update-application-display (desktop-console stream)
   (declare (ignore desktop-console))
-  (with-slots (view-option) clim:*application-frame*
-    (dolist (app *applications*)
-      (when (application-menu-p app)
-	(clim:present (find-application app) 'application :stream stream)
-	(format stream "~%")))))
-
+  (dolist (app (registered-applications))
+    (when (application-menu-p app)
+      (fresh-line stream)
+      (clim:present app
+                    'application
+                    :view clim:+textual-view+
+                    :stream stream))))
 
 ;;;
 ;;; Menu
@@ -162,12 +156,3 @@
 			 :menu '(("Quit" :command (com-quit))
 				 ("Console" :menu menubar-console-command-table)
 				 ("Application" :menu menubar-application-command-table)))
-				 
-				 
-(defvar *applications* nil)
-
-(defun update-applications ()
-  (setf *applications*
-	(sort (applications)
-	      #'string<
-	      :key #'application-pretty-name)))
