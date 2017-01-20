@@ -1,4 +1,4 @@
-* Launcher (mcclim-desktop)
+* Console (mcclim-desktop)
 
 #+CAPTION: Screenshot
 #+NAME:   fig:screenshot
