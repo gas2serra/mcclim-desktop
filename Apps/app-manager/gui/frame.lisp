@@ -2,9 +2,11 @@
 
 (clim:define-application-frame desktop-app-manager ()
   ((view-option :initform "menu"))
-  (:menu-bar menubar-command-table)
+  (:menu-bar t)
   (:command-table (desktop-app-manager
-		   :inherit-from (deski::desktop-application-command-table)))
+		   :inherit-from (deski::desktop-application-command-table)
+		   :menu (("Quit" :command com-quit)
+			  ("Refresh" :command com-refresh-apps))))
   (:panes
    (application :application
 		:height 300
@@ -86,12 +88,4 @@
 	    (clim:present (find-application app) 'application :stream stream)
 	    (format stream "~%"))))))
 
-;;;
-;;; Menu
-;;;
-
-(clim:make-command-table 'menubar-command-table
-			 :errorp nil
-			 :menu '(("Quit" :command com-quit)
-				 ("Refresh" :command com-refresh)))
 

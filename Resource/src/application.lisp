@@ -49,6 +49,16 @@
 		  :view +list-textual-view+ :stream *standard-output*))
   nil)
 
+(clim:define-command (com-show-app :command-table desktop-application-command-table
+				   :menu nil
+				   :name "Show app")
+    ((app application :prompt "which app?"))
+  (clim:with-output-as-presentation (*standard-output* app 'application :single-box t)
+    (format *debug-io* "PRINT~%")
+    (format *standard-output* "Name: ~A~%" (application-name app))
+    (format *standard-output* "Pretty name: ~A~%" (application-pretty-name app))))
+
+
 (clim:define-command (com-launch-app :command-table desktop-application-command-table
 				     :menu nil
 				     :name "Launch app")

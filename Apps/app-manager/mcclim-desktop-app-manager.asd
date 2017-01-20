@@ -26,4 +26,4 @@
 			 (:file "frame")
 			 (:file "commands")
 			 (:file "main"))))
-  :description "McCLIM Desktop Launcher")
+  :description "McCLIM Desktop App Manager")

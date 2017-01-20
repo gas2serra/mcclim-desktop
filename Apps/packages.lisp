@@ -4,6 +4,8 @@
 		#:run-launcher)
   (:import-from desktop-task-manager
 		#:run-task-manager)
+  (:import-from desktop-app-manager
+		#:run-app-manager)
   (:import-from desktop-apropos
 		#:run-apropos-navigator)
   (:import-from desktop-debugger
@@ -13,6 +15,7 @@
   (:export
    #:run-launcher
    #:run-task-manager
+   #:run-app-manager
    #:run-apropos-navigator
    #:run-console
    #:debugger))
