@@ -1,12 +1,12 @@
 (in-package :desktop-console)
 
 (defun run-console (&key (new-process nil)
-		       (width nil)
-		       (height nil)
-		       port
-		       frame-manager
-		       (pretty-name "Desktop Console")
-		       (process-name "desktop-console"))
+		      (width nil)
+		      (height nil)
+		      port
+		      frame-manager
+		      (pretty-name "Desktop Console")
+		      (process-name "desktop-console"))
   (let* ((fm (or frame-manager (clim:find-frame-manager :port (or port (clim:find-port)))))
          (frame (clim:make-application-frame 'desktop-console
 					     :pretty-name pretty-name

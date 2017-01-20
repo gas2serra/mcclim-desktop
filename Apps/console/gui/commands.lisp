@@ -66,7 +66,7 @@
                  (present-value object)
                  (fresh-line)))))))
 
-(define-desktop-console-command (com-eval :menu t)
+(define-desktop-console-command (com-eval :menu nil)
     ((form 'clim:form :prompt "form"))
   (let ((standard-output *standard-output*)
         (standard-input *standard-input*)

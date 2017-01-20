@@ -22,9 +22,9 @@
 			:serial t
 			:depends-on ("packages")
 			:components
-			((:file "parameters")
-			 (:file "utility")
-			 (:file "presentations")
+			(
+			 
+			 
 			 (:file "wholine")
 			 (:file "frame")
 			 (:file "commands")
