@@ -43,12 +43,12 @@
 				      :menu nil
 				      :name "List frames")
     ()
-  (let ((frames nil))
+  (with-resource-list-output (*standard-output*)
     (clim:map-over-frames #'(lambda (frame)
-			      (push frame frames)))
-    (clim:present frames
-		  'list
-		  :view +list-textual-view+ :stream *standard-output*))
+			      (with-resource-list-item-output (*standard-output*)
+				(clim:present frame 'clim:application-frame
+					      :view clim:+textual-view+
+					      :stream *standard-output*)))))
   nil)
 
 (clim:define-command (com-application-frame-exit :command-table frame-command-table

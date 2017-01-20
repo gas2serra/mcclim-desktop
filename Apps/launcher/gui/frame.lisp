@@ -15,7 +15,7 @@
    (view-option :initform "menu"))
   (:menu-bar menubar-command-table)
   (:command-table (desktop-launcher
-		   :inherit-from (deski::desktop-application-command-table)))
+		   :inherit-from (deski::application-command-table)))
   (:panes
    (application-display :application
 			:height 300

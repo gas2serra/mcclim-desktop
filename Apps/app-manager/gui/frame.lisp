@@ -4,7 +4,7 @@
   ((view-option :initform "menu"))
   (:menu-bar t)
   (:command-table (desktop-app-manager
-		   :inherit-from (deski::desktop-application-command-table)
+		   :inherit-from (deski::application-command-table)
 		   :menu (("Quit" :command com-quit)
 			  ("Refresh" :command com-refresh-apps))))
   (:panes

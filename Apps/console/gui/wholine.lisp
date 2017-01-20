@@ -24,8 +24,13 @@
 
 ;; Wholine Pane
 
-(defclass wholine-pane (clim:application-pane) ()
-  (:default-initargs :background *wholine-background*))
+(defclass wholine-pane (clim:application-pane)
+  ()
+  (:default-initargs :background *wholine-background*
+    :display-function #'display-wholine
+    :scroll-bars nil
+    :display-time :command-loop
+    :end-of-line-action :allow))
 
 (defmethod clim:compose-space ((pane wholine-pane) &key width height)
   (declare (ignore width height))  
@@ -33,6 +38,21 @@
     (clim:make-space-requirement :height h
 				 :min-height h
 				 :max-height h)))
+
+(defun display-wholine (frame stream-pane)
+  (let ((record (clim:with-output-to-output-record (stream-pane)
+		  (let* ((*standard-output* stream-pane))
+		    (generate-wholine-contents frame)))))
+    (clim:with-bounding-rectangle* (rx0 ry0 rx1 ry1) (clim:bounding-rectangle record)
+      (declare (ignore rx1 ry1))
+      (setf (clim:output-record-position record)
+	    (values (+ rx0 *wholine-padding*) (+ ry0 *wholine-padding*))))
+    (clim:add-output-record record (clim:stream-output-history stream-pane))
+    (clim:replay-output-record record stream-pane)))
+
+;;;
+;;; 
+;;;
 
 (defun print-package-name (stream)
   (let ((foo (package-name *package*)))
@@ -44,7 +64,7 @@
 (defun frob-pathname (pathname)
   (namestring (truename pathname)))
 
-(defun generate-wholine-contents (frame pane)
+(defun generate-wholine-contents (frame)
   (declare (ignore frame))
   (let* ((username (or (osicat:environment-variable "USER")
                        "luser"))
@@ -79,13 +99,4 @@
 	    ;; to really do so such that the memory usage appears right justified.
 	    ))))))
 
-(defun display-wholine (frame stream-pane)
-  (let ((record (clim:with-output-to-output-record (stream-pane)
-		  (let* ((*standard-output* stream-pane))
-		    (generate-wholine-contents frame stream-pane)))))
-    (clim:with-bounding-rectangle* (rx0 ry0 rx1 ry1) (clim:bounding-rectangle record)
-      (declare (ignore rx1 ry1))
-      (setf (clim:output-record-position record)
-	    (values (+ rx0 *wholine-padding*) (+ ry0 *wholine-padding*))))
-    (clim:add-output-record record (clim:stream-output-history stream-pane))
-    (clim:replay-output-record record stream-pane)))
+

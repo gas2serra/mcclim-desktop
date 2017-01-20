@@ -6,7 +6,7 @@
   ((system-debugger))
   (:menu-bar t)
   (:command-table (desktop-console
-		   :inherit-from (deski::desktop-application-command-table
+		   :inherit-from (deski::application-command-table
 				  deski::frame-command-table
 				  deski::thread-command-table)
 		   :menu (("Quit" :command (com-quit))
@@ -27,9 +27,7 @@
      :width 650
      :height 300))
    (doc :pointer-documentation)
-   (wholine (clim:make-pane 'wholine-pane
-			    :display-function 'display-wholine :scroll-bars nil
-			    :display-time :command-loop :end-of-line-action :allow))
+   (wholine (clim:make-pane 'wholine-pane))
    (debugger-option
     (clim:with-radio-box (:orientation :vertical
 				       :value-changed-callback '%update-debugger-option)

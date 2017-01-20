@@ -4,8 +4,7 @@
 ;;; Clim resource for applications
 ;;;
 
-;; presentations
-
+;;; presentations
 
 (clim:define-presentation-method clim:present (app (type application)
 						   stream
@@ -21,10 +20,11 @@
 						 (clim:suggest (application-pretty-name o) o))
 					     (registered-applications)))))
 
-;; command table
-(clim:define-command-table desktop-application-command-table)
+;;; command table
 
-;; parameters
+(clim:define-command-table application-command-table)
+
+;;; parameters
 
 (defvar *force-user-app-files-p* t)
 
@@ -36,44 +36,38 @@
 
 ;; commands
 
-(clim:define-command (com-list-apps :command-table desktop-application-command-table
-				     :menu nil
-				     :name "List apps")
+(clim:define-command (com-list-apps :command-table application-command-table
+				    :name "List apps")
     ((all-p boolean :default nil :prompt "all apps?"))
-  (let ((apps nil))
+  (with-resource-list-output (*standard-output*)
     (dolist (app (registered-applications))
       (when (or all-p (application-menu-p app))
-	(push app apps)))
-    (clim:present apps
-		  'list
-		  :view +list-textual-view+ :stream *standard-output*))
+	(with-resource-list-item-output (*standard-output*)
+	  (clim:present app 'application :view clim:+textual-view+
+			:stream *standard-output*)))))
   nil)
 
-(clim:define-command (com-show-app :command-table desktop-application-command-table
-				   :menu nil
+(clim:define-command (com-show-app :command-table application-command-table
 				   :name "Show app")
     ((app application :prompt "which app?"))
   (clim:with-output-as-presentation (*standard-output* app 'application :single-box t)
-    (format *debug-io* "PRINT~%")
-    (format *standard-output* "Name: ~A~%" (application-name app))
-    (format *standard-output* "Pretty name: ~A~%" (application-pretty-name app))))
+    (with-resource-show-output (*standard-output*)
+      (format *standard-output* "Name: ~A~%" (application-name app))
+      (format *standard-output* "Pretty name: ~A~%" (application-pretty-name app)))))
 
-
-(clim:define-command (com-launch-app :command-table desktop-application-command-table
-				     :menu nil
+(clim:define-command (com-launch-app :command-table application-command-table
 				     :name "Launch app")
     ((app application :prompt "which app?"))
   (launch-application app))
   
-(clim:define-command (com-open-app-home-page :command-table desktop-application-command-table
-					     :menu nil
+(clim:define-command (com-open-app-home-page :command-table application-command-table
 					     :name "Open app home page")
     ((app 'application :prompt "which app?"))
   (launch-application (find-application "browser")
 		      :args (list (application-home-page app))))
 
 
-(clim:define-command (com-edit-app-def-file :command-table desktop-application-command-table
+(clim:define-command (com-edit-app-def-file :command-table application-command-table
 					    :menu nil
 					    :name "Edit app def")
     ((app 'application :prompt "which app?"))
@@ -84,7 +78,7 @@
 			  (declare (ignore rest))
 			  (refresh-application (application-name app))))))
 
-(clim:define-command (com-edit-app-config-file :command-table desktop-application-command-table
+(clim:define-command (com-edit-app-config-file :command-table application-command-table
 					       :menu nil
 					       :name "Edit app config")
     ((app 'application :prompt "which app?"))
@@ -97,7 +91,7 @@
 			  (when (application-configured-p app)
 			    (configure-application app t))))))
 
-(clim:define-command (com-edit-app-style-file :command-table desktop-application-command-table
+(clim:define-command (com-edit-app-style-file :command-table application-command-table
 					      :name "Edit app style")
     ((app 'application :prompt "which app?"))
   (when (application-configured-p app)

@@ -36,9 +36,11 @@
 				      :menu nil
 				      :name "List threads")
     ()
-  (clim:present (bt:all-threads)
-		'list
-		:view +list-textual-view+ :stream *standard-output*)
+  (with-resource-list-output (*standard-output*)
+    (dolist (thread (bt:all-threads))
+      (with-resource-list-item-output (*standard-output*)
+	(clim:present thread 'thread :view clim:+textual-view+
+		      :stream *standard-output*))))
   nil)
 
 (clim:define-command (com-thread-break :command-table thread-command-table
