@@ -4,39 +4,28 @@
 
 (clim:define-application-frame desktop-console ()
   ((system-debugger))
-  (:menu-bar menubar-command-table)
+  (:menu-bar t)
   (:command-table (desktop-console
 		   :inherit-from (deski::desktop-application-command-table
 				  deski::frame-command-table
-				  deski::thread-command-table)))
-  #|
-  (:command-table (desktop-console
-                   :inherit-from (application-commands
-                                  lisp-commands
-                                  asdf-commands
-                                  filesystem-commands
-                                  show-commands)
-                   :menu (("Listener"   :menu application-commands)
-                          ("Lisp"       :menu lisp-commands)
-                          ("Filesystem" :menu filesystem-commands)
-                          ("Show"       :menu show-commands))))
-  |#
-  (:disabled-commands )
+				  deski::thread-command-table)
+		   :menu (("Quit" :command (com-quit))
+			  ("Console" :menu menubar-console-command-table)
+			  ("Application" :menu menubar-application-command-table))))
+  (:disabled-commands)
   (:panes
    (application-display :application
 			:width 200
 			:height 300
 			:display-function #'%update-application-display
-			:display-time nil)
+			:display-time t)
    (interactor-container
     (clim:make-clim-stream-pane
      :type 'listener-interactor-pane
      :name 'interactor :scroll-bars t
      ;;:default-view +listener-view+
      :width 650
-     :height 300
-     ;;:display-time :command-loop
-     ))
+     :height 300))
    (doc :pointer-documentation)
    (wholine (clim:make-pane 'wholine-pane
 			    :display-function 'display-wholine :scroll-bars nil
@@ -53,11 +42,11 @@
    (default
        (clim:horizontally ()
 	 (clim:vertically ()
-	   (clim:+fill+
-	    (clim:labelling (:label "Applications")
-	      application-display))
-	   (clim:labelling (:label "Debugger")
-	     debugger-option))
+           (clim:labelling (:label "Debugger")
+             debugger-option)
+           (clim:+fill+
+            (clim:labelling (:label "Applications")
+	      application-display)))
 	 (clim:+fill+
 	  (clim:labelling (:label "Console")
 	    (clim:vertically ()
@@ -130,7 +119,7 @@
 
 (defun %update-application-display (desktop-console stream)
   (declare (ignore desktop-console))
-  (dolist (app (registered-applications))
+  (dolist (app (sort (registered-applications) #'string< :key #'application-pretty-name))
     (when (application-menu-p app)
       (fresh-line stream)
       (clim:present app
@@ -142,17 +131,10 @@
 ;;; Menu
 ;;;
 
-(clim:make-command-table 'menubar-console-command-table
-			 :errorp nil
-			 :menu '(("Clear Output" :command (com-clear-output))
-				 ("Quit" :command (com-quit))))
+(clim:define-command-table menubar-console-command-table
+    :menu (("Clear Output" :command (com-clear-output))
+	   ("Quit" :command (com-quit))))
 
-(clim:make-command-table 'menubar-application-command-table
-			 :errorp nil
-			 :menu '(("Refresh" :command (com-refresh))))
+(clim:define-command-table menubar-application-command-table
+    :menu (("Refresh" :command (com-refresh))))
 
-(clim:make-command-table 'menubar-command-table
-			 :errorp nil
-			 :menu '(("Quit" :command (com-quit))
-				 ("Console" :menu menubar-console-command-table)
-				 ("Application" :menu menubar-application-command-table)))
