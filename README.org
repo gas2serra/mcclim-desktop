@@ -32,7 +32,7 @@ or
 *** GUI
 
 #+BEGIN_SRC lisp
-(desk:launch-app "launcher") 
+(desk:launch-app "console") 
 #+END_SRC
 
 ** Installation
@@ -59,7 +59,11 @@ mcclim-desktop.ros
 #+END_SRC
 
 ** Applications
-- Launcher
+- Console
+  [[file:Apps/console/README.org][link]]
+- App manager
+  [[file:Apps/app-manager/README.org][link]]
+- Launcher (deprecated)
   [[file:Apps/launcher/README.org][link]]
 - Apropos Navigator
   [[file:Apps/apropos/README.org][link]]
