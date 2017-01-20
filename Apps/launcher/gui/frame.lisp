@@ -12,7 +12,6 @@
 
 (clim:define-application-frame desktop-launcher ()
   ((system-debugger)
-   (system-style)
    (view-option :initform "menu"))
   (:menu-bar menubar-command-table)
   (:command-table (desktop-launcher
@@ -39,12 +38,6 @@
       "swank"
       "clim"
       "desktop"))
-   (style-option
-    (clim:with-radio-box (:orientation :vertical
-				       :value-changed-callback '%update-style-option)
-      (clim:radio-box-current-selection "system")
-      "my"
-      "default"))
    (view-option
     (clim:with-radio-box (:orientation :vertical
 				       :value-changed-callback '%update-view-option)
@@ -70,8 +63,6 @@
 		debugger-option)
               (clim:labelling (:label "Edit local files")
 		edit-option)
-	      (clim:labelling (:label "Style")
-                style-option)
 	      clim:+fill+
 	      (clim:labelling (:label "Actions")
 			      clear-action))))
@@ -90,8 +81,6 @@
              debugger-option)
            (clim:labelling (:label "Edit local files")
              edit-option)
-           (clim:labelling (:label "Style")
-             style-option)
 	   clim:+fill+)))
       (1/3 (clim:labelling (:label "Interactor")
              interactor))))))
@@ -105,17 +94,15 @@
 
 (defmethod clim:adopt-frame  :after (fm (frame desktop-launcher))
   (declare (ignore fm))
-  (with-slots (system-debugger system-style) frame
-    (setf system-debugger *debugger*)
-    (setf system-style *application-style*))
+  (with-slots (system-debugger) frame
+    (setf system-debugger *debugger*))
   (update-applications))
 
 (defmethod clim:disown-frame  :after (fm (frame desktop-launcher))
   (declare (ignore fm))
   (setf (logger-stream *logger*) *trace-output*)
-  (with-slots (system-debugger system-style) frame
-    (use-debugger system-debugger)
-    (setf *application-style* system-style)))
+  (with-slots (system-debugger) frame
+    (use-debugger system-debugger)))
 
 ;; commands
 
@@ -144,20 +131,6 @@
 	 (use-application-as-debugger "clim-debugger"))
 	((string= label "desktop")
 	 (use-application-as-debugger "desktop-debugger"))))))
-
-(defun %update-style-option (this-gadget selected-gadget)
-  (declare (ignore this-gadget))
-  (with-slots (system-style) clim:*application-frame*
-    (let ((label (clim:gadget-label selected-gadget)))
-      (cond
-	((string= label "system")
-	 (setf *application-style* system-style))
-	((string= label "my")
-	 (setf *application-style* :my))
-	((string= label "default")
-	 (setf *application-style* :default)))))
-  (dolist (app *applications*)
-    (need-reconfigure-application app)))
 
 (defun %update-view-option (this-gadget selected-gadget)
   (declare (ignore this-gadget))

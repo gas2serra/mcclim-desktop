@@ -9,7 +9,8 @@
 
 (define-desktop-console-command (com-clear-output :name "Clear output history"
 						  :command-table application-commands
-						  :provide-output-destination-keyword nil)
+						  :provide-output-destination-keyword nil
+						  :keystroke (#\c :meta))
     ()
   (clim:window-clear *standard-output*))
 
@@ -44,30 +45,9 @@
 (defun display-evalues (values)
   (labels
       ((present-value (value)         
-         ;; I would really prefer this to behave as below, as presenting
-         ;; things as expressions causes translators applicable to expression
-         ;; to override those which would be otherwise applicable (such as
-         ;; the set-current-package translator). I retain the use of w-o-a-p,
-         ;; swapping the inner/outer presentation types, with the assumption
-         ;; that someone (the form reader?) really does want expressions, and
-         ;; the presentation-type-of is seldom a subtype of expression.
-         ;; Aside from that, the problem with my code below is that it
-         ;; will use the default presentation method for the type, which will
-         ;; not necessarily print in the fashion expected from the lisp REPL.
-         ;; Possibly this +listener-view+ could save the day here, but I'm
-         ;; unclear on why it exists.   --Hefner
-
-         ;; Okay, set-current-package translator now mysteriously works, but
-         ;; I stand by the notion that 'expression should not be the type of
-         ;; the innermost presentation.
-         
-         #+(or)
-         (with-output-as-presentation (t value 'expression :single-box t)
-           (present value (presentation-type-of value) :single-box t))
-
-         (clim:with-output-as-presentation (t value (clim:presentation-type-of value)
-                                         :single-box t)
-           (clim:present value 'clim:expression))))
+         (clim:with-output-as-presentation (t value (deski::desktop-presentation-type-of value)
+					      :single-box t)
+	   (clim:present value 'clim:expression))))
     (clim:with-drawing-options (t :ink clim:+olivedrab+)
       (cond ((null values) #+NIL (format t "No values.~%"))
             ((= 1 (length values))             
@@ -146,3 +126,5 @@
                           (format t "Aborted for unknown reasons (possibly use of ~A)." 'break))))
             (:abort (clim:with-text-style (t (clim:make-text-style nil :italic nil))
                       (format t "Aborted by user after ~F seconds." value)))))))))
+
+

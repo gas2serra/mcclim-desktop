@@ -40,11 +40,14 @@
 				     :menu nil
 				     :name "List apps")
     ((all-p boolean :default nil :prompt "all apps?"))
-  (dolist (app (registered-applications))
-    (when (or all-p (application-menu-p app))
-      (progn
-	(clim:present app 'application :stream *standard-output*)
-	(format *standard-output* "~%")))))
+  (let ((apps nil))
+    (dolist (app (registered-applications))
+      (when (or all-p (application-menu-p app))
+	(push app apps)))
+    (clim:present apps
+		  'list
+		  :view +list-textual-view+ :stream *standard-output*))
+  nil)
 
 (clim:define-command (com-launch-app :command-table desktop-application-command-table
 				     :menu nil
@@ -95,45 +98,3 @@
 			  (declare (ignore rest))
 			  (when (application-configured-p app)
 			    (configure-application app t))))))
-;; traslators
-
-(clim:define-presentation-to-command-translator launch-app
-    (application com-launch-app desktop-application-command-table
-		 :documentation "launch app"
-		 :gesture :help
-		 :tester ((app) (not (application-requires-args-p app))))
-    (app)
-  (list app))
-
-(clim:define-presentation-to-command-translator open-app-home-page
-    (application com-open-app-home-page desktop-application-command-table
-		 :gesture :help
-		 :documentation "open app home page"
-		 :tester ((app) (declare (ignore app)) t))
-    (app)
-  (list app))
-
-(clim:define-presentation-to-command-translator edit-app-def-file
-    (application com-edit-app-def-file desktop-application-command-table
-		 :gesture :help
-		 :documentation "edit app file"
-		 :tester ((app) (declare (ignore app)) t))
-    (app)
-  (list app))
-
-(clim:define-presentation-to-command-translator edit-app-config-file
-    (application com-edit-app-config-file desktop-application-command-table
-		 :gesture :help
-		 :documentation "edit app config"
-		 :tester ((app) (declare (ignore app)) t))
-    (app)
-  (list app))
-
-(clim:define-presentation-to-command-translator edit-app-style-file
-    (application com-edit-app-style-file desktop-application-command-table
-		 :gesture :help
-		 :documentation "edit app style"
-		 :tester ((app) (declare (ignore app)) t))
-    (app)
-  (list app))
-

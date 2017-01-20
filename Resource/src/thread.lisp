@@ -9,6 +9,10 @@
 
 (clim:define-presentation-type thread ())
 
+#+sbcl
+(defmethod desktop-presentation-type-of ((thread sb-thread:thread))
+  'thread)
+
 (clim:define-presentation-method clim:present (object (type thread) stream
 						      (view clim:textual-view)
 						      &key acceptably for-context-type)
@@ -30,13 +34,12 @@
 
 (clim:define-command (com-list-thread :command-table thread-command-table
 				      :menu nil
-				      :name "List thread")
+				      :name "List threads")
     ()
-  (dolist (thread (bt:all-threads))
-    (fresh-line *standard-output*)
-    (clim:present thread
-		  'thread
-		  :stream *standard-output*)))
+  (clim:present (bt:all-threads)
+		'list
+		:view +list-textual-view+ :stream *standard-output*)
+  nil)
 
 (clim:define-command (com-thread-break :command-table thread-command-table
 				       :name "Break thread")

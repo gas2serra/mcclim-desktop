@@ -1,5 +1,7 @@
 (in-package :desktop-console)
 
+(defclass listener-interactor-pane (clim:interactor-pane) ())
+
 (clim:define-application-frame desktop-console ()
   ((system-debugger))
   (:menu-bar menubar-command-table)
@@ -7,16 +9,34 @@
 		   :inherit-from (deski::desktop-application-command-table
 				  deski::frame-command-table
 				  deski::thread-command-table)))
+  #|
+  (:command-table (listener
+                   :inherit-from (application-commands
+                                  lisp-commands
+                                  asdf-commands
+                                  filesystem-commands
+                                  show-commands)
+                   :menu (("Listener"   :menu application-commands)
+                          ("Lisp"       :menu lisp-commands)
+                          ("Filesystem" :menu filesystem-commands)
+                          ("Show"       :menu show-commands))))
+  |#
+  (:disabled-commands )
   (:panes
    (application-display :application
 			:width 150
 			:height 300
 			:display-function #'%update-application-display
 			:display-after-commands nil)
-   (interactor :interactor
-	       :width 600
-	       :height 300
-	       :display-time :command-loop)
+   (interactor-container
+    (clim:make-clim-stream-pane
+     :type 'listener-interactor-pane
+     :name 'interactor :scroll-bars t
+     ;;:default-view +listener-view+
+     :width 650
+     :height 300
+     ;;:display-time :command-loop
+     ))
    (doc :pointer-documentation)
    (wholine (clim:make-pane 'wholine-pane
 			    :display-function 'display-wholine :scroll-bars nil
@@ -41,7 +61,7 @@
 	 (clim:+fill+
 	  (clim:labelling (:label "Console")
 	    (clim:vertically ()
-	      (clim:+fill+ interactor)
+	      (clim:+fill+ interactor-container)
 	      doc
 	      wholine)))))))
 
@@ -139,7 +159,8 @@
 
 (clim:make-command-table 'menubar-command-table
 			 :errorp nil
-			 :menu '(("Console" :menu menubar-console-command-table)
+			 :menu '(("Quit" :command (com-quit))
+				 ("Console" :menu menubar-console-command-table)
 				 ("Application" :menu menubar-application-command-table)))
 				 
 				 
