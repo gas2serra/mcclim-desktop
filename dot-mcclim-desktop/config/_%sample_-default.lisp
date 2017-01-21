@@ -1,8 +1,0 @@
-(in-package :desktop-user)
-
-;;;
-;;;
-;;;
-
-
-
