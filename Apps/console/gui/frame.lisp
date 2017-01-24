@@ -88,10 +88,23 @@
 (defmethod clim:read-frame-command ((frame desktop-console) &key (stream *standard-input*))  
   "Specialized for the listener, read a lisp form to eval, or a command."
   (multiple-value-bind (object type)
-      (let ((clim:*command-dispatchers* '(#\,)))
-        (clim:with-text-style (stream (clim:make-text-style :fix :roman :normal))
-          (clim:accept 'clim:command-or-form :stream stream :prompt nil 
-		       :default "hello" :default-type 'empty-input)))
+      (let* ((clim:*command-dispatchers* '(#\,))
+	     (command-table (clim:frame-command-table frame))
+	     (clim:*accelerator-gestures* (climi::compute-inherited-keystrokes command-table)))
+	(handler-case
+	    (clim:with-text-style (stream (clim:make-text-style :fix :roman :normal))
+	      (clim:accept 'clim:command-or-form :stream stream :prompt nil 
+			   :default "hello" :default-type 'empty-input))
+	  (clim:accelerator-gesture (c)
+	    (let ((command
+		   (clim:lookup-keystroke-command-item (clim:accelerator-gesture-event c)
+						       command-table)))
+	      (if (and (listp command)
+		       (clim:partial-command-p command))
+		  (funcall clim:*partial-command-parser*
+			   command-table stream command
+			   (position clim:*unsupplied-argument-marker* command))
+		 (values command 'clim:command))))))
     (cond
       ((clim:presentation-subtypep type 'empty-input)
        ;; Do nothing.
