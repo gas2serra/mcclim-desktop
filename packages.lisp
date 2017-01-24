@@ -154,4 +154,5 @@
   (:nicknames :deski))
 
 (defpackage :desktop-user
-  (:use :desktop :common-lisp))
+  (:use :desktop :clim :clim-lisp)
+  (:nicknames :desk-user))

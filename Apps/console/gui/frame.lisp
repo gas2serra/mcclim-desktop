@@ -58,7 +58,7 @@
   (declare (ignore fm))
   (with-slots (system-debugger) frame
     (setf system-debugger *debugger*))
-  (in-package :desk))
+  (in-package :desk-user))
 
 (defmethod clim:disown-frame  :after (fm (frame desktop-console))
   (declare (ignore fm))
