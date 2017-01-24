@@ -7,6 +7,7 @@
     ()
   (clim:frame-exit clim:*application-frame*))
 
+
 (define-desktop-console-command (com-clear-output :name "Clear output history"
 						  :command-table application-commands
 						  :provide-output-destination-keyword nil
@@ -27,6 +28,7 @@
 
 (clim:define-presentation-to-command-translator launch-app
     (application deski::com-launch-app desktop-console
+		 :echo nil
 		 :gesture :select
 		 :documentation "launch app"
 		 :tester ((app) (not (application-requires-args-p app))))
