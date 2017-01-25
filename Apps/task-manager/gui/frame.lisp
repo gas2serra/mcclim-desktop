@@ -1,7 +1,8 @@
 (in-package :desktop-task-manager)
 
+
 (clim:define-application-frame task-manager (clim:standard-application-frame)
-  ()
+  ((timer))
   (:panes
    (frame-display :application
 		  :display-function #'%render-frame-display
@@ -27,6 +28,21 @@
 		   (clim:labelling (:label "Interactor")
 		     interact))
 		  doc))))
+
+;; initialization
+
+(defmethod clim:adopt-frame  :after (fm (frame task-manager))
+  (declare (ignore fm))
+  (with-slots (timer) frame
+    (setf timer (trivial-timers:make-timer
+		 #'(lambda ()
+		     (clim:execute-frame-command frame '(com-refresh)))))
+    (trivial-timers:schedule-timer timer 3.0 :repeat-interval 3.0)))
+
+(defmethod clim:disown-frame  :after (fm (frame task-manager))
+  (declare (ignore fm))
+  (with-slots (timer) frame
+    (trivial-timers:unschedule-timer timer)))
 
 ;;;
 ;;; render functions

@@ -18,7 +18,7 @@
   :version "0.1"
   :author "Alessandro Serra"
   :license "GPLv3"
-  :depends-on (:mcclim :anaphora :clouseau)
+  :depends-on (:mcclim :anaphora :clouseau :trivial-timers)
   :components ((:file "mcclim-desktop-task-manager")
 	       (:module "src"
 			:serial t
