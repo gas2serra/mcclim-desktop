@@ -31,15 +31,3 @@
   (let ((pane (clim:find-pane-named clim:*application-frame* 'interact)))
     (clim:window-clear pane)))
 
-;;; gesture :select and :help
-
-
-
-
-		  
-;;
-;; command traslators
-;;
-
-
-

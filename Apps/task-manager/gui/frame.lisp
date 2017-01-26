@@ -36,13 +36,25 @@
   (with-slots (timer) frame
     (setf timer (trivial-timers:make-timer
 		 #'(lambda ()
-		     (clim:execute-frame-command frame '(com-refresh)))))
-    (trivial-timers:schedule-timer timer 3.0 :repeat-interval 3.0)))
+		     (clim:execute-frame-command frame '(com-refresh)))))))
 
 (defmethod clim:disown-frame  :after (fm (frame task-manager))
   (declare (ignore fm))
   (with-slots (timer) frame
-    (trivial-timers:unschedule-timer timer)))
+    (when (trivial-timers:timer-scheduled-p timer)
+      (trivial-timers:unschedule-timer timer))))
+
+;;;
+;;;
+;;;
+
+(defmethod clim:read-frame-command :around ((frame task-manager) &key &allow-other-keys)
+  (with-slots (timer) frame
+    (unwind-protect
+	(progn
+	  (trivial-timers:schedule-timer timer 3.0 :repeat-interval 3.0)
+	  (call-next-method))
+      (trivial-timers:unschedule-timer timer))))
 
 ;;;
 ;;; render functions
@@ -51,12 +63,13 @@
 (defun %render-frame-display (frame pane)
   (declare (ignore frame))
   (clim:map-over-frames #'(lambda (frame)
-			    (fresh-line pane)
-			    (clim:stream-increment-cursor-position pane 5 3)
-			    (clim:present frame
-					  'clim:application-frame
-					  :view deski::+extended-textual-view+
-					  :stream pane))))
+			    (when (typep frame 'clim:standard-application-frame)
+			      (fresh-line pane)
+			      (clim:stream-increment-cursor-position pane 5 3)
+			      (clim:present frame
+					    'clim:application-frame
+					    :view deski::+extended-textual-view+
+					    :stream pane)))))
 
 (defun %render-thread-display (frame pane)
   (declare (ignore frame))
@@ -66,4 +79,3 @@
     (clim:present thread 'deski::thread
 		  :view clim:+textual-view+
 		  :stream pane)))
-
