@@ -39,21 +39,22 @@
 (clim:define-command (com-list-apps :command-table application-command-table
 				    :name "List apps")
     ((all-p boolean :default nil :prompt "all apps?"))
-  (with-resource-list-output (*standard-output*)
-    (dolist (app (registered-applications))
-      (when (or all-p (application-menu-p app))
-	(with-resource-list-item-output (*standard-output*)
-	  (clim:present app 'application :view clim:+textual-view+
-			:stream *standard-output*)))))
+  (show-resources
+   (if all-p
+       (registered-applications)
+       (remove-if-not #'application-menu-p (registered-applications))))
   nil)
 
 (clim:define-command (com-show-app :command-table application-command-table
 				   :name "Show app")
     ((app application :prompt "which app?"))
+  (show-resource app))
+  #|
   (clim:with-output-as-presentation (*standard-output* app 'application :single-box t)
     (with-resource-show-output (*standard-output*)
       (format *standard-output* "Name: ~A~%" (application-name app))
       (format *standard-output* "Pretty name: ~A~%" (application-pretty-name app)))))
+  |#
 
 (clim:define-command (com-launch-app :command-table application-command-table
 				     :name "Launch app")
