@@ -20,17 +20,10 @@
   :license "GPLv3"
   :depends-on (:mcclim :anaphora :clouseau :trivial-timers)
   :components ((:file "mcclim-desktop-task-manager")
-	       (:module "src"
-			:serial t
-			:depends-on ("mcclim-desktop-task-manager")
-			:components
-			((:file "presentations")))
   	       (:module "gui"
-			:depends-on ("src")
 			:serial t
 			:components
-			((:file "parameters")
-			 (:file "frame")
+			((:file "frame")
 			 (:file "commands")
 			 (:file "main"))))
   :description "Task Manager")

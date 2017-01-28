@@ -5,14 +5,12 @@
 ;;;
 
 (define-task-manager-command (com-quit :name "Quit"
-				       :menu t
 				       :keystroke (#\q :meta))
     ()
   (clim:frame-exit clim:*application-frame*))
 
 
-(define-task-manager-command (com-refresh  :menu t
-					   :name "Refresh"
+(define-task-manager-command (com-refresh  :name "Refresh"
 					   :keystroke (#\r :meta))
     ()
   (clim:redisplay-frame-pane clim:*application-frame*

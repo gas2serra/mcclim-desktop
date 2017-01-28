@@ -27,14 +27,15 @@
     (show-object thing stream))
   (values))
 
-(defun show-resources (things &optional stream)
+(defun list-resources (things &optional stream)
   (if (null stream)
       (setq stream *standard-output*)
       (if  (eq stream t)
            (setq stream *terminal-io*)))
   (with-resource-show-output stream
-    (show-objects things stream))
+    (list-objects things stream))
   (values))
+
 
 
 (defgeneric show-object (thing stream))
@@ -43,8 +44,8 @@
   (show-fresh-line stream)
   (clim:present thing (desktop-presentation-type-of thing) :stream stream))
 
-(defgeneric show-objects (things stream))
+(defgeneric list-objects (things stream))
 
-(defmethod show-objects (things stream)
+(defmethod list-objects (things stream)
   (dolist (object things)
     (show-object object stream)))

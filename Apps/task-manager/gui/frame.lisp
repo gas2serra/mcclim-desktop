@@ -14,7 +14,11 @@
    (interact :interactor))
   (:command-table
    (task-manager :inherit-from (deski::frame-command-table
-				deski::thread-command-table)))
+				deski::thread-command-table)
+		 :menu (("Quit" :command (com-quit))
+			("Refresh" :command (com-refresh))
+			("Thread" :menu deski::thread-command-table)
+			("Frame" :menu deski::frame-command-table))))
   (:menu-bar t)
   (:layouts (default
 		(clim:vertically ()
@@ -63,13 +67,12 @@
 (defun %render-frame-display (frame pane)
   (declare (ignore frame))
   (clim:map-over-frames #'(lambda (frame)
-			    (when (typep frame 'clim:standard-application-frame)
-			      (fresh-line pane)
-			      (clim:stream-increment-cursor-position pane 5 3)
-			      (clim:present frame
-					    'clim:application-frame
-					    :view deski::+extended-textual-view+
-					    :stream pane)))))
+			    (fresh-line pane)
+			    (clim:stream-increment-cursor-position pane 5 3)
+			    (clim:present frame
+					  'clim:application-frame
+					  :view deski::+extended-textual-view+
+					  :stream pane))))
 
 (defun %render-thread-display (frame pane)
   (declare (ignore frame))

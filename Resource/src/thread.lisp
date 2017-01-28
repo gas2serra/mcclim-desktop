@@ -4,26 +4,28 @@
 ;;; Clim resource for threads
 ;;;
 
+(defun thread-textual-string (thread)
+  (bt:thread-name thread))
 
 ;;; presentation
 
 (clim:define-presentation-type thread ())
 
 (clim:define-presentation-method clim:presentation-typep (object (type thread))
-  #+sbcl (typep object 'sb-thread:thread)
-  #-sbcl t)
+  (bt:threadp object))
 
 (clim:define-presentation-method clim:present (object (type thread) stream
 						      (view clim:textual-view)
 						      &key acceptably for-context-type)
   (declare (ignore acceptably for-context-type))
-  (princ (bt:thread-name object) stream))
+  (princ (thread-textual-string object) stream))
 
 (clim:define-presentation-method clim:accept ((type thread) stream view &key)
+  (declare (ignore view))
   (values
    (clim:completing-from-suggestions (stream :partial-completers '(#\Space))
-     (mapcar #'(lambda (o)
-		 (clim:suggest (bt:thread-name o) o))
+     (mapcar #'(lambda (thread)
+		 (clim:suggest (thread-textual-string thread) thread))
 	     (bt:all-threads)))))
 
 ;;; command table
@@ -31,7 +33,6 @@
 (clim:define-command-table thread-command-table)
 
 ;;; translators
-
 
 (clim:define-presentation-translator expression-to-thread
     (clim:expression thread thread-command-table
@@ -50,60 +51,82 @@
 
 ;;; commands
 
-(clim:define-command (com-thread-break :command-table thread-command-table
-				       :name "Break thread")
-    ((thread 'thread :prompt "which thread?"))
+(clim:define-command (com-break-thread :command-table thread-command-table
+				       :name t
+				       :menu t)
+    ((thread 'thread))
   (bt:interrupt-thread thread
 		       #'(lambda ()
 			   (break))))
 
-(clim:define-command (com-thread-destroy :command-table thread-command-table
-					 :name "Destroy thread")
-    ((thread 'thread :prompt "which thread?"))
+(clim:define-command (com-destroy-thread :command-table thread-command-table
+					 :name t
+					 :menu t)
+    ((thread 'thread))
   (bt:destroy-thread thread))
+
+(clim:define-command (com-inspect-thread :command-table thread-command-table
+					 :name t
+					 :menu t)
+    ((thread 'thread))
+  (launch-application (find-application "clouseau")
+		      :args (list thread)))
+
+(clim:define-command (com-describe-thread :command-table thread-command-table
+					  :name t
+					  :menu t)
+    ((thread 'thread))
+  (climi::describe thread *query-io*))
+
+(clim:define-command (com-show-thread :command-table thread-command-table
+				      :name t
+				      :menu t)
+    ((thread 'thread))
+  (show-resource thread *query-io*))
+
+(clim:define-command (com-list-threads :command-table thread-command-table
+				       :name t
+				       :menu t)
+    ()
+  (list-resources (bt:all-threads) *query-io*))
+
 
 ;; translators
 
 (clim:define-presentation-to-command-translator break-thread
-    (thread com-thread-break thread-command-table
+    (thread com-break-thread thread-command-table
 	    :gesture :help
-	    :documentation "break thread")
+	    :documentation "break")
     (thread)
   (list thread))
 
 (clim:define-presentation-to-command-translator destroy-thread
-    (thread com-thread-destroy thread-command-table
+    (thread com-destroy-thread thread-command-table
 		 :gesture :help
-		 :documentation "destroy thread")
+		 :documentation "destroy")
     (thread)
   (list thread))
 
-;;; debugging
+(clim:define-presentation-to-command-translator describe-thread
+    (thread com-describe-thread thread-command-table
+		 :gesture :help
+		 :documentation "describe")
+    (thread)
+  (list thread))
 
-(clim:define-command (com-thread-inspect  :command-table thread-command-table
-					  :name "Inspect thread")
-    ((thread 'thread :prompt "which thread?"))
-  (launch-application (find-application "clouseau")
-		      :args (list thread)))
+(clim:define-presentation-to-command-translator inspect-thread
+    (thread com-inspect-thread thread-command-table
+		 :gesture :help
+		 :documentation "inspect")
+    (thread)
+  (list thread))
 
-(clim:define-command (com-thread-describe  :command-table thread-command-table
-					   :name "Describe thread")
-    ((thread 'thread :prompt "which thread?"))
-  (climi::describe thread *query-io*))
-
-;;; show
-
-(clim:define-command (com-thread-show-all :command-table thread-command-table
-					  :menu nil
-					  :name "Show threads")
-    ()
-  (show-resources (bt:all-threads) *query-io*))
-
-(clim:define-command (com-thread-show-current :command-table thread-command-table
-					      :name "Show current thread")
-    ()
-  (show-resource (bt:current-thread) *query-io*))
-
+(clim:define-presentation-to-command-translator show-thread
+    (thread com-show-thread thread-command-table
+		 :gesture :help
+		 :documentation "show")
+    (thread)
+  (list thread))
 
 ;;; UTILITY
 
