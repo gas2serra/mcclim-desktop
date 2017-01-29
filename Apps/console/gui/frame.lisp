@@ -11,7 +11,7 @@
 				  deski::thread-command-table)
 		   :menu (("Quit" :command (com-quit))
 			  ("Console" :menu menubar-console-command-table)
-			  ("Application" :menu menubar-application-command-table))))
+			  ("Resource" :menu menubar-resource-command-table))))
   (:disabled-commands)
   (:panes
    (application-display :application
@@ -144,8 +144,25 @@
 
 (clim:define-command-table menubar-console-command-table
     :menu (("Clear Output" :command (com-clear-output))
+	   ("Refresh apps" :command (com-refresh))
 	   ("Quit" :command (com-quit))))
 
-(clim:define-command-table menubar-application-command-table
-    :menu (("Refresh" :command (com-refresh))))
+(clim:define-command-table menubar-resource-command-table
+    :menu (("Thread" :menu deski::thread-command-table)
+	   ("Frame" :menu deski::frame-command-table)
+	   ("Application" :menu deski::application-command-table)))
 
+(clim:add-command-to-command-table 'deski::com-list-threads 'menubar-resource-command-table
+				   :name t
+				   :menu t
+				   :errorp nil)
+
+(clim:add-command-to-command-table 'deski::com-list-frames 'menubar-resource-command-table
+				   :name t
+				   :menu t
+				   :errorp nil)
+
+(clim:add-command-to-command-table 'deski::com-list-apps 'menubar-resource-command-table
+				   :name t
+				   :menu t
+				   :errorp nil)

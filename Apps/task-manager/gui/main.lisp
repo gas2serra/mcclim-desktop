@@ -2,7 +2,7 @@
 
 (defun run-task-manager (&key (new-process nil)
 			   (width 790)
-			   (height 550)
+			   (height 650)
 			   port
 			   frame-manager
 			   (pretty-name "Task Manager")

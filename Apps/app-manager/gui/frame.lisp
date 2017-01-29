@@ -87,5 +87,3 @@
 	  (progn
 	    (clim:present (find-application app) 'application :stream stream)
 	    (format stream "~%"))))))
-
-

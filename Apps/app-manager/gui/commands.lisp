@@ -28,51 +28,20 @@
 
 ;; traslators
 
+(define-desktop-app-manager-command (com-show-app
+				     :menu nil
+				     :name "Show")
+    ((app 'application))
+  (fresh-line)
+  (clim:present app))
+
+
 (clim:define-presentation-to-command-translator show-app
-    (application deski::com-show-app desktop-app-manager
+    (application com-show-app desktop-app-manager
 		 :documentation "show app"
 		 :gesture :select)
     (app)
   (list app))
 
-(clim:define-presentation-to-command-translator launch-app
-    (application deski::com-launch-app desktop-app-manager
-		 :documentation "launch app"
-		 :gesture :help
-		 :tester ((app) (not (application-requires-args-p app))))
-    (app)
-  (list app))
-
-(clim:define-presentation-to-command-translator open-app-home-page
-    (application deski::com-open-app-home-page desktop-app-manager
-		 :gesture :help
-		 :documentation "open app home page"
-		 :tester ((app) (declare (ignore app)) t))
-    (app)
-  (list app))
-
-(clim:define-presentation-to-command-translator edit-app-def-file
-    (application deski::com-edit-app-def-file desktop-app-manager
-		 :gesture :help
-		 :documentation "edit app file"
-		 :tester ((app) (declare (ignore app)) t))
-    (app)
-  (list app))
-
-(clim:define-presentation-to-command-translator edit-app-config-file
-    (application deski::com-edit-app-config-file desktop-app-manager
-		 :gesture :help
-		 :documentation "edit app config"
-		 :tester ((app) (declare (ignore app)) t))
-    (app)
-  (list app))
-
-(clim:define-presentation-to-command-translator edit-app-style-file
-    (application deski::com-edit-app-style-file desktop-app-manager
-		 :gesture :help
-		 :documentation "edit app style"
-		 :tester ((app) (declare (ignore app)) t))
-    (app)
-  (list app))
 
 

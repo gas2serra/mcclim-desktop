@@ -4,9 +4,19 @@
 ;;; Clim resource for threads
 ;;;
 
-(defun thread-textual-string (thread)
+(defun thread->textual-string (thread)
   (bt:thread-name thread))
 
+(defun thread-frames (thread)
+  (let ((frames nil))
+    (clim:map-over-frames #'(lambda (frame)
+			      (when (and
+				     (typep frame 'clim:standard-application-frame)
+				     (eq (climi::frame-process frame)
+					 thread))
+				(push frame frames))))
+    frames))
+	
 ;;; presentation
 
 (clim:define-presentation-type thread ())
@@ -18,14 +28,14 @@
 						      (view clim:textual-view)
 						      &key acceptably for-context-type)
   (declare (ignore acceptably for-context-type))
-  (princ (thread-textual-string object) stream))
+  (princ (thread->textual-string object) stream))
 
 (clim:define-presentation-method clim:accept ((type thread) stream view &key)
   (declare (ignore view))
   (values
    (clim:completing-from-suggestions (stream :partial-completers '(#\Space))
      (mapcar #'(lambda (thread)
-		 (clim:suggest (thread-textual-string thread) thread))
+		 (clim:suggest (thread->textual-string thread) thread))
 	     (bt:all-threads)))))
 
 ;;; command table
@@ -44,8 +54,7 @@
 
 (clim:define-presentation-translator thread-to-expression
     (thread clim:expression thread-command-table
-		     :documentation "thread to expression"
-		     :tester-definitive t)
+	    :documentation "thread to expression")
     (object)
   object)
 
@@ -72,26 +81,18 @@
   (launch-application (find-application "clouseau")
 		      :args (list thread)))
 
-(clim:define-command (com-describe-thread :command-table thread-command-table
-					  :name t
-					  :menu t)
-    ((thread 'thread))
-  (climi::describe thread *query-io*))
-
-(clim:define-command (com-show-thread :command-table thread-command-table
-				      :name t
-				      :menu t)
-    ((thread 'thread))
-  (show-resource thread *query-io*))
-
 (clim:define-command (com-list-threads :command-table thread-command-table
-				       :name t
-				       :menu t)
+				       :name nil
+				       :menu nil)
     ()
-  (list-resources (bt:all-threads) *query-io*))
+  (dolist (thread (bt:all-threads))
+    (fresh-line)
+    (clim:with-output-as-presentation (t thread (deski::desktop-presentation-type-of thread)
+					 :allow-sensitive-inferiors nil
+					 :single-box t)
+      (clim:present thread 'clim:expression))))
 
-
-;; translators
+;;; translators
 
 (clim:define-presentation-to-command-translator break-thread
     (thread com-break-thread thread-command-table
@@ -107,24 +108,10 @@
     (thread)
   (list thread))
 
-(clim:define-presentation-to-command-translator describe-thread
-    (thread com-describe-thread thread-command-table
-		 :gesture :help
-		 :documentation "describe")
-    (thread)
-  (list thread))
-
 (clim:define-presentation-to-command-translator inspect-thread
     (thread com-inspect-thread thread-command-table
 		 :gesture :help
 		 :documentation "inspect")
-    (thread)
-  (list thread))
-
-(clim:define-presentation-to-command-translator show-thread
-    (thread com-show-thread thread-command-table
-		 :gesture :help
-		 :documentation "show")
     (thread)
   (list thread))
 

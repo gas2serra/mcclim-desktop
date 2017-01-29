@@ -26,14 +26,16 @@
 			     :force-p t)
   nil)
 
+
 (clim:define-presentation-to-command-translator launch-app
     (application deski::com-launch-app desktop-console
 		 :echo nil
 		 :gesture :select
-		 :documentation "launch app"
+		 :documentation "launch"
 		 :tester ((app) (not (application-requires-args-p app))))
     (app)
   (list app))
+
 
 (defvar *use-background-eval* nil)
 
@@ -51,6 +53,7 @@
   (labels
       ((present-value (value)         
          (clim:with-output-as-presentation (t value (deski::desktop-presentation-type-of value)
+					      :allow-sensitive-inferiors nil
 					      :single-box t)
 	   (clim:present value 'clim:expression))))
     (clim:with-drawing-options (t :ink clim:+olivedrab+)
@@ -133,3 +136,35 @@
                       (format t "Aborted by user after ~F seconds." value)))))))))
 
 
+
+
+#|
+(clim:define-presentation-to-command-translator describe-thread
+    (thread com-describe-thread thread-command-table
+		 :gesture :help
+		 :documentation "describe")
+    (thread)
+  (list thread))
+
+(clim:define-presentation-to-command-translator show-thread
+    (thread com-show-thread thread-command-table
+		 :gesture :help
+		 :documentation "show")
+    (thread)
+  (list thread))
+
+(clim:define-presentation-to-command-translator describe-frame
+    (clim:application-frame com-describe-frame frame-command-table
+			    :gesture :select
+			    :documentation "describe")
+    (frame)
+  (list frame))
+
+(clim:define-presentation-to-command-translator show-frame
+    (clim:application-frame com-show-frame frame-command-table
+			    :gesture :select
+			    :documentation "show")
+    (frame)
+  (list frame))
+
+|#
