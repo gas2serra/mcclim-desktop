@@ -4,10 +4,10 @@
   ((view-option :initform "menu"))
   (:menu-bar t)
   (:command-table (desktop-app-manager
-		   :inherit-from (deski::application-command-table)
+		   :inherit-from (deski::edit-application-command-table)
 		   :menu (("Quit" :command com-quit)
 			  ("AppMan" :menu menubar-app-command-table)
-			  ("Application" :menu deski::application-command-table))))
+			  ("Application" :menu deski::edit-application-command-table))))
   (:panes
    (application-display :application
 			:height 300

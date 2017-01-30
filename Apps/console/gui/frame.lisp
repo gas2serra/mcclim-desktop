@@ -169,3 +169,12 @@
 				   :errorp nil)
 
 (clim:define-command-table menubar-tool-command-table)
+
+(clim:add-menu-item-to-command-table 'menubar-tool-command-table
+				     "App Manager"
+				     :command `(deski::com-launch-app ,(find-application "app-manager")) :errorp nil)
+
+(clim:add-menu-item-to-command-table 'menubar-tool-command-table
+				     "Task Manager"
+				     :command `(deski::com-launch-app ,(find-application "task-manager")) :errorp nil)
+

@@ -25,6 +25,9 @@
 ;;; command table
 
 (clim:define-command-table application-command-table)
+(clim:define-command-table edit-application-command-table
+    :inherit-from (application-command-table)
+    :inherit-menu t)
 
 ;;; translators
 
@@ -61,7 +64,14 @@
   (launch-application (find-application "browser")
 		      :args (list (application-home-page app))))
 
-(clim:define-command (com-edit-app-def-file :command-table application-command-table
+(clim:define-command (com-inspect-app :command-table application-command-table
+				      :name t
+				      :menu t)
+    ((app 'application))
+  (launch-application (find-application "clouseau")
+		      :args (list app)))
+
+(clim:define-command (com-edit-app-def-file :command-table edit-application-command-table
 					    :menu t
 					    :name t)
     ((app 'application))
@@ -72,7 +82,7 @@
 			  (declare (ignore rest))
 			  (refresh-application (application-name app))))))
 
-(clim:define-command (com-edit-app-config-file :command-table application-command-table
+(clim:define-command (com-edit-app-config-file :command-table edit-application-command-table
 					       :menu t
 					       :name t)
     ((app 'application))
@@ -85,7 +95,7 @@
 			  (when (application-configured-p app)
 			    (configure-application app t))))))
 
-(clim:define-command (com-edit-app-style-file :command-table application-command-table
+(clim:define-command (com-edit-app-style-file :command-table edit-application-command-table
 					      :name t
 					      :menu t)
     ((app 'application))
@@ -98,12 +108,6 @@
 			  (when (application-configured-p app)
 			    (configure-application app t))))))
 
-(clim:define-command (com-inspect-app :command-table application-command-table
-				      :name t
-				      :menu t)
-    ((app 'application))
-  (launch-application (find-application "clouseau")
-		      :args (list app)))
 
 (clim:define-command (com-list-apps :command-table application-command-table
 				    :name nil
@@ -131,7 +135,14 @@
     (app)
   (list app))
 
-(clim:define-presentation-to-command-translator launch-open-app-home-page
+(clim:define-presentation-to-command-translator inspect-app
+    (application com-inspect-app application-command-table
+	    :gesture :help
+	    :documentation "inspect")
+    (app)
+  (list app))
+
+(clim:define-presentation-to-command-translator open-app-home-page
     (application com-open-app-home-page application-command-table
 	    :gesture :help
 	    :documentation "open home page")
@@ -139,21 +150,21 @@
   (list app))
 
 (clim:define-presentation-to-command-translator edit-app-def-file
-    (application com-edit-app-def-file application-command-table
+    (application com-edit-app-def-file edit-application-command-table
 		 :gesture :help
 		 :documentation "edit def file")
     (app)
   (list app))
 
 (clim:define-presentation-to-command-translator edit-app-config-file
-    (application com-edit-app-config-file application-command-table
+    (application com-edit-app-config-file edit-application-command-table
 		 :gesture :help
 		 :documentation "edit config file")
     (app)
   (list app))
 
 (clim:define-presentation-to-command-translator edit-app-style-file
-    (application com-edit-app-style-file application-command-table
+    (application com-edit-app-style-file edit-application-command-table
 	    :gesture :help
 	    :documentation "edit style file")
     (app)
