@@ -23,7 +23,7 @@
    (task-manager :inherit-from (deski::frame-command-table
 				deski::thread-command-table)
 		 :menu (("Quit" :command (com-quit))
-			("Task" :menu menubar-task-command-table)
+			("TaskMan" :menu menubar-task-command-table)
 			("Thread" :menu deski::thread-command-table)
 			("Frame" :menu deski::frame-command-table))))
   (:menu-bar t)

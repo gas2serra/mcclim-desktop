@@ -6,17 +6,14 @@
   (:command-table (desktop-app-manager
 		   :inherit-from (deski::application-command-table)
 		   :menu (("Quit" :command com-quit)
-			  ("Refresh" :command com-refresh-apps))))
+			  ("AppMan" :menu menubar-app-command-table)
+			  ("Application" :menu deski::application-command-table))))
   (:panes
-   (application :application
-		:height 300
-		:width 300
-		:display-time nil)
    (application-display :application
 			:height 300
-			:width 150
+			:width 400
 			:display-function #'%update-application-display
-			:display-after-commands nil)
+			:display-time :command-loop)
    (interactor :interactor :display-time :command-loop)
    (edit-option
     (clim:with-radio-box (:orientation :vertical
@@ -35,7 +32,6 @@
        (clim:horizontally nil
          (clim:labelling (:label "Applications")
            application-display)
-	 application
          (clim:vertically nil
            (clim:labelling (:label "View")
              view-option)
@@ -81,9 +77,53 @@
         
 (defun %update-application-display (desktop-app-manager stream)
   (declare (ignore desktop-app-manager))
-  (with-slots (view-option) clim:*application-frame*
-    (dolist (app (deski::registered-applications))
-      (if (or (string= view-option "all") (application-menu-p app))
-	  (progn
-	    (clim:present (find-application app) 'application :stream stream)
-	    (format stream "~%"))))))
+  (draw-app-table stream))
+
+(clim:define-command-table menubar-app-command-table
+    :menu (("Clear Interactor" :command (com-clear-interactor))
+	   ("Refresh" :command (com-refresh))
+	   ("Refresh Apps" :command (com-refresh-apps))
+	   ("Quit" :command (com-quit))))
+
+
+(defun draw-app-table (stream)
+  (let ((max-width (round
+		    (/ (/ (clim:rectangle-width
+			   (clim:sheet-region stream))
+			  2)
+		       (clim:stream-string-width stream #\M)))))
+    (with-slots (view-option) clim:*application-frame*
+      (clim:with-drawing-options (stream :text-size :large)
+	(if (string= view-option "all")
+	    (format stream "~%   Registered Apps~%~%")
+	    (format stream "~%   Menu Apps~%~%"))
+	(fresh-line stream))
+      (clim:formatting-table (stream :x-spacing '(2 :character))
+	(clim:formatting-row (stream)
+	  (clim:with-text-face (stream :italic)
+	    (clim:formatting-cell (stream :align-x :center) (format stream "Name"))
+	    (clim:formatting-cell (stream :align-x :center) (format stream "Prety Name"))
+	    (clim:formatting-cell (stream :align-x :center) (format stream "Menu"))
+	    (clim:formatting-cell (stream :align-x :center) (format stream "I/L/C"))
+	    ))
+	(dolist (app (deski::registered-applications))
+	  (when (or (string= view-option "all") (application-menu-p app))
+	    (clim:with-output-as-presentation (stream app 'application)
+	      (clim:formatting-row (stream)
+		(clim:formatting-cell (stream :align-x :left :align-y :top)
+		  (princ (application-name app) stream))
+		(clim:formatting-cell (stream :align-x :left :align-y :top)
+		  (princ (application-pretty-name app) stream))
+		(clim:formatting-cell (stream :align-x :left :align-y :top)
+		  (princ (application-menu-p app) stream))
+		(clim:formatting-cell (stream :align-x :left :align-y :top)
+		  (when (typep app 'cl-application)
+		    (format stream "~A/~A/~A"
+			    (application-installed-p app)
+			    (application-loaded-p app)
+			    (application-configured-p app))))
+		
+		))))))))
+	      
+	      
+

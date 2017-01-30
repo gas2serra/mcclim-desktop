@@ -20,8 +20,7 @@
   :components ((:module "src"
 			:serial t
 			:components
-			((:file "show")
-			 (:file "views")
+			((:file "views")
 			 (:file "application")
 			 (:file "frame")
 			 (:file "thread"))))

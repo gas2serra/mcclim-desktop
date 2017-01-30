@@ -11,7 +11,8 @@
 				  deski::thread-command-table)
 		   :menu (("Quit" :command (com-quit))
 			  ("Console" :menu menubar-console-command-table)
-			  ("Resource" :menu menubar-resource-command-table))))
+			  ("Resource" :menu menubar-resource-command-table)
+			  ("Tools" :menu menubar-tool-command-table))))
   (:disabled-commands)
   (:panes
    (application-display :application
@@ -166,3 +167,5 @@
 				   :name t
 				   :menu t
 				   :errorp nil)
+
+(clim:define-command-table menubar-tool-command-table)
