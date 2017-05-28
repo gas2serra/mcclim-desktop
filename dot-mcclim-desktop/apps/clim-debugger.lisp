@@ -7,4 +7,4 @@
 		      :requires-args-p t
 		      :home-page ""
 		      :git-repo ""
-		      :system-name "mcclim")
+		      :system-name "clim-debugger")
