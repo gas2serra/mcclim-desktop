@@ -137,7 +137,8 @@
       (clim:present app
                     'application
                     :view clim:+textual-view+
-                    :stream stream))))
+                    :stream stream)))
+  (fresh-line stream))
 
 ;;;
 ;;; Menu
