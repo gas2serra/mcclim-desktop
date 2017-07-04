@@ -121,9 +121,8 @@
 		    (format stream "~A/~A/~A"
 			    (application-installed-p app)
 			    (application-loaded-p app)
-			    (application-configured-p app))))
-		
-		))))))))
+			    (application-configured-p app)))))))))
+      (fresh-line stream))))
 	      
 	      
 

@@ -36,51 +36,8 @@ TODO
   `(clim:with-text-face (,stream :bold)
      ,@body))
 
-(defclass debugger-info ()
-  ((the-condition :accessor the-condition
-		  :initarg :the-condition)
-   (condition-message :accessor condition-message
-		      :initarg  :condition-message)
-   (type-of-condition :accessor type-of-condition
-		      :initarg  :type-of-condition)
-   (condition-extra :accessor condition-extra
-		    :initarg  :condition-extra)
-   (restarts :accessor restarts
-	     :initarg :restarts)
-   (backtrace :accessor backtrace
-	      :initarg :backtrace)))
 
-(defclass minimized-stack-frame-view (clim:textual-view)())
-(defclass maximized-stack-frame-view (clim:textual-view)())
 
-(defparameter +minimized-stack-frame-view+ 
-  (make-instance 'minimized-stack-frame-view))
-(defparameter +maximized-stack-frame-view+ 
-  (make-instance 'maximized-stack-frame-view))
-
-(defclass stack-frame ()
-  ((clim-view       :accessor view :initform +minimized-stack-frame-view+)
-   (frame-string    :accessor frame-string
-		    :initarg  :frame-string)
-   (frame-no        :accessor frame-no
-		    :initarg :frame-no)
-   (frame-variables :accessor frame-variables
-		    :initarg :frame-variables)))
-
-(defun compute-backtrace (start end)
-  (loop for frame    in   (swank-backend::compute-backtrace start end)
-     for frame-no from 0
-     collect (make-instance
-	      'stack-frame
-	      :frame-string    (let ((*print-pretty* nil))
-				 (with-output-to-string (stream) 
-				   (swank-backend::print-frame frame stream)))
-	      :frame-no        frame-no
-	      :frame-variables (swank-backend::frame-locals frame-no))))
-
-(defmethod expand-backtrace ((info debugger-info) (value integer))
-  (with-slots (backtrace) info
-    (setf backtrace (compute-backtrace 0 (+ (length backtrace) 10)))))
 
 ;;; CLIM stuff
 ;;; ----------------------------------------
@@ -89,21 +46,19 @@ TODO
   ((condition-info :reader condition-info :initarg :condition-info)))
 
 (defmethod condition-info (p)
-  *condition*)
+  deski::*condition*)
 
 ;; FIXME - These two variables should be removed!
 ;; Used to return the chosen reatart in the debugger.
 (defparameter *returned-restart* nil)
 
-;; Used to provide the clim frame with the condition info that
-;; triggered the debugger.
-(defparameter *condition* nil)
+
 
 (defun make-debugger-pane ()
   (clim:with-look-and-feel-realization ((clim:frame-manager clim:*application-frame*)
 					clim:*application-frame*) 
     (clim:make-pane 'debugger-pane 
-		    :condition-info *condition*
+		    :condition-info deski::*condition*
 		    :display-function #'display-debugger
 		    :end-of-line-action :allow
 		    :end-of-page-action :scroll)))
@@ -125,14 +80,13 @@ TODO
   (clim:run-frame-top-level
    (clim:make-application-frame 'clim-debugger)))
 
-(clim:define-presentation-type pr-stack-frame () :inherit-from 'stack-frame)
-(clim:define-presentation-type restart     ())
+(clim:define-presentation-type pr-stack-frame () :inherit-from 'deski::stack-frame)
 (clim:define-presentation-type more-type   ())
 (clim:define-presentation-type inspect     ())
 
 (define-clim-debugger-command (com-more :name "More backtraces")
-    ((pane 'more-type))
-  (expand-backtrace (condition-info pane) 10))
+    ((pane 'more-type :default (clim:find-pane-named clim:*application-frame* 'debugger-pane)))
+  (deski::expand-backtrace (condition-info pane) 10))
 
 (define-clim-debugger-command (com-invoke-inspector :name "Invoke inspector")
     ((obj 'inspect))
@@ -145,17 +99,17 @@ TODO
   (clim:frame-exit clim:*application-frame*))
 
 (define-clim-debugger-command (com-invoke-restart :name "Invoke restart")
-    ((restart 'restart))
+    ((restart 'deski::restart))
   (setf *returned-restart* restart)
   (clim:frame-exit clim:*application-frame*))
 
 (define-clim-debugger-command (com-toggle-stack-frame-view 
 			       :name "Toggle stack frame view")
-    ((stack-frame 'stack-frame))
+    ((stack-frame 'deski::stack-frame))
   (progn
-    (if (eq +minimized-stack-frame-view+ (view stack-frame))
-	(setf (view stack-frame) +maximized-stack-frame-view+)
-	(setf (view stack-frame) +minimized-stack-frame-view+))
+    (if (eq deski::+minimized-stack-frame-view+ (deski::view stack-frame))
+	(setf (deski::view stack-frame) deski::+maximized-stack-frame-view+)
+	(setf (deski::view stack-frame) deski::+minimized-stack-frame-view+))
     (clim:change-space-requirements (clim:frame-panes clim:*application-frame*))))
 
 (clim:define-presentation-to-command-translator more-backtraces
@@ -190,12 +144,12 @@ TODO
 (defun display-debugger (frame pane)
   (let ((*standard-output* pane))
     (clim:formatting-table (pane)
-      (std-form pane "Condition type:" (type-of-condition (condition-info
+      (std-form pane "Condition type:" (deski::type-of-condition (condition-info
 							   pane)))
-      (std-form pane "Description:"    (condition-message (condition-info
+      (std-form pane "Description:"    (deski::condition-message (condition-info
 							   pane)))
-      (when (condition-extra (condition-info pane))
-        (std-form pane "Extra:" (condition-extra (condition-info pane))
+      (when (deski::condition-extra (condition-info pane))
+        (std-form pane "Extra:" (deski::condition-extra (condition-info pane))
                   :family :fix)))
     (fresh-line)
     
@@ -205,15 +159,19 @@ TODO
     (format t " ")
     (clim:formatting-table 
 	(pane)
-      (loop for r in (restarts (condition-info pane))
+      (loop
+	 for r in (deski::restarts (condition-info pane))
+	 for i from 0 
 	 do (clim:formatting-row (pane)
-              (clim:with-output-as-presentation (pane r 'restart)
-                (clim:formatting-cell (pane)
-                  (format pane "~A" (restart-name r)))
-		
-                (clim:formatting-cell (pane)
-                  (clim:with-text-family (pane :sans-serif)
-                    (format pane "~A" r)))))))
+	      (clim:with-output-as-presentation (pane r 'deski::restart :single-box t)
+		(clim:formatting-cell (pane)
+		  (bold (pane) (format pane "~A: " i)))
+		(clim:formatting-cell (pane)
+		  (clim:with-drawing-options (pane :ink clim:+deep-pink+)
+		    (format pane "[~A]" (restart-name r))))
+		(clim:formatting-cell (pane)
+		  (clim:with-text-family (pane :sans-serif)
+		    (format pane "~A" r)))))))
     (fresh-line)
     (display-backtrace frame pane)
     (clim:change-space-requirements pane
@@ -228,15 +186,15 @@ TODO
   (format t " ")
   (clim:formatting-table 
       (pane)
-    (loop for stack-frame in (backtrace (condition-info pane))
+    (loop for stack-frame in (deski::backtrace (condition-info pane))
        for i from 0
        do (clim:formatting-row (pane)
-	    (clim:with-output-as-presentation (pane stack-frame 'stack-frame)
+	    (clim:with-output-as-presentation (pane stack-frame 'deski::stack-frame)
 	      (bold (pane) (clim:formatting-cell (pane) (format t "~A: " i)))
 	      (clim:formatting-cell (pane)
 		(clim:present stack-frame 'pr-stack-frame 
-			 :view (view stack-frame))))))
-    (when (>= (length (backtrace (condition-info pane))) 20)
+			 :view (deski::view stack-frame))))))
+    (when (>= (length (deski::backtrace (condition-info pane))) 20)
       (clim:formatting-row (pane)
         (clim:formatting-cell (pane))
         (clim:formatting-cell (pane)
@@ -244,21 +202,21 @@ TODO
             (clim:present pane 'more-type)))))))
 
 (clim:define-presentation-method clim:present (object (type pr-stack-frame) stream
-					    (view minimized-stack-frame-view)
+					    (view deski::minimized-stack-frame-view)
 					    &key acceptably for-context-type)
   (declare (ignore acceptably for-context-type))
-  (let ((str (frame-string object)))
+  (let ((str (deski::frame-string object)))
     (format t "~A  "
 	    (if (> (length str) 300)
 		(subseq str 0 300)
 		str))))
 
 (clim:define-presentation-method clim:present (object (type pr-stack-frame) stream
-                     (view maximized-stack-frame-view)
+                     (view deski::maximized-stack-frame-view)
                      &key acceptably for-context-type)
   (declare (ignore acceptably for-context-type))
   (progn
-    (princ (frame-string object) stream)
+    (princ (deski::frame-string object) stream)
     (fresh-line)
     (clim:with-text-family (stream :sans-serif)
       (bold (stream) (format t "  Locals:")))
@@ -266,20 +224,14 @@ TODO
     (format t "     ")
     (clim:formatting-table 
 	(stream)
-      (loop for (name n identifier id value val) in (frame-variables object)
+      (loop for (name n identifier id value val) in (deski::frame-variables object)
 	 do (clim:formatting-row 
 		(stream)
 	      (clim:formatting-cell (stream) (format t "~A" n))
 	      (clim:formatting-cell (stream) (format t "="))
 	      (clim:formatting-cell (stream) (clim:present val 'inspect)))))
     (fresh-line)))
-
-(clim:define-presentation-method clim:present (object (type restart) stream
-					    (view clim:textual-view)
-					    &key acceptably for-context-type)
-  (declare (ignore acceptably for-context-type))
-  (bold (stream) (format t "~A" (restart-name object))))
-
+	  
 (clim:define-presentation-method clim:present (object (type more-type) stream
 					    (view clim:textual-view)
 					    &key acceptably for-context-type)
@@ -301,19 +253,12 @@ TODO
      (unwind-protect
 	  (progn 
 	    (setf 
-	     *condition* 
-	     (make-instance 
-	      'debugger-info
-	      :the-condition        condition
-	      :type-of-condition    (type-of condition)
-	      :condition-message    (swank::safe-condition-message condition)
-	      :condition-extra      (swank::condition-extras       condition)
-	      :restarts             (compute-restarts)
-	      :backtrace            (compute-backtrace 0 20)))
+	     deski::*condition* 
+	     (deski::make-debugger-info condition))
 	    (run-debugger-frame))
        (let ((restart *returned-restart*))
 	 (setf *returned-restart* nil)
-	 (setf *condition* nil)
+	 (setf deski::*condition* nil)
 	 (if restart
 	     (let ((*debugger-hook* me-or-my-encapsulation))
 	       (invoke-restart-interactively restart))

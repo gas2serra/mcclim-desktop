@@ -23,5 +23,6 @@
 			((:file "views")
 			 (:file "application")
 			 (:file "frame")
-			 (:file "thread"))))
+			 (:file "thread")
+			 (:file "debugger"))))
   :description "McCLIM Desktop")

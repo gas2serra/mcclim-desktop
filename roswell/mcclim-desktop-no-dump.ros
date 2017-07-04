@@ -19,12 +19,16 @@ exec ros  -- $0 "$@"
 	  ((equal "clxfb" backend)
 	   (require :mcclim-clx-fb)
 	   (setf clim:*default-server-path*  (list :clx-fb)))
+          ((equal "sdlfb" backend)
+	   (require :mcclim-sdl2)
+	   (setf clim:*default-server-path*  (list :sdl2)))
 	  (t
 	   (format t "Usage: ~A [clx | clxv3 | clxfb ]~%" (file-namestring *load-pathname*))
 	   (ros:quit 1))))
   (desktop:configure)
   (desktop:run-app "console")
-  (loop while (> (length (bt:all-threads)) 2)
+  (loop while (> (length (bt:all-threads))
+                 (if (equal "clxfb" backend) 3 2))
      do
        (bt:join-thread (find-if-not #'(lambda (thread)
 					(eq thread (bt:current-thread)))
