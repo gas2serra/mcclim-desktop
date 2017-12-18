@@ -151,7 +151,9 @@
 
 (defpackage :desktop-internals
   (:use :desktop :desktop-extensions :desktop-sys :common-lisp)
-  (:nicknames :deski))
+  (:nicknames :deski)
+  (:export
+   #:application-command-table))
 
 (defpackage :desktop-user
   (:use :desktop :clim :clim-lisp)

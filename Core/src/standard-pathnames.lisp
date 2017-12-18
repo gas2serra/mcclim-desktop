@@ -61,7 +61,7 @@
 
 (defun find-system-directories ()
   (setf *system-directories* nil)
-  (dolist (system-name (asdf/find-system:registered-systems))
+  (dolist (system-name (asdf/find-system::registered-systems))
     (let ((pathname (asdf:component-pathname (asdf:find-system system-name))))
       (when pathname
 	(let ((p (uiop:merge-pathnames* *system-directory-relative-pathaname*
