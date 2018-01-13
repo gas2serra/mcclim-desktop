@@ -15,8 +15,8 @@ exec ros -m my-mcclim -- $0 "$@"
 	  ((equal "clxv3" backend)
 	   (require :mcclim-clxv3/pretty)
 	   (setf clim:*default-server-path*  (list :clxv3)))
-	  ((equal "clxfb" backend)
-	   (require :mcclim-clx-fb)
+	  ((equal "cldk-clx" backend)
+	   (require :mcclim-cldk-clx)
 	   (setf clim:*default-server-path*  (list :clx-fb)))
 	  (t
 	   (format t "Usage: ~A [clx | clxv3 | clxfb ]~%" (file-namestring *load-pathname*))

@@ -4,6 +4,7 @@
 exec ros  -- $0 "$@"
 |#
 
+(require :log4cl)
 (require :mcclim)
 (require :mcclim-desktop)
 
@@ -19,16 +20,26 @@ exec ros  -- $0 "$@"
 	  ((equal "clxfb" backend)
 	   (require :mcclim-clx-fb)
 	   (setf clim:*default-server-path*  (list :clx-fb)))
-          ((equal "sdlfb" backend)
-	   (require :mcclim-sdl2)
-	   (setf clim:*default-server-path*  (list :sdl2)))
+          ((equal "cldk-clx" backend)
+	   (require :mcclim-cldk)
+           (require :cldk-clx)
+	   (setf clim:*default-server-path*  (list :cldk :cldk-driver :clx)))
+          ((equal "cldk-sdl2" backend)
+	   (require :mcclim-cldk)
+           (require :cldk-sdl2)
+	   (setf clim:*default-server-path*  (list :cldk :cldk-driver :sdl2)))
 	  (t
 	   (format t "Usage: ~A [clx | clxv3 | clxfb ]~%" (file-namestring *load-pathname*))
 	   (ros:quit 1))))
   (desktop:configure)
   (desktop:run-app "console")
   (loop while (> (length (bt:all-threads))
-                 (if (equal "clxfb" backend) 3 2))
+		 (cond
+		   ((equal "clxfb" backend) 3)
+		   ((equal "cldk-clx" backend) 4)
+		   ((equal "cldk-sdl2" backend) 4)
+		   (t
+		    2)))
      do
        (bt:join-thread (find-if-not #'(lambda (thread)
 					(eq thread (bt:current-thread)))
