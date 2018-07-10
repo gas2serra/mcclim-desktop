@@ -24,7 +24,7 @@
 
 ;;; command table
 
-(defparameter application-command-table nil)
+;;(defparameter application-command-table nil)
 (clim:define-command-table application-command-table)
 (clim:define-command-table edit-application-command-table
     :inherit-from (application-command-table)

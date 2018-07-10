@@ -6,9 +6,9 @@
   ((system-debugger))
   (:menu-bar t)
   (:command-table (desktop-console
-		   :inherit-from (deski::application-command-table
-				  deski::frame-command-table
-				  deski::thread-command-table)
+		   :inherit-from (deski:application-command-table
+				  deski:frame-command-table
+				  deski:thread-command-table)
 		   :menu (("Quit" :command (com-quit))
 			  ("Console" :menu menubar-console-command-table)
 			  ("Resource" :menu menubar-resource-command-table)
@@ -150,9 +150,9 @@
 	   ("Quit" :command (com-quit))))
 
 (clim:define-command-table menubar-resource-command-table
-    :menu (("Thread" :menu deski::thread-command-table)
-	   ("Frame" :menu deski::frame-command-table)
-	   ("Application" :menu deski::application-command-table)))
+    :menu (("Thread" :menu deski:thread-command-table)
+	   ("Frame" :menu deski:frame-command-table)
+	   ("Application" :menu deski:application-command-table)))
 
 (clim:add-command-to-command-table 'deski::com-list-threads 'menubar-resource-command-table
 				   :name t

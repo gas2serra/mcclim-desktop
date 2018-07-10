@@ -153,7 +153,10 @@
   (:use :desktop :desktop-extensions :desktop-sys :common-lisp)
   (:nicknames :deski)
   (:export
-   #:application-command-table))
+   #:frame-command-table
+   #:thread-command-table
+   #:application-command-table
+   #:edit-application-command-table))
 
 (defpackage :desktop-user
   (:use :desktop :clim :clim-lisp)
