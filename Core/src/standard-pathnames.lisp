@@ -61,13 +61,16 @@
 
 (defun find-system-directories ()
   (setf *system-directories* nil)
-  (dolist (system-name (asdf/find-system::registered-systems))
-    (let ((pathname (asdf:component-pathname (asdf:find-system system-name))))
-      (when pathname
-	(let ((p (uiop:merge-pathnames* *system-directory-relative-pathaname*
-					pathname)))
-	  (when (probe-file p)
-	    (push p *system-directories*))))))
+  (dolist (system-name (asdf:registered-systems))
+    (multiple-value-bind (foundp found-system pathname previous previous-time)
+        (asdf:locate-system system-name)
+      (let ((pathname (asdf:component-pathname previous)))
+        (when pathname
+	  (let ((p (uiop:merge-pathnames* *system-directory-relative-pathaname*
+					  pathname)))
+	    (when (probe-file p)
+              (unless (member p *system-directories* :test #'equal)
+	        (push p *system-directories*))))))))
   *system-directories*)
 
 ;;;

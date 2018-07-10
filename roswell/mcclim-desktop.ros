@@ -39,7 +39,7 @@ exec ros -m mcclim-desktop  -- $0 "$@"
 		   ((equal "cldk-clx" backend) 4)
 		   ((equal "cldk-sdl2" backend) 4)
 		   (t
-		    2)))
+		    3)))
      do
        (bt:join-thread (find-if-not #'(lambda (thread)
 					(eq thread (bt:current-thread)))
