@@ -90,7 +90,7 @@ TODO
 
 (define-clim-debugger-command (com-invoke-inspector :name "Invoke inspector")
     ((obj 'inspect))
-  (clouseau:inspector obj))
+  (clouseau:inspect obj))
 
 (define-clim-debugger-command (com-refresh :name "Refresh" :menu t) ()
   (clim:change-space-requirements (clim:frame-panes clim:*application-frame*)))

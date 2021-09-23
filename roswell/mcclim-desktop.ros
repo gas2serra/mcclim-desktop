@@ -19,6 +19,8 @@ exec ros -m mcclim-desktop  -- $0 "$@"
 	  ((equal "clxs" backend)
            (require :mcclim-fonts/clx-truetype)                     
 	   (setf clim:*default-server-path*  (list :clx :mirroring :single)))
+      ((equal "clxttf" backend)
+	   (setf clim:*default-server-path*  (list :clx-ttf)))
 	  ((equal "clx-fb" backend)
            (require :mcclim-fonts/clx-truetype)                                
 	   (require :mcclim-clx-fb)
