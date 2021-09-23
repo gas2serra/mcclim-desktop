@@ -12,8 +12,8 @@
 		   :display-function #'%render-thread-display
 		   :display-time nil)
    (history-display-container (clim:make-clim-stream-pane :name 'history-display
-							  :record nil
-							  :draw t
+							  ;;:record nil
+							  ;;draw t
 							  :scroll-bars :vertical
 							  :display-function #'%render-history-display
 							  :display-time nil))

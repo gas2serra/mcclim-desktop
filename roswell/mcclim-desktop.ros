@@ -17,6 +17,8 @@ exec ros -m mcclim-desktop  -- $0 "$@"
 	   (setf clim:*default-server-path*  (list :clx)))
 	  ((equal "clxs" backend)
 	   (setf clim:*default-server-path*  (list :clx :mirroring :single)))
+      ((equal "clxttf" backend)
+	   (setf clim:*default-server-path*  (list :clx-ttf)))
 	  ((equal "clx-fb" backend)
 	   (require :mcclim-clx-fb)
 	   (setf clim:*default-server-path*  (list :clx-fb)))

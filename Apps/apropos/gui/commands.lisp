@@ -99,7 +99,7 @@
 (define-apropos-navigator-command (com-inspect-object
 				   :name "Inspect Object")
     ((object 'object :gesture :select))
-  (clouseau:inspector object))
+  (clouseau:inspect object))
 
 (define-apropos-navigator-command (com-edit-definition :name "Edit Definition")
     ((loc 'source-location :gesture :select))

@@ -86,12 +86,24 @@
     (object (type empty-input) stream view &key &allow-other-keys)
   (princ "" stream))
 
+
+(defun compute-inherited-keystrokes (command-table)
+  "Return a list containing the keyboard gestures of accelerators defined in
+ 'command-table' and all tables it inherits from."
+  (let (accumulated-keystrokes)
+    (climi::do-command-table-inheritance (comtab command-table)
+      (climi::with-command-table-keystrokes (keystrokes comtab)
+        (dolist (keystroke keystrokes)
+          (setf accumulated-keystrokes (adjoin keystroke accumulated-keystrokes :test #'equal)))))
+    accumulated-keystrokes))
+
+
 (defmethod clim:read-frame-command ((frame desktop-console) &key (stream *standard-input*))  
   "Specialized for the listener, read a lisp form to eval, or a command."
   (multiple-value-bind (object type)
       (let* ((clim:*command-dispatchers* '(#\,))
 	     (command-table (clim:frame-command-table frame))
-	     (clim:*accelerator-gestures* (climi::compute-inherited-keystrokes command-table)))
+	         (clim:*accelerator-gestures* (compute-inherited-keystrokes command-table)))
 	(handler-case
 	    (clim:with-text-style (stream (clim:make-text-style :fix :roman :normal))
 	      (clim:accept 'clim:command-or-form :stream stream :prompt nil 
