@@ -110,9 +110,6 @@
 (defun draw-history (stream)
   (with-slots (thread-num-history memory-usage-history history-position)
       clim:*application-frame*
-    (unless (equal
-             (clim:sheet-region stream)
-             climi::+nowhere+)
     (let* ((padding 10)
 	   (width (- (clim:rectangle-width
 		      (clim:sheet-region stream))
@@ -125,7 +122,7 @@
 	(clim:draw-rectangle* stream padding padding (+ width padding) (+ height padding) :ink clim:+grey70+)
 	(draw-history-data stream width height padding thread-num-history history-position thread-num-ink)
 	(draw-history-data stream width height padding memory-usage-history history-position memory-usage-ink))))
-  (clim:stream-force-output stream)))
+  (clim:stream-force-output stream))
 
 (defun draw-history-data (stream width height padding data pos ink)
   (let ((N history-size)
