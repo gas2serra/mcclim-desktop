@@ -28,7 +28,7 @@
   ()
   (:default-initargs :background *wholine-background*
     :display-function #'display-wholine
-    :scroll-bars nil
+    ;;:scroll-bars nil
     :display-time :command-loop
     :end-of-line-action :allow))
 
