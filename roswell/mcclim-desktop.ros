@@ -9,17 +9,20 @@ exec ros -m mcclim-desktop  -- $0 "$@"
 (require :mcclim)
 (require :mcclim-desktop)
 
-(defun main (&optional (backend "clxs") &rest argv)
+(defun main (&optional (backend "clxf") &rest argv)
   (declare (ignorable argv))
   #+ sbcl (sb-ext:enable-debugger)
   (when backend
     (cond ((equal "clxf" backend)
-	   (setf clim:*default-server-path*  (list :clx)))
+           (require :mcclim-fonts/clx-truetype)
+	   (setf clim:*default-server-path*  (list :clx :font-renderer 'mcclim-truetype:truetype-font-renderer)))
 	  ((equal "clxs" backend)
+           (require :mcclim-fonts/clx-truetype)                     
 	   (setf clim:*default-server-path*  (list :clx :mirroring :single)))
       ((equal "clxttf" backend)
 	   (setf clim:*default-server-path*  (list :clx-ttf)))
 	  ((equal "clx-fb" backend)
+           (require :mcclim-fonts/clx-truetype)                                
 	   (require :mcclim-clx-fb)
 	   (setf clim:*default-server-path*  (list :clx-fb)))
           ((equal "cldk-clx" backend)
@@ -37,9 +40,9 @@ exec ros -m mcclim-desktop  -- $0 "$@"
   (desktop:run-app "console")
   (loop while (> (length (bt:all-threads))
 		 (cond
-		   ((equal "clxfb" backend) 3)
+		   ((equal "clx-fb" backend) 4)
 		   ((equal "cldk-clx" backend) 4)
-		   ((equal "cldk-sdl2" backend) 4)
+		   ((equal "cldk-sdl2" backend) 5)
 		   (t
 		    3)))
      do
